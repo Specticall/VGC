@@ -55,7 +55,7 @@ export default function Sidebar({ onClose, isOpen }: Props) {
         <div className="flex justify-between items-center border-b border-border pb-4">
           <div className="flex gap-3 items-center">
             <Logo />
-            <p className="font-bold text-white text-2xl">VCG</p>
+            <p className="font-bold text-white text-2xl">VGC</p>
           </div>
           <i
             className="bx bx-sidebar text-gray hover:text-white transition cursor-pointer text-2xl"
