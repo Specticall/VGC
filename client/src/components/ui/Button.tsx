@@ -6,7 +6,7 @@ import { cn } from "../../lib/utils";
 import { LoadingSpinner } from "./LoadingSpinner";
 
 const buttonVariants = cva(
-  "flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none px-6 py-4 transition disabled:opacity-50 leading-[100%]",
+  "flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none px-6 py-4 transition disabled:opacity-50 leading-[100%] items-center",
   {
     variants: {
       variant: {
