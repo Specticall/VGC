@@ -19,7 +19,9 @@ export default function AppLayout() {
         <Topbar />
         <main className="flex-1 flex flex-col w-full relative">
           <div className="flex column absolute inset-0 overflow-auto">
-            <Outlet />
+            <div className="flex-1">
+              <Outlet />
+            </div>
           </div>
         </main>
       </div>

@@ -7,6 +7,7 @@ import MovieForm from "./pages/MovieForm";
 import MovieList from "./pages/MovieList";
 import MovieAir from "./pages/MovieAir";
 import DesignSystem from "./pages/DesignSystem";
+import AdminMovies from "./pages/AdminMovies";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: "movie-air",
         element: <MovieAir />,
+      },
+      {
+        path: "admin-movies",
+        element: <AdminMovies />,
       },
     ],
   },
