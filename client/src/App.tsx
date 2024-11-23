@@ -6,11 +6,16 @@ import Dashboard from "./pages/Dashboard";
 import MovieForm from "./pages/MovieForm";
 import MovieList from "./pages/MovieList";
 import MovieAir from "./pages/MovieAir";
+import DesignSystem from "./pages/DesignSystem";
 
 const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/design-system",
+    element: <DesignSystem />,
   },
   {
     path: "/",

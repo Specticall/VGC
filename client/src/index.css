@@ -9,3 +9,7 @@
 body {
   background-color: #0d0d0f;
 }
+
+.transition {
+  @apply transition-all duration-100;
+}

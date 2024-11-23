@@ -36,7 +36,7 @@ const Input = forwardRef<
   return (
     <div className={className}>
       <div className="flex justify-between">
-        {label && <label className="pb-2">{label}</label>}
+        {label && <label className="pb-2 text-white">{label}</label>}
       </div>
       {!isLoading ? (
         <input
@@ -47,8 +47,8 @@ const Input = forwardRef<
           disabled={disabled}
           type={type}
           className={cn(
-            "border-[1px] border-slate-200 rounded-md w-full px-6 py-3 disabled:text-slate-500 shadow-slate-50 shadow-[0_0_0.5rem_0.05rem]",
-            errorMessage && "border-red-400",
+            "border-[1px] border-border bg-primary text-white rounded-md w-full px-6 py-4 disabled:text-slate-500 outline-none focus:border-accent transition placeholder:text-gray",
+            errorMessage && "border-red-400 ",
             inputClassName
           )}
           placeholder={placeholder}

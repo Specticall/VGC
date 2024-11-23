@@ -10,6 +10,7 @@ export default {
         accent: "#CA4141",
         light: "#BFC2E4",
         background: "#0D0D0F",
+        gray: "#656998",
       },
     },
     screens: {
