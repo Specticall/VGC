@@ -4,13 +4,20 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#131313",
-        secondary: "#1E1F21",
-        border: "#2A2B35",
-        accent: "#CA4141",
-        light: "#BFC2E4",
-        background: "#0D0D0F",
-        gray: "#656998",
+        primary: "#131313", // Darkmode Primary
+        secondary: "#1E1F21", // Darkmode Secondary
+        border: "#2A2B35", // Darkmode Border
+        accent: "#CA4141", // Darkmode accent
+        light: "#BFC2E4", // Darkmode white
+        background: "#0D0D0F", // background color belakang
+        gray: "#656998", // buat placeholder (white secondary)
+      },
+      fontSize: {
+        heading: "18px",
+        largest: "36px",
+        large: "32px",
+        paragraph: "14px",
+        title: "24px",
       },
     },
     screens: {
