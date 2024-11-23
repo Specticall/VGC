@@ -15,10 +15,12 @@ export default function AppLayout() {
       )}
     >
       <Sidebar isOpen={isOpen} onClose={toggleIsOpen} />
-      <div className="">
+      <div className="flex flex-col ">
         <Topbar />
-        <main>
-          <Outlet />
+        <main className="flex-1 flex flex-col w-full relative">
+          <div className="flex column absolute inset-0 overflow-auto">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>
