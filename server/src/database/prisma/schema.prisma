@@ -20,7 +20,7 @@ model User {
   Email           String       @unique
   Password        String
   ProfilePicture  String?
-  Point           Int
+  Point           Int          @default(0)
   Age             Int
   Role            UserRole     @default(USER)
   DateCreated     DateTime     @default(now())
@@ -30,23 +30,23 @@ model User {
 model Reservation {
   ReservationId   String       @id @default(uuid())
   TotalPrice      Decimal      @db.Decimal(8, 2)
-  UserId          String
-  MovieId         String
-  ScheduleId      String
   Reminder1Status Boolean
   Reminder2Status Boolean
   Reminder3Status Boolean
+  UserId          String
+  ScheduleId      String
   user            User          @relation(fields: [UserId], references: [UserId])
   schedule        Schedule      @relation(fields: [ScheduleId], references: [ScheduleId])
   payment         Payment?
+  seats           ReservationSeat[]
 }
 
 model Movie {
   MovieId         String        @id @default(uuid())
-  RoomId          String
   Title           String
   Tagline         String
   DurationMinutes Int
+  Price           Decimal       @db.Decimal(8, 2)
   Rating          Decimal       @db.Decimal(3, 2) @default(0.00)
   Poster          String?
   Backdrop        String?
@@ -54,6 +54,7 @@ model Movie {
   Status          Status
   AgeRestriction  AgeRestriction
   ReleaseDate     DateTime
+  RoomId          String?
   languages       MovieLanguage[]
   genres          MovieGenre[]
   casts           Cast[]
@@ -67,7 +68,8 @@ enum Status {
 }
 
 model Language {
-  LanguageId      String        @id
+  LanguageId      String        @id @default(uuid())
+  IsoCode         String
   Name            String
   movies          MovieLanguage[]
 }
@@ -81,7 +83,7 @@ model MovieLanguage {
 }
 
 model Genre {
-  GenreId         Int           @id
+  GenreId         String        @id @default(uuid())
   Name            String
   movies          MovieGenre[]
 }
@@ -89,7 +91,7 @@ model Genre {
 model MovieGenre {
   MovieGenreId    String        @id @default(uuid())
   MovieId         String
-  GenreId         Int
+  GenreId         String
   movie           Movie         @relation(fields: [MovieId], references: [MovieId])
   genre           Genre         @relation(fields: [GenreId], references: [GenreId])
 }
@@ -97,7 +99,7 @@ model MovieGenre {
 model Cast {
   CastId          String        @id @default(uuid())
   Name            String
-  Image           String
+  Image           String?
   Character       String
   MovieId         String
   movie           Movie         @relation(fields: [MovieId], references: [MovieId])
@@ -123,11 +125,19 @@ model Room {
 
 model Seat {
   SeatId          String        @id @default(uuid())
-  RoomId          String
   Row             Row
   Number          Int
-  Type            SeatType
+  RoomId          String
   room            Room          @relation(fields: [RoomId], references: [RoomId])
+  seatReservations ReservationSeat[]
+}
+
+model ReservationSeat {
+  ReservationSeatId String       @id @default(uuid())
+  ReservationId   String
+  SeatId          String
+  reservation     Reservation   @relation(fields: [ReservationId], references: [ReservationId])
+  seat            Seat          @relation(fields: [SeatId], references: [SeatId])
 }
 
 enum Row {
@@ -144,17 +154,10 @@ enum Row {
   K
 }
 
-enum SeatType {
-  REGULAR
-  VIP
-}
-
 model Schedule {
   ScheduleId      String        @id @default(uuid())
   Date            DateTime
   StartTime       DateTime
-  EndTime         DateTime
-  Price           Decimal       @db.Decimal(8, 2)
   RoomId          String
   MovieId         String
   room            Room          @relation(fields: [RoomId], references: [RoomId])
@@ -182,8 +185,9 @@ enum AgeRestriction {
 }
 
 enum PaymentMethod {
-  CREDIT_CARD
-  PAYPAL
-  BANK_TRANSFER
-  CASH
+  GOPAY
+  BCA
+  BNI
+  MANDIRI
+  QRIS
 }

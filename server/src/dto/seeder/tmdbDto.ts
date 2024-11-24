@@ -20,3 +20,11 @@ export type TmdbPopularMovieDto = {
   video: boolean;
   
 }
+
+export type TmdbCastDto = {
+  id: number;
+  name: string;
+  original_name: string;
+  profile_path?: string;
+  character?: string;
+}
