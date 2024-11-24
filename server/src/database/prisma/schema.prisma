@@ -1,0 +1,193 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  UserId          String       @id @default(uuid())
+  Name            String
+  Email           String       @unique
+  Password        String
+  ProfilePicture  String?
+  Point           Int          @default(0)
+  Age             Int
+  Role            UserRole     @default(USER)
+  DateCreated     DateTime     @default(now())
+  reservations    Reservation[]
+}
+
+model Reservation {
+  ReservationId   String       @id @default(uuid())
+  TotalPrice      Decimal      @db.Decimal(8, 2)
+  Reminder1Status Boolean
+  Reminder2Status Boolean
+  Reminder3Status Boolean
+  UserId          String
+  ScheduleId      String
+  user            User          @relation(fields: [UserId], references: [UserId])
+  schedule        Schedule      @relation(fields: [ScheduleId], references: [ScheduleId])
+  payment         Payment?
+  seats           ReservationSeat[]
+}
+
+model Movie {
+  MovieId         String        @id @default(uuid())
+  Title           String
+  Tagline         String
+  DurationMinutes Int
+  Price           Decimal       @db.Decimal(8, 2)
+  Rating          Decimal       @db.Decimal(3, 2) @default(0.00)
+  Poster          String?
+  Backdrop        String?
+  Trailer         String?
+  Status          Status
+  AgeRestriction  AgeRestriction
+  ReleaseDate     DateTime
+  RoomId          String?
+  languages       MovieLanguage[]
+  genres          MovieGenre[]
+  casts           Cast[]
+  schedules       Schedule[]
+}
+
+enum Status {
+  COMING_SOON
+  NOW_SHOWING
+  END_OF_SHOWING
+}
+
+model Language {
+  LanguageId      String        @id @default(uuid())
+  IsoCode         String
+  Name            String
+  movies          MovieLanguage[]
+}
+
+model MovieLanguage {
+  MovieLanguageId String        @id @default(uuid())
+  MovieId         String
+  LanguageId      String
+  movie           Movie         @relation(fields: [MovieId], references: [MovieId])
+  language        Language      @relation(fields: [LanguageId], references: [LanguageId])
+}
+
+model Genre {
+  GenreId         String        @id @default(uuid())
+  Name            String
+  movies          MovieGenre[]
+}
+
+model MovieGenre {
+  MovieGenreId    String        @id @default(uuid())
+  MovieId         String
+  GenreId         String
+  movie           Movie         @relation(fields: [MovieId], references: [MovieId])
+  genre           Genre         @relation(fields: [GenreId], references: [GenreId])
+}
+
+model Cast {
+  CastId          String        @id @default(uuid())
+  Name            String
+  Image           String?
+  Character       String
+  MovieId         String
+  movie           Movie         @relation(fields: [MovieId], references: [MovieId])
+}
+
+model Cinema {
+  CinemaId        String        @id @default(uuid())
+  Name            String
+  Location        String
+  Contact         String?
+  rooms           Room[]
+}
+
+model Room {
+  RoomId          String        @id @default(uuid())
+  Name            String
+  SeatCapacity    Int
+  CinemaId        String
+  cinema          Cinema        @relation(fields: [CinemaId], references: [CinemaId])
+  seats           Seat[]
+  schedules       Schedule[]
+}
+
+model Seat {
+  SeatId          String        @id @default(uuid())
+  Row             Row
+  Number          Int
+  RoomId          String
+  room            Room          @relation(fields: [RoomId], references: [RoomId])
+  seatReservations ReservationSeat[]
+}
+
+model ReservationSeat {
+  ReservationSeatId String       @id @default(uuid())
+  ReservationId   String
+  SeatId          String
+  reservation     Reservation   @relation(fields: [ReservationId], references: [ReservationId])
+  seat            Seat          @relation(fields: [SeatId], references: [SeatId])
+}
+
+enum Row {
+  A
+  B
+  C
+  D
+  E
+  F
+  G
+  H
+  I
+  J
+  K
+}
+
+model Schedule {
+  ScheduleId      String        @id @default(uuid())
+  Date            DateTime
+  StartTime       DateTime
+  RoomId          String
+  MovieId         String
+  room            Room          @relation(fields: [RoomId], references: [RoomId])
+  movie           Movie         @relation(fields: [MovieId], references: [MovieId])
+  reservations    Reservation[]
+}
+
+model Payment {
+  PaymentId       String        @id @default(uuid())
+  Method          PaymentMethod
+  Date            DateTime      @default(now())
+  ReservationId   String        @unique
+  reservation     Reservation   @relation(fields: [ReservationId], references: [ReservationId])
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum AgeRestriction {
+  SU
+  R13
+  D17
+}
+
+enum PaymentMethod {
+  GOPAY
+  BCA
+  BNI
+  MANDIRI
+  QRIS
+}
