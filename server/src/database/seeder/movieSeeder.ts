@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import axios from 'axios';
 import { TmdbCastDto, TmdbMovieDetailDto, TmdbPopularMovieDto } from '../../dto/seeder/tmdbDto';
-import createSchedules from './scheduleSeeder';
+// import createSchedules from './scheduleSeeder';
 
 const prisma = new PrismaClient();
 
@@ -11,15 +11,15 @@ const TMDB_MEDIA_BASE_URL = process.env.TMDB_MEDIA_BASE_URL || 'https://image.tm
 
 type Status = 'COMING_SOON' | 'NOW_SHOWING' | 'END_OF_SHOWING';
 
-async function fetchMovies(page: number = 1) {
+export async function fetchMovies(page: number = 1) {
   try {
-    const response = await axios.get<TmdbPopularMovieDto[]>(`${TMDB_ENDPOINT_BASE_URL}/movie/popular`, {
+    const response = await axios.get<{results: TmdbPopularMovieDto[]}>(`${TMDB_ENDPOINT_BASE_URL}/movie/popular`, {
       params: {
         api_key: TMDB_API_KEY,
         page: page,
       }
     });
-    return response.data;
+    return response.data.results;
   } catch (e) {
     console.error(e);
     process.exit(1);
@@ -148,9 +148,9 @@ export default async function movieSeeder() {
             }
           },
         });
-        if (status !== 'COMING_SOON' && movieDetails?.runtime) {
-          await createSchedules(movie.id, movieDetails.runtime, randomRoom.RoomId);
-        }
+        // if (status !== 'COMING_SOON' && movieDetails?.runtime) {
+        //   await createSchedules(movie.id, movieDetails.runtime, randomRoom.RoomId);
+        // }
 
         console.log(`Stored ${movie.original_title}`);
         total++;
