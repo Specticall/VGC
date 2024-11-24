@@ -30,13 +30,14 @@ model User {
 model Reservation {
   ReservationId   String       @id @default(uuid())
   TotalPrice      Decimal      @db.Decimal(8, 2)
-  Reminder1Status Boolean
-  Reminder2Status Boolean
-  Reminder3Status Boolean
+  Reminder1Status Boolean      @default(false)
+  Reminder2Status Boolean      @default(false)
+  Reminder3Status Boolean      @default(false)
+  IsUsed          Boolean      @default(false)      
   UserId          String
   ScheduleId      String
-  user            User          @relation(fields: [UserId], references: [UserId])
-  schedule        Schedule      @relation(fields: [ScheduleId], references: [ScheduleId])
+  user            User         @relation(fields: [UserId], references: [UserId])
+  schedule        Schedule     @relation(fields: [ScheduleId], references: [ScheduleId])
   payment         Payment?
   seats           ReservationSeat[]
 }
@@ -156,7 +157,8 @@ enum Row {
 
 model Schedule {
   ScheduleId      String        @id @default(uuid())
-  Date            DateTime
+  StartDate       DateTime
+  EndDate         DateTime
   StartTime       DateTime
   RoomId          String
   MovieId         String
