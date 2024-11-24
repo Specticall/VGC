@@ -57,9 +57,9 @@ const Input = forwardRef<
         <Skeleton height={"2.75rem"} className="mt-2" />
       )}
       {errorMessage && (
-        <div className="flex gap-2 items-center mt-2">
-          <i className="text-red-400 bx bxs-error-circle leading-[150%]"></i>
-          <p className="text-red-400 leading-[150%]">{errorMessage}</p>
+        <div className="mt-2 text-red-500">
+          <i className="bx bx-error text-red-500 pb-5 mr-2"></i>
+          {errorMessage}
         </div>
       )}
     </div>

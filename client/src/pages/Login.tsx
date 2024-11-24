@@ -6,6 +6,7 @@ import { Button } from "../components/ui/Button";
 import googleIcon from "../../public/google-logo.png";
 import loginImage from "../../public/login-image.png";
 import { useState } from "react";
+import { useGoogleLogin } from "@react-oauth/google";
 
 type loginFields = {
   username: string;
@@ -13,6 +14,9 @@ type loginFields = {
 };
 
 export default function Login() {
+  const handleLogin = useGoogleLogin({
+    onSuccess: (token) => console.log(token),
+  });
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
@@ -23,8 +27,9 @@ export default function Login() {
   const onSubmit: SubmitHandler<loginFields> = (value) => {
     console.log(value);
   };
+
   return (
-    <>
+    <main className="min-h-screen grid place-items-center">
       <div className="grid grid-cols-2 h-[1024px] gap-10 p-10">
         <div className="flex flex-col justify-between">
           <div className="flex flex-col pt-[5rem] gap-9 px-10">
@@ -38,20 +43,15 @@ export default function Login() {
             <div>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Input
-                  label="Username"
+                  label="Email"
                   type="email"
                   placeholder="johndoe@gmail.com"
                   {...register("username", {
                     required: "Username field is required",
                   })}
                   className="mb-4"
+                  errorMessage={errors.username?.message}
                 />
-                {errors.username && (
-                  <div className="text-white">
-                    <i className="bx bx-error text-red-500 pb-5 mr-2"></i>
-                    {errors.username.message}
-                  </div>
-                )}
 
                 <div className="relative mb-4">
                   <Input
@@ -61,6 +61,7 @@ export default function Login() {
                     {...register("password", {
                       required: "Password field is required",
                     })}
+                    errorMessage={errors.password?.message}
                   />
                   <button
                     type="button"
@@ -70,12 +71,6 @@ export default function Login() {
                     onClick={() => setShowPassword(!showPassword)}
                   ></button>
                 </div>
-                {errors.password && (
-                  <div className="text-white">
-                    <i className="bx bx-error text-red-500 pb-5 mr-2"></i>
-                    {errors.password.message}
-                  </div>
-                )}
 
                 <div className="pt-2">
                   <Button
@@ -101,14 +96,16 @@ export default function Login() {
               <p className="text-light p-[1rem]">or</p>
               <hr className="w-full border-border" />
             </div>
-            <div className="flex justify-center">
-              <div className="flex flex-row gap-4 border-2 border-border text-white px-12 py-5 items-center rounded-[12px] cursor-pointer">
-                <img src={googleIcon} alt="google icon" className="w-6 h-6" />
-                <p className="text-paragraph font-medium text-white">
-                  Log in with Google
-                </p>
-              </div>
-            </div>
+            <Button
+              variant={"tertiary"}
+              className="gap-2"
+              onClick={handleLogin}
+            >
+              <img src={googleIcon} alt="google icon" className="w-6 h-6" />
+              <p className="text-paragraph font-medium text-white">
+                Log in with Google
+              </p>
+            </Button>
           </div>
           <footer>
             <p className="text-light text-center text-paragraph font-medium">
@@ -132,6 +129,6 @@ export default function Login() {
           />
         </div>
       </div>
-    </>
+    </main>
   );
 }
