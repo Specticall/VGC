@@ -8,11 +8,18 @@ import MovieList from "./pages/MovieList";
 import MovieAir from "./pages/MovieAir";
 import DesignSystem from "./pages/DesignSystem";
 import AdminMovies from "./pages/AdminMovies";
+import Register from "./pages/Register";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { GOOGLE_CLIENT_ID } from "./lib/config";
 
 const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
   },
   {
     path: "/design-system",
@@ -50,7 +57,9 @@ const queryClient = new QueryClient();
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+        <RouterProvider router={router} />
+      </GoogleOAuthProvider>
     </QueryClientProvider>
   );
 }
