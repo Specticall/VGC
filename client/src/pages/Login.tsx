@@ -27,7 +27,6 @@ export default function Login() {
   const onSubmit: SubmitHandler<loginFields> = (value) => {
     console.log(value);
   };
-
   return (
     <main className="min-h-screen grid place-items-center">
       <div className="grid grid-cols-2 h-[1024px] gap-10 p-10">
