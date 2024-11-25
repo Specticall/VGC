@@ -3,7 +3,6 @@ import { Button } from "../components/ui/Button";
 import Table from "../components/ui/Table";
 
 export default function AdminMovies() {
-  // minmax(32fr,2fr) minmax(8rem,0.5fr) minmax(16rem,1fr) minmax(16rem,1fr) minmax(8rem,0.5fr)
   return (
     <div className="p-6 bg-primary">
       <div className="flex justify-between items-center mb-8">
