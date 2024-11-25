@@ -3,6 +3,24 @@ import Logo from "./Logo";
 import { cn } from "../../lib/utils";
 import useToggleState from "../../hooks/useToggleState";
 
+const userMenus = [
+  {
+    title: "Movies",
+    icon: "bx-movie",
+    redirect: "/movies",
+  },
+  {
+    title: "Tickets",
+    icon: "bxs-discount",
+    redirect: "/tickets",
+  },
+  {
+    title: "History",
+    icon: "bx-list-ul",
+    redirect: "/history",
+  },
+];
+
 const adminMenus = [
   {
     title: "Dashboard",
@@ -10,12 +28,12 @@ const adminMenus = [
     redirect: "/dashboard",
   },
   {
-    title: "Movies",
+    title: "Movie List",
     icon: "bx-movie",
     redirect: "/admin-movies",
   },
   {
-    title: "Tickets",
+    title: "Ordered Tickets",
     icon: "bxs-discount",
     redirect: "/admin-tickets",
   },
@@ -48,7 +66,7 @@ export default function Sidebar({ onClose, isOpen }: Props) {
       </div>
       <nav
         className={cn(
-          "bg-primary border-r border-border px-3 py-4 min-w-[17.5rem] flex flex-col transition-transform duration-500",
+          "bg-primary border-r border-border px-3 py-4 min-w-[17.5rem] flex flex-col transition-transform duration-500 h-0 min-h-full overflow-y-auto",
           isOpen ? "translate-x-0" : "translate-x-[-17.5rem]"
         )}
       >
@@ -63,6 +81,34 @@ export default function Sidebar({ onClose, isOpen }: Props) {
           ></i>
         </div>
         <p className="pl-3 mt-4 text-gray text-[0.75rem]">MAIN MENU</p>
+        <ul className="mt-4 grid gap-2">
+          {userMenus.map((menu, i) => {
+            const active = pathname.includes(menu.redirect);
+            return (
+              <li
+                key={i}
+                className={cn(
+                  "px-3 py-2 rounded-md",
+                  active
+                    ? "border-accent border bg-accent/10"
+                    : "hover:bg-secondary/100 transition cursor-pointer"
+                )}
+              >
+                <Link
+                  to={menu.redirect}
+                  className={cn(
+                    "text-light flex items-center gap-2",
+                    active && "text-accent"
+                  )}
+                >
+                  <i className={cn("bx text-2xl ", menu.icon)}></i>
+                  <p>{menu.title}</p>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+        <p className="pl-3 mt-8 text-gray text-[0.75rem]">ADMIN MENU</p>
         <ul className="mt-4 grid gap-2">
           {adminMenus.map((menu, i) => {
             const active = pathname.includes(menu.redirect);

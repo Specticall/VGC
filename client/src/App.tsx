@@ -11,6 +11,7 @@ import AdminMovies from "./pages/AdminMovies";
 import Register from "./pages/Register";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GOOGLE_CLIENT_ID } from "./lib/config";
+import OrderTicket from "./pages/OrderTicket";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
       {
         path: "admin-movies",
         element: <AdminMovies />,
+      },
+      {
+        path: "order-ticket",
+        element: <OrderTicket />,
       },
     ],
   },
