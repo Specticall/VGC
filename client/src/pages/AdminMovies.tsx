@@ -8,7 +8,9 @@ export default function AdminMovies() {
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-white text-3xl">Airing Movies</h2>
         <div className="flex items-center gap-4">
-          <Button variant={"primary"}>+ Add Movies</Button>
+          <Button variant={"primary"} to="/movie-form">
+            + Add Movies
+          </Button>
         </div>
       </div>
       <Table.Root cols="minmax(24rem,2fr) minmax(8rem,0.5fr) minmax(16rem,1fr) minmax(16rem,1fr) minmax(8rem,0.5fr)">

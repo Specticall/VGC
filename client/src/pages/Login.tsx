@@ -98,7 +98,7 @@ export default function Login() {
             <Button
               variant={"tertiary"}
               className="gap-2"
-              onClick={handleLogin}
+              onClick={() => handleLogin()}
             >
               <img src={googleIcon} alt="google icon" className="w-6 h-6" />
               <p className="text-paragraph font-medium text-white">
