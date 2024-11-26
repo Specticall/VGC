@@ -13,9 +13,9 @@ export default function AiringMoviesList() {
           <li>Room</li>
           <li>Seats Left</li>
         </Table.Head>
-        {new Array(10).fill("x").map(() => {
+        {new Array(10).fill("x").map((_, i) => {
           return (
-            <Table.Body>
+            <Table.Body key={i}>
               <li className="flex items-center gap-8">
                 <div className="bg-border h-20 aspect-square rounded-md"></div>
                 <div>

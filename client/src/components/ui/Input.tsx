@@ -27,7 +27,6 @@ const Input = forwardRef<
     className,
     errorMessage,
     inputClassName,
-    onChange,
     onBlur,
     ...props
   },
@@ -42,7 +41,6 @@ const Input = forwardRef<
         <input
           {...props}
           ref={ref}
-          onChange={onChange}
           onBlur={onBlur}
           disabled={disabled}
           type={type}
