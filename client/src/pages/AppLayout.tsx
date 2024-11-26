@@ -1,8 +1,8 @@
 import { Outlet } from "react-router-dom";
-import Sidebar from "../components/general/Sidebar";
-import Topbar from "../components/general/Topbar";
-import useToggleState from "../hooks/useToggleState";
-import { cn } from "../lib/utils";
+import Sidebar from "@/components/general/Sidebar";
+import Topbar from "@/components/general/Topbar";
+import useToggleState from "@/hooks/useToggleState";
+import { cn } from "@/lib/utils";
 
 export default function AppLayout() {
   const [isOpen, toggleIsOpen] = useToggleState(true);

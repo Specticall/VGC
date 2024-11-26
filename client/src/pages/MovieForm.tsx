@@ -1,7 +1,7 @@
-import BackNavigation from "../components/general/BackNavigation";
+import BackNavigation from "@/components/general/BackNavigation";
 import { SubmitHandler, useForm } from "react-hook-form";
-import MovieMediaInputs from "../components/Movie/MovieMediaInputs";
-import MovieGeneralInputs from "../components/Movie/MovieGeneralInputs";
+import MovieMediaInputs from "@/components/Movie/MovieMediaInputs";
+import MovieGeneralInputs from "@/components/Movie/MovieGeneralInputs";
 
 export type MovieFields = {
   title: string;

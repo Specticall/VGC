@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
-import BackNavigation from "../components/general/BackNavigation";
-import DateSelector from "../components/ticketing/DateSelector";
-import TimeSelector from "../components/ticketing/TimeSelector";
-import SeatSelector from "../components/ticketing/SeatSelector";
+import BackNavigation from "@/components/general/BackNavigation";
+import DateSelector from "@/components/ticketing/DateSelector";
+import TimeSelector from "@/components/ticketing/TimeSelector";
+import SeatSelector from "@/components/ticketing/SeatSelector";
 
 const dummy = [
   {

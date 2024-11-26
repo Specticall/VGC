@@ -1,7 +1,6 @@
 import { Control, FieldErrors, SubmitHandler } from "react-hook-form";
 import { cn } from "../../lib/utils";
 import Input from "../ui/Input";
-import ActorInput from "./ActorInput";
 import { MovieFields } from "../../pages/MovieForm";
 import { Button } from "../ui/Button";
 import MovieActorInput from "./MovieActorInput";
@@ -76,7 +75,7 @@ export default function MovieGeneralInputs({
             required: "Release Date field is required",
           })}
         />
-        <MovieActorInput className="mt-4" />
+        <MovieActorInput onSelect={() => {}} className="mt-4" />
         <div className="flex justify-end mt-8">
           <Button type="submit" className="px-8 py-3 text-white text-sm">
             Add Movie

@@ -1,8 +1,8 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import Logo from "../components/general/Logo";
-import Input from "../components/ui/Input";
-import { Button } from "../components/ui/Button";
+import Logo from "@/components/general/Logo";
+import Input from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
 import googleIcon from "../../public/google-logo.png";
 import loginImage from "../../public/login-image.png";
 import { useState } from "react";

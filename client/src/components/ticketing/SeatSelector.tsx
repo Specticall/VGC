@@ -1,7 +1,6 @@
 import { Button } from "../ui/Button";
 import SeatSelectorLegend from "./SeatSelectorLegend";
 
-const seats = [];
 const COLUMNS = 24 + 2;
 const ROWS = 6 + 1;
 

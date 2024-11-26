@@ -1,6 +1,6 @@
-import Badge from "../components/ui/Badge";
-import { Button } from "../components/ui/Button";
-import Table from "../components/ui/Table";
+import Badge from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import Table from "@/components/ui/Table";
 
 export default function AdminMovies() {
   return (
