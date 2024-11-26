@@ -2,7 +2,6 @@ import { PrismaClient } from '@prisma/client';
 import axios from 'axios';
 import { TmdbCastDto, TmdbMovieDetailDto, TmdbPopularMovieDto } from '../../dto/seeder/tmdbDto';
 import { TMDB_API_KEY, TMDB_ENDPOINT_BASE_URL, TMDB_MEDIA_BASE_URL } from '../../utils/config';
-// import createSchedules from './scheduleSeeder';
 
 const prisma = new PrismaClient();
 
@@ -76,7 +75,7 @@ async function fetchGenres() {
 }
 
 export default async function movieSeeder() {
-  console.log('Seeding movies...');
+  console.log('Seeding languages...');
   const movieLanguages = await fetchLanguages();
   if (movieLanguages) {
     await prisma.language.createMany({
@@ -87,7 +86,8 @@ export default async function movieSeeder() {
       skipDuplicates: true,
     });
   }
-
+  console.log('Languages seeded!');
+  console.log('Seeding genres...');
   const movieGenres = await fetchGenres();
   if (movieGenres) {
     await prisma.genre.createMany({
@@ -98,8 +98,9 @@ export default async function movieSeeder() {
       skipDuplicates: true,
     });
   }
-
+  console.log('Genres seeded!');
   let total = 0;
+  console.log('Seeding movies & casts...');
   for (let i = 1; i <= 47270; i++) {
     const movies = await fetchMovies(i);
     for (const movie of movies) {
@@ -157,9 +158,6 @@ export default async function movieSeeder() {
             },
           },
         });
-        // if (status !== 'COMING_SOON' && movieDetails?.runtime) {
-        //   await createSchedules(movie.id, movieDetails.runtime, randomRoom.RoomId);
-        // }
 
         console.log(`Stored ${movie.original_title}`);
         total++;
@@ -173,5 +171,5 @@ export default async function movieSeeder() {
     }
   }
 
-  console.log(`SUCCESSFULLY Seeds ${total} Movies!`);
+  console.log(`Successfully seeded ${total} movies & its casts!`);
 }

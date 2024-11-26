@@ -1,51 +1,73 @@
 import { PrismaClient } from "@prisma/client";
+import { roundTimeDownToNearest5, shuffleArray } from "../../utils/helper";
 
 const prisma = new PrismaClient();
 
-export default async function createSchedules(
-  movieId: number, 
-  runtime: number, 
-  roomId: string
-) {
-  const movieDuration = runtime; 
-  const operatingHoursStart = 10; 
-  const operatingHoursEnd = 22; 
-  const intervalBetweenMovies = 15;
+export default async function scheduleSeeder() {
+  console.log("Seeding schedules...");
 
-  let scheduleStartTime = operatingHoursStart * 60;
-  const schedules = [];
-  while (scheduleStartTime + movieDuration <= operatingHoursEnd * 60) {
-    const currentDate = new Date(Date.now());
-    const hours = Math.floor(scheduleStartTime / 60); 
-    const minutes = scheduleStartTime % 60;
-    currentDate.setHours(hours, minutes, 0, 0); 
+  const movies = await prisma.movie.findMany({
+    where: {
+      Status: "NOW_SHOWING",
+    },
+    select: {
+      MovieId: true,
+      DurationMinutes: true,
+    },
+  });
 
-    let endDate = new Date();
-    const rawEndTime = new Date(currentDate.getTime() + movieDuration * 60 * 1000);
-    const h = rawEndTime.getHours();
-    const m = rawEndTime.getMinutes();
+  const rooms = await prisma.room.findMany({
+    select: {
+      RoomId: true,
+    },
+  });
 
-    const roundedMinutes = Math.ceil(m / 15) * 15;
-    if (roundedMinutes >= 60) {
-      endDate = new Date(rawEndTime.setHours(h + 1, 0, 0, 0));
+  if (movies.length === 0 || rooms.length === 0) {
+    console.log("No movies or rooms available for schedule seeding.");
+    return;
+  }
+
+  const schedulesData = [];
+  const startOfDay = new Date();
+  startOfDay.setHours(11, 0, 0, 0);
+
+  const endDate = new Date(startOfDay);
+  endDate.setDate(endDate.getDate() + 3);
+
+  for (const room of rooms) {
+    let currentTime = new Date(startOfDay);
+
+    while (currentTime < endDate) {
+      const shuffledMovies = shuffleArray([...movies]);
+
+      for (const movie of shuffledMovies) {
+        const movieEndTime = new Date(currentTime.getTime() + movie.DurationMinutes * 60 * 1000 + 30 * 60 * 1000);
+        if (
+          currentTime.getHours() < 11 || 
+          movieEndTime.getHours() >= 23 || 
+          movieEndTime > endDate 
+        ) {
+          currentTime.setDate(currentTime.getDate() + 1); 
+          currentTime.setHours(11, 0, 0, 0); 
+          break; 
+        }
+
+        schedulesData.push({
+          StartDate: new Date(startOfDay),
+          EndDate: new Date(endDate),
+          StartTime: roundTimeDownToNearest5(new Date(currentTime)),
+          EndTime: new Date(movieEndTime),
+          RoomId: room.RoomId,
+          MovieId: movie.MovieId,
+        });
+        currentTime = new Date(movieEndTime.getTime() + 30 * 60 * 1000); 
+      }
     }
-
-    endDate = new Date(rawEndTime.setMinutes(roundedMinutes, 0, 0));
-
-    const schedule = {
-      StartDate: currentDate,
-      EndDate: new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000),
-      StartTime: currentDate,
-      EndTime: endDate,
-      Price: Math.floor(Math.random() * 100000) + 50000,
-      RoomId: roomId,
-      MovieId: movieId.toString(),
-    };
-    schedules.push(schedule);
-    scheduleStartTime += movieDuration + intervalBetweenMovies;
   }
 
   await prisma.schedule.createMany({
-    data: schedules,
+    data: schedulesData,
   });
+
+  console.log(`Successfully seeded ${schedulesData.length} schedules.`);
 }
