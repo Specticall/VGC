@@ -56,7 +56,7 @@ export default async function scheduleSeeder() {
           StartDate: new Date(startOfDay),
           EndDate: new Date(endDate),
           StartTime: roundTimeDownToNearest5(new Date(currentTime)),
-          EndTime: new Date(movieEndTime),
+          EndTime: roundTimeDownToNearest5(new Date(movieEndTime)),
           RoomId: room.RoomId,
           MovieId: movie.MovieId,
         });
