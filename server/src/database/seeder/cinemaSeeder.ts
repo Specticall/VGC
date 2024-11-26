@@ -3,9 +3,9 @@ import cinemas from '../../assets/cinemas';
 
 const prisma = new PrismaClient();
 
-export default async function cinemaSeeder() {
+export default function cinemaSeeder() {
   console.log('Seeding cinemas...');
-  for (const cinema of cinemas) {
+  cinemas.forEach(async (cinema) => {
     try {
       await prisma.cinema.create({
         data: {
@@ -15,7 +15,7 @@ export default async function cinemaSeeder() {
           rooms: {
             create: cinema.rooms.map((room) => ({
               Name: room.name,
-              SeatCapacity: 188,
+              SeatCapacity: 170,
               seats: {
                 create: Object.keys(room.rows).flatMap((row) =>
                   room.rows[row].map((number) => ({
@@ -31,6 +31,6 @@ export default async function cinemaSeeder() {
     }catch (e) {
       console.error(e);
     }
-  }
+  });
   console.log('Cinemas seeded!');
 }

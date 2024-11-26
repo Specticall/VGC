@@ -1,3 +1,10 @@
 import cinemaSeeder from "./cinemaSeeder";
+import movieSeeder from "./movieSeeder";
 
-cinemaSeeder();
+
+async function main() {
+  await cinemaSeeder();
+  await movieSeeder();
+}
+
+main();

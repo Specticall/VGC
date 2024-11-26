@@ -22,8 +22,9 @@ model User {
   ProfilePicture  String?
   Point           Int          @default(0)
   Age             Int
+  CreatedAt       DateTime     @default(now())
+  UpdatedAt       DateTime     @updatedAt
   Role            UserRole     @default(USER)
-  DateCreated     DateTime     @default(now())
   reservations    Reservation[]
 }
 
@@ -36,6 +37,8 @@ model Reservation {
   IsUsed          Boolean      @default(false)      
   UserId          String
   ScheduleId      String
+  CreatedAt       DateTime     @default(now())
+  UpdatedAt       DateTime     @updatedAt
   user            User         @relation(fields: [UserId], references: [UserId])
   schedule        Schedule     @relation(fields: [ScheduleId], references: [ScheduleId])
   payment         Payment?
@@ -48,17 +51,20 @@ model Movie {
   Tagline         String
   DurationMinutes Int
   Price           Decimal       @db.Decimal(8, 2)
-  Rating          Decimal       @db.Decimal(3, 2) @default(0.00)
   Poster          String?
   Backdrop        String?
   Trailer         String?
   Status          Status
   AgeRestriction  AgeRestriction
-  ReleaseDate     DateTime
-  RoomId          String?
-  languages       MovieLanguage[]
+  ReleaseDate     DateTime?
+  VoteAverage     Decimal       @db.Decimal(3, 2) @default(0.00)
+  VoteCount       Int           @default(0)
+  LanguageId      String
+  CreatedAt       DateTime     @default(now())
+  UpdatedAt       DateTime     @updatedAt
+  language        Language     @relation(fields: [LanguageId], references: [LanguageId])
   genres          MovieGenre[]
-  casts           Cast[]
+  casts           MovieCast[]
   schedules       Schedule[]
 }
 
@@ -69,22 +75,13 @@ enum Status {
 }
 
 model Language {
-  LanguageId      String        @id @default(uuid())
-  IsoCode         String
+  LanguageId      String      @id
   Name            String
-  movies          MovieLanguage[]
-}
-
-model MovieLanguage {
-  MovieLanguageId String        @id @default(uuid())
-  MovieId         String
-  LanguageId      String
-  movie           Movie         @relation(fields: [MovieId], references: [MovieId])
-  language        Language      @relation(fields: [LanguageId], references: [LanguageId])
+  movies          Movie[]
 }
 
 model Genre {
-  GenreId         String        @id @default(uuid())
+  GenreId         Int           @id
   Name            String
   movies          MovieGenre[]
 }
@@ -92,7 +89,7 @@ model Genre {
 model MovieGenre {
   MovieGenreId    String        @id @default(uuid())
   MovieId         String
-  GenreId         String
+  GenreId         Int
   movie           Movie         @relation(fields: [MovieId], references: [MovieId])
   genre           Genre         @relation(fields: [GenreId], references: [GenreId])
 }
@@ -102,8 +99,15 @@ model Cast {
   Name            String
   Image           String?
   Character       String
+  casts           MovieCast[]
+}
+
+model MovieCast {
+  MovieCastId     String        @id @default(uuid())
   MovieId         String
+  CastId          String
   movie           Movie         @relation(fields: [MovieId], references: [MovieId])
+  cast            Cast          @relation(fields: [CastId], references: [CastId])
 }
 
 model Cinema {
@@ -160,8 +164,11 @@ model Schedule {
   StartDate       DateTime
   EndDate         DateTime
   StartTime       DateTime
+  EndTime         DateTime
   RoomId          String
   MovieId         String
+  CreatedAt       DateTime     @default(now())
+  UpdatedAt       DateTime     @updatedAt
   room            Room          @relation(fields: [RoomId], references: [RoomId])
   movie           Movie         @relation(fields: [MovieId], references: [MovieId])
   reservations    Reservation[]

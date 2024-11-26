@@ -20,9 +20,23 @@ export default async function createSchedules(
     const minutes = scheduleStartTime % 60;
     currentDate.setHours(hours, minutes, 0, 0); 
 
+    let endDate = new Date();
+    const rawEndTime = new Date(currentDate.getTime() + movieDuration * 60 * 1000);
+    const h = rawEndTime.getHours();
+    const m = rawEndTime.getMinutes();
+
+    const roundedMinutes = Math.ceil(m / 15) * 15;
+    if (roundedMinutes >= 60) {
+      endDate = new Date(rawEndTime.setHours(h + 1, 0, 0, 0));
+    }
+
+    endDate = new Date(rawEndTime.setMinutes(roundedMinutes, 0, 0));
+
     const schedule = {
-      Date: currentDate, 
+      StartDate: currentDate,
+      EndDate: new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000),
       StartTime: currentDate,
+      EndTime: endDate,
       Price: Math.floor(Math.random() * 100000) + 50000,
       RoomId: roomId,
       MovieId: movieId.toString(),

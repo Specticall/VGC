@@ -22,16 +22,11 @@ const generateSeats = () => {
     });
   };
 
-  // Row A
-  addSeats("A", [[1, 20]]);
-  // Row B
-  addSeats("B", [[1, 4], [7, 19], [21, 22]]);
-  // Rows C-J
-  for (let charCode = 67; charCode <= 74; charCode++) {
+  // Pola kursi
+  // Rows A-K
+  for (let charCode = 65; charCode <= 75; charCode++) {
     addSeats(String.fromCharCode(charCode), [[3, 4], [7, 19], [21, 22]]);
   }
-  // Row Ks
-  addSeats("K", [[3, 4], [9, 17], [21, 22]]);
 
   return seats;
 };

@@ -1,17 +1,14 @@
 import { PrismaClient } from '@prisma/client';
 import axios from 'axios';
 import { TmdbCastDto, TmdbMovieDetailDto, TmdbPopularMovieDto } from '../../dto/seeder/tmdbDto';
+import { TMDB_API_KEY, TMDB_ENDPOINT_BASE_URL, TMDB_MEDIA_BASE_URL } from '../../utils/config';
 // import createSchedules from './scheduleSeeder';
 
 const prisma = new PrismaClient();
 
-const TMDB_API_KEY = process.env.TMDB_API_KEY; 
-const TMDB_ENDPOINT_BASE_URL = process.env.TMDB_ENDPOINT_BASE_URL || 'https://api.themoviedb.org/3';
-const TMDB_MEDIA_BASE_URL = process.env.TMDB_MEDIA_BASE_URL || 'https://image.tmdb.org/t/p/original';
-
 type Status = 'COMING_SOON' | 'NOW_SHOWING' | 'END_OF_SHOWING';
 
-export async function fetchMovies(page: number = 1) {
+async function fetchMovies(page: number = 1) {
   try {
     const response = await axios.get<{results: TmdbPopularMovieDto[]}>(`${TMDB_ENDPOINT_BASE_URL}/movie/popular`, {
       params: {
@@ -41,12 +38,12 @@ async function fetchMovieDetails(movieId: number) {
 
 async function fetchMovieCasts(movieId: number) {
   try {
-    const response = await axios.get<TmdbCastDto[]>(`${TMDB_ENDPOINT_BASE_URL}/movie/${movieId}/credits`, {
+    const response = await axios.get<{cast: TmdbCastDto[]}>(`${TMDB_ENDPOINT_BASE_URL}/movie/${movieId}/credits`, {
       params: {
         api_key: TMDB_API_KEY,
       }
     });
-    return response.data;
+    return response.data.cast;
   } catch (e) {
     console.error(e);
   }
@@ -65,14 +62,14 @@ async function fetchLanguages() {
   }
 }
 
-const fetchGenres = async () => {
+async function fetchGenres() {
   try {
-    const response = await axios.get<{ id: number; name: string }[]>(`${TMDB_ENDPOINT_BASE_URL}/genre/movie/list`, {
+    const response = await axios.get<{genres: { id: number; name: string }[]}>(`${TMDB_ENDPOINT_BASE_URL}/genre/movie/list`, {
       params: {
         api_key: TMDB_API_KEY,
       }
     });
-    return response.data;
+    return response.data.genres;
   } catch (e) {
     console.error(e);
   }
@@ -84,7 +81,7 @@ export default async function movieSeeder() {
   if (movieLanguages) {
     await prisma.language.createMany({
       data: movieLanguages.map((language) => ({
-        IsoCode: language.iso_639_1,
+        LanguageId: language.iso_639_1,
         Name: language.english_name,
       })),
       skipDuplicates: true,
@@ -95,13 +92,12 @@ export default async function movieSeeder() {
   if (movieGenres) {
     await prisma.genre.createMany({
       data: movieGenres.map((genre) => ({
+        GenreId: genre.id,
         Name: genre.name,
       })),
       skipDuplicates: true,
     });
   }
-
-  const rooms = await prisma.room.findMany();
 
   let total = 0;
   for (let i = 1; i <= 47270; i++) {
@@ -114,13 +110,11 @@ export default async function movieSeeder() {
         let status: Status;
         if (dayDifference < 0) {
           status = 'COMING_SOON';
-        } else if (dayDifference <= 30) {
+        } else if (dayDifference <= 60) {
           status = 'NOW_SHOWING';
         } else {
           status = 'END_OF_SHOWING';
         }
-
-        const randomRoom = rooms[Math.floor(Math.random() * rooms.length)];
 
         await prisma.movie.create({
           data: {
@@ -129,23 +123,38 @@ export default async function movieSeeder() {
             DurationMinutes: movieDetails?.runtime || 0,
             Price: Math.floor(Math.random() * 100000) + 50000,
             Poster: `${TMDB_MEDIA_BASE_URL}${movie.poster_path}`,
+            Backdrop: `${TMDB_MEDIA_BASE_URL}${movie.backdrop_path}`,
             Status: status,
-            Trailer: `${TMDB_MEDIA_BASE_URL}${movie.video}`,
+            Trailer: movie.video ? `https://www.youtube.com/watch?v=${movie.video}` : null,
             AgeRestriction: movie.adult ? 'D17' : Math.random() < 0.5 ? 'R13' : 'SU',
-            ReleaseDate: movie.release_date,
-            RoomId: (status==='COMING_SOON') ? null : randomRoom.RoomId,
+            ReleaseDate: new Date(movie.release_date),
+            VoteAverage: movie.vote_average,
+            VoteCount: movie.vote_count,
             genres: {
-              connect: movieDetails?.genres.map((genre) => ({
-                MovieGenreId: genre.id.toString(),
+              create: movieDetails?.genres.map((genre) => ({
+                genre : {
+                  connect: {
+                    GenreId: genre.id,
+                  }
+                },
               })),
             },
+            language:{
+              connect: {
+                LanguageId: movie?.original_language,
+              }
+            },
             casts: {
-              create: movieCasts?.map((cast) => ({
-                Name: cast.name,
-                Character: cast.character || '',
-                Image: cast.profile_path ? `${TMDB_MEDIA_BASE_URL}${cast.profile_path}` : null,
-              })).filter(cast => cast.Name !== '' && cast.Character !== '' && cast.Image !== null),
-            }
+              create: movieCasts?.filter(cast => cast.character).map((cast) => ({
+                cast: {
+                  create: {
+                    Name: cast.original_name,
+                    Character: cast.character || "",
+                    Image: cast.profile_path ? `${TMDB_MEDIA_BASE_URL}${cast.profile_path}` : null,
+                  }
+                }
+              })),
+            },
           },
         });
         // if (status !== 'COMING_SOON' && movieDetails?.runtime) {
@@ -155,14 +164,14 @@ export default async function movieSeeder() {
         console.log(`Stored ${movie.original_title}`);
         total++;
       }
-      if (total === 200) {
+      if (total === 100) {
         break;
       }
     }
-    if (total === 200) {
+    if (total === 100) {
       break;
     }
   }
 
-  console.log(`SUCCESSFULLY SEEDS ${total}!`);
+  console.log(`SUCCESSFULLY Seeds ${total} Movies!`);
 }
