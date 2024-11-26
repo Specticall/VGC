@@ -60,7 +60,7 @@ export default async function scheduleSeeder() {
           RoomId: room.RoomId,
           MovieId: movie.MovieId,
         });
-        currentTime = new Date(movieEndTime.getTime() + 30 * 60 * 1000); 
+        currentTime = new Date(movieEndTime.getTime()); 
       }
     }
   }
