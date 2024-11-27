@@ -22,48 +22,68 @@ const ALLOWED_FILE_TYPES = {
   trailer: ["video/mp4", "video/x-matroska"],
 };
 
-export const generatePresignedUrl: RequestHandler = async (
-  req: Request,
-  res: Response,
-  next
+const generatePresignedUrl = async ( 
+  operation: "putObject" | "getObject",
+  fileName: string,                   
+  fileType: string | null,            
+  fileCategory: keyof typeof ALLOWED_FILE_TYPES 
 ) => {
+
+  if (!fileCategory || !["poster", "backdrop", "trailer"].includes(fileCategory)) {
+    throw new AppError("Invalid file category", STATUS.BAD_REQUEST);
+  }
+
+  if (fileType && !ALLOWED_FILE_TYPES[fileCategory]?.includes(fileType)) {
+    throw new AppError(
+      "Invalid file type for this category",
+      STATUS.BAD_REQUEST
+    );
+  }
+
+  const fileKey = `${fileCategory}s/${fileName}`; 
+  const params = {
+    Bucket: AWS_S3_BUCKET_NAME,
+    Key: fileKey,
+    Expires: 60, 
+    ContentType: fileType || undefined, 
+  };
+
+  const url = await s3.getSignedUrlPromise(operation, params);
+  return url;
+};
+
+export const uploadFile: RequestHandler = async (req: Request, res: Response, next) => {
   try {
     const {
       fileName,
       fileType,
       fileCategory,
-    }: {
+    } = req.params as {
       fileName: string;
       fileType: string;
       fileCategory: keyof typeof ALLOWED_FILE_TYPES;
-    } = req.body;
-
-    if (
-      !fileCategory ||
-      !["poster", "backdrop", "trailer"].includes(fileCategory)
-    ) {
-      throw new AppError("Invalid file category", STATUS.BAD_REQUEST);
-    }
-
-    if (!ALLOWED_FILE_TYPES[fileCategory]?.includes(fileType)) {
-      throw new AppError(
-        "Invalid file type for this category",
-        STATUS.BAD_REQUEST
-      );
-    }
-
-    const fileKey = `${fileCategory}s/${fileName}`;
-    const params = {
-      Bucket: AWS_S3_BUCKET_NAME,
-      Key: fileKey,
-      Expires: 60, //valid 60s
-      ContentType: fileType,
     };
 
-    // const url = s3.createPresignedPost(params);
-    const url = await s3.getSignedUrlPromise("putObject", params);
+    const url = await generatePresignedUrl("putObject", fileName, fileType, fileCategory);
     return successRes(res, { url });
   } catch (e) {
     next(e);
+  }
+};
+
+export const getFile: RequestHandler = async (req: Request, res: Response, next) => {
+  try {
+    const {
+      fileName,
+      fileCategory,
+    }: {
+      fileName: string;
+      fileCategory: keyof typeof ALLOWED_FILE_TYPES;
+    } = req.body;
+
+    const url = await generatePresignedUrl("getObject", fileName, null, fileCategory);
+    return successRes(res, { url });
+  } catch (e) {
+    next(e); 
   }
 };

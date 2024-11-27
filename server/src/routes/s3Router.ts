@@ -1,9 +1,10 @@
 import express from "express";
-import { generatePresignedUrl } from "@/controllers/s3Controller";
+import { getFile, uploadFile } from "@/controllers/s3Controller";
 
 const s3Router = express.Router();
 
-s3Router.post("/", generatePresignedUrl);
+s3Router.post("/", uploadFile);
+s3Router.get("/", getFile);
 
 /**
  * @swagger
