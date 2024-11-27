@@ -22,7 +22,6 @@ export const getMovies : RequestHandler = async (req, res, next) => {
         schedules: {
           include: {
             room: true, 
-            movie: true, 
           },
         },
       },

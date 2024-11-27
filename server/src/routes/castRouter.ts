@@ -53,15 +53,11 @@ export { castRouter };
  *       properties:
  *         CastId:
  *           type: string
- *           description: Unique identifier for the cast member
  *         Name:
  *           type: string
- *           description: Name of the cast member
  *         Image:
  *           type: string
  *           nullable: true
- *           description: Image URL of the cast member (if available)
  *         Character:
  *           type: string
- *           description: Character played by the cast member in the movie
  */
