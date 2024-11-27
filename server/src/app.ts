@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 
 import { 
+  castRouter,
   movieRouter 
 } from "./routes";
 
@@ -13,5 +14,6 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/movies", movieRouter);
+app.use("/casts", castRouter);
 
 export default app;

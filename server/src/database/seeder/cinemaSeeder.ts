@@ -1,5 +1,5 @@
 import { PrismaClient, Row } from '@prisma/client';
-import cinemas from '../../assets/cinemas';
+import cinemas from '@/assets/cinemas';
 
 const prisma = new PrismaClient();
 
