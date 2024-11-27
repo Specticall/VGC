@@ -1,21 +1,48 @@
 import { PrismaClient } from "@prisma/client";
 import axios from "axios";
 import {
-  TmdbCastDto,
-  TmdbMovieDetailDto,
-  TmdbPopularMovieDto,
-} from "@/dto/seeder/tmdbDto";
-import {
   TMDB_API_KEY,
   TMDB_ENDPOINT_BASE_URL,
   TMDB_MEDIA_BASE_URL,
-} from "@/utils/config";
+} from "@/config/config";
 
-const prisma = new PrismaClient();
+type TmdbMovieDetailDto = {
+  genres: {
+    id: number;
+    name: string;
+  }[];
+  tagline?: string;
+  runtime: number;
+}
+
+type TmdbPopularMovieDto = {
+  adult: boolean;
+  backdrop_path?: string;
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  poster_path?: string;
+  release_date: Date;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+}
+
+type TmdbCastDto = {
+  id: number;
+  name: string;
+  original_name: string;
+  profile_path?: string;
+  character?: string;
+}
 
 type Status = "COMING_SOON" | "NOW_SHOWING" | "END_OF_SHOWING";
 
-async function fetchMovies(page: number = 1) {
+const prisma = new PrismaClient();
+
+const fetchMovies = async (page: number = 1) => {
   try {
     const response = await axios.get<{ results: TmdbPopularMovieDto[] }>(
       `${TMDB_ENDPOINT_BASE_URL}/movie/popular`,
@@ -31,9 +58,9 @@ async function fetchMovies(page: number = 1) {
     console.error(e);
     process.exit(1);
   }
-}
+};
 
-async function fetchMovieDetails(movieId: number) {
+const fetchMovieDetails = async (movieId: number) => {
   try {
     const response = await axios.get<TmdbMovieDetailDto>(
       `${TMDB_ENDPOINT_BASE_URL}/movie/${movieId}`,
@@ -47,9 +74,9 @@ async function fetchMovieDetails(movieId: number) {
   } catch (e) {
     console.error(e);
   }
-}
+};
 
-async function fetchMovieCasts(movieId: number) {
+const fetchMovieCasts = async (movieId: number) => {
   try {
     const response = await axios.get<{ cast: TmdbCastDto[] }>(
       `${TMDB_ENDPOINT_BASE_URL}/movie/${movieId}/credits`,
@@ -63,9 +90,9 @@ async function fetchMovieCasts(movieId: number) {
   } catch (e) {
     console.error(e);
   }
-}
+};
 
-async function fetchLanguages() {
+const fetchLanguages = async () => {
   try {
     const response = await axios.get<
       { iso_639_1: string; english_name: string }[]
@@ -78,9 +105,9 @@ async function fetchLanguages() {
   } catch (e) {
     console.error(e);
   }
-}
+};
 
-async function fetchGenres() {
+const fetchGenres = async () => {
   try {
     const response = await axios.get<{
       genres: { id: number; name: string }[];
@@ -93,9 +120,9 @@ async function fetchGenres() {
   } catch (e) {
     console.error(e);
   }
-}
+};
 
-export default async function movieSeeder() {
+export const movieSeeder = async () => {
   console.log("Seeding languages...");
   const movieLanguages = await fetchLanguages();
   if (movieLanguages) {
@@ -205,4 +232,4 @@ export default async function movieSeeder() {
   }
 
   console.log(`Successfully seeded ${total} movies & its casts!`);
-}
+};

@@ -3,7 +3,7 @@ import cinemas from '../../assets/cinemas';
 
 const prisma = new PrismaClient();
 
-export default function cinemaSeeder() {
+export const cinemaSeeder = () => {
   console.log('Seeding cinemas...');
   cinemas.forEach(async (cinema) => {
     try {
@@ -33,4 +33,4 @@ export default function cinemaSeeder() {
     }
   });
   console.log('Cinemas seeded!');
-}
+};

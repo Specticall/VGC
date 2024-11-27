@@ -1,13 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 import axios from "axios";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "./config";
+import { JWT_SECRET } from "@/config/config";
 
 const prisma = new PrismaClient();
 
 // const scopeLogin
 
-async function loginGoogle(token: string) {
+const loginGoogle = async (token: string) => {
 	const userInfo = await axios.get(
 		`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}`,
 		{
