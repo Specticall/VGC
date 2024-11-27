@@ -8,7 +8,7 @@ const castRouter = express.Router();
  * tags:
  *   - name: Casts
  *     description: API endpoints for managing cast members
- * 
+ *
  * /casts:
  *   get:
  *     tags:

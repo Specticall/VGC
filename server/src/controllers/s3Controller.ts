@@ -1,7 +1,14 @@
-import { Request, RequestHandler, Response } from 'express';
-import AWS from 'aws-sdk';
-import { AWS_ACCESS_KEY_ID, AWS_REGION, AWS_S3_BUCKET_NAME, AWS_SECRET_ACCESS_KEY } from '@/config/config';
-import { errBadRequest, successRes } from '@/utils';
+import { Request, RequestHandler, Response } from "express";
+import AWS from "aws-sdk";
+import {
+  AWS_ACCESS_KEY_ID,
+  AWS_REGION,
+  AWS_S3_BUCKET_NAME,
+  AWS_SECRET_ACCESS_KEY,
+} from "@/config/config";
+import { successRes } from "@/utils";
+import { AppError } from "@/utils/AppError";
+import { STATUS } from "@/utils/statusCodes";
 
 const s3 = new AWS.S3({
   accessKeyId: AWS_ACCESS_KEY_ID,
@@ -15,22 +22,33 @@ const ALLOWED_FILE_TYPES = {
   trailer: ["video/mp4", "video/x-matroska"],
 };
 
-export const generatePresignedUrl: RequestHandler = async (req: Request, res: Response, next) => {
-  const { 
-    fileName, 
-    fileType, 
-    fileCategory 
-  }: { 
-    fileName: string; 
-    fileType: string; 
-    fileCategory: keyof typeof ALLOWED_FILE_TYPES } = req.body;
+export const generatePresignedUrl: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next
+) => {
+  const {
+    fileName,
+    fileType,
+    fileCategory,
+  }: {
+    fileName: string;
+    fileType: string;
+    fileCategory: keyof typeof ALLOWED_FILE_TYPES;
+  } = req.body;
 
-  if (!fileCategory || !['poster', 'backdrop', 'trailer'].includes(fileCategory)) {
-    return errBadRequest(next, 'Invalid file category');
+  if (
+    !fileCategory ||
+    !["poster", "backdrop", "trailer"].includes(fileCategory)
+  ) {
+    throw new AppError("Invalid file category", STATUS.BAD_REQUEST);
   }
 
   if (!ALLOWED_FILE_TYPES[fileCategory]?.includes(fileType)) {
-    return errBadRequest(next, 'Invalid file type for this category');
+    throw new AppError(
+      "Invalid file type for this category",
+      STATUS.BAD_REQUEST
+    );
   }
 
   const fileKey = `${fileCategory}s/${fileName}`;
@@ -45,12 +63,9 @@ export const generatePresignedUrl: RequestHandler = async (req: Request, res: Re
   };
 
   try {
-    const url = await s3.getSignedUrlPromise('putObject', params);
+    const url = await s3.getSignedUrlPromise("putObject", params);
     return successRes(res, { url });
   } catch (e) {
-    if (e instanceof Error) {
-      return errBadRequest(next, e.message);
-    }
-    return errBadRequest(next);
+    next(e);
   }
 };

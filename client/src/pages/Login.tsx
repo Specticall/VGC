@@ -7,24 +7,28 @@ import googleIcon from "../../public/google-logo.png";
 import loginImage from "../../public/login-image.png";
 import { useState } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
+import useAuthMutation from "@/hooks/mutation/useAuthMutation";
 
-type loginFields = {
+type LoginFields = {
   username: string;
   password: string;
 };
 
 export default function Login() {
+  const { googleLoginMutation } = useAuthMutation();
   const handleLogin = useGoogleLogin({
-    onSuccess: (token) => console.log(token),
+    onSuccess: (response) => {
+      googleLoginMutation.mutate({ access_token: response.access_token });
+    },
   });
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<loginFields>();
+  } = useForm<LoginFields>();
 
-  const onSubmit: SubmitHandler<loginFields> = (value) => {
+  const onSubmit: SubmitHandler<LoginFields> = (value) => {
     console.log(value);
   };
   return (

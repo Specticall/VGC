@@ -1,7 +1,8 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "./Logo";
 import { cn } from "../../lib/utils";
-import useToggleState from "../../hooks/useToggleState";
+import useUserQuery from "@/hooks/queries/useUserQuery";
+import { hasPermission } from "@/lib/permissions";
 
 const userMenus = [
   {
@@ -46,6 +47,14 @@ type Props = {
 
 export default function Sidebar({ onClose, isOpen }: Props) {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  const { userData } = useUserQuery();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   return (
     <>
@@ -108,37 +117,46 @@ export default function Sidebar({ onClose, isOpen }: Props) {
             );
           })}
         </ul>
-        <p className="pl-3 mt-8 text-gray text-[0.75rem]">ADMIN MENU</p>
-        <ul className="mt-4 grid gap-2">
-          {adminMenus.map((menu, i) => {
-            const active = pathname.includes(menu.redirect);
-            return (
-              <li
-                key={i}
-                className={cn(
-                  "px-3 py-2 rounded-md",
-                  active
-                    ? "border-accent border bg-accent/10"
-                    : "hover:bg-secondary/100 transition cursor-pointer"
-                )}
-              >
-                <Link
-                  to={menu.redirect}
-                  className={cn(
-                    "text-light flex items-center gap-2",
-                    active && "text-accent"
-                  )}
-                >
-                  <i className={cn("bx text-2xl ", menu.icon)}></i>
-                  <p>{menu.title}</p>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        {hasPermission(userData, "view:dashboard") && (
+          <>
+            <p className="pl-3 mt-8 text-gray text-[0.75rem]">ADMIN MENU</p>
+            <ul className="mt-4 grid gap-2">
+              {adminMenus.map((menu, i) => {
+                const active = pathname.includes(menu.redirect);
+                return (
+                  <li
+                    key={i}
+                    className={cn(
+                      "px-3 py-2 rounded-md",
+                      active
+                        ? "border-accent border bg-accent/10"
+                        : "hover:bg-secondary/100 transition cursor-pointer"
+                    )}
+                  >
+                    <Link
+                      to={menu.redirect}
+                      className={cn(
+                        "text-light flex items-center gap-2",
+                        active && "text-accent"
+                      )}
+                    >
+                      <i className={cn("bx text-2xl ", menu.icon)}></i>
+                      <p>{menu.title}</p>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        )}
         <div className="flex-1"></div>
         <p className="pl-3 mt-4 text-gray text-[0.75rem]">OTHER</p>
-        <li className={cn("px-3 py-2 mt-1 text-light flex gap-2 items-center")}>
+        <li
+          className={cn(
+            "px-3 py-2 mt-1 text-light flex gap-2 items-center cursor-pointer hover:opacity-50"
+          )}
+          onClick={handleLogout}
+        >
           <i className={cn("bx bx-exit text-2xl ")}></i>
           <p>Log Out</p>
         </li>

@@ -16,35 +16,35 @@ function useTable() {
 function Root({ cols, children }: { children: ReactNode; cols: string }) {
   return (
     <TableContext.Provider value={{ cols }}>
-      <ul className="">{children}</ul>
+      <div className="">{children}</div>
     </TableContext.Provider>
   );
 }
 function Head({ children }: { children: ReactNode }) {
   const { cols } = useTable();
   return (
-    <li
+    <ul
       className="grid gap-4 bg-border text-white py-3 px-6 rounded-md"
       style={{
         gridTemplateColumns: cols,
       }}
     >
       {children}
-    </li>
+    </ul>
   );
 }
 
 function Body({ children }: { children: ReactNode }) {
   const { cols } = useTable();
   return (
-    <li
+    <ul
       className="grid gap-4 px-5 py-4 border-border border-b items-center"
       style={{
         gridTemplateColumns: cols,
       }}
     >
       {children}
-    </li>
+    </ul>
   );
 }
 
