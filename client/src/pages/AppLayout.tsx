@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 
 export default function AppLayout() {
   const [isOpen, toggleIsOpen] = useToggleState(true);
-  console.log(isOpen);
   return (
     <div
       className={cn(

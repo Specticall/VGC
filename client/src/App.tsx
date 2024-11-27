@@ -35,6 +35,10 @@ const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
+        path: "movies",
+        element: <div></div>,
+      },
+      {
         path: "movie-form",
         element: <MovieForm />,
       },

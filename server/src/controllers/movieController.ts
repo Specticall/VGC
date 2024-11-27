@@ -1,14 +1,16 @@
-import { errInternalServer, successRes } from "@/utils";
+import { successRes } from "@/utils";
+import { AppError } from "@/utils/AppError";
+import { STATUS } from "@/utils/statusCodes";
 import { PrismaClient } from "@prisma/client";
 import { RequestHandler } from "express";
 
 const prisma = new PrismaClient();
 
-export const getMovies : RequestHandler = async (req, res, next) => {
+export const getMovies: RequestHandler = async (req, res, next) => {
   try {
     const movies = await prisma.movie.findMany({
       include: {
-        language: true, 
+        language: true,
         genres: {
           include: {
             genre: true,
@@ -16,18 +18,23 @@ export const getMovies : RequestHandler = async (req, res, next) => {
         },
         casts: {
           include: {
-            cast: true, 
+            cast: true,
           },
         },
         schedules: {
           include: {
-            room: true, 
+            room: true,
           },
         },
       },
     });
+
+    if (!movies) {
+      throw new AppError("No movies found", STATUS.NOT_FOUND);
+    }
+
     return successRes(res, movies);
-  } catch(e) {
-    return errInternalServer(next);
+  } catch (e) {
+    next(e);
   }
 };
