@@ -27,42 +27,42 @@ export const generatePresignedUrl: RequestHandler = async (
   res: Response,
   next
 ) => {
-  const {
-    fileName,
-    fileType,
-    fileCategory,
-  }: {
-    fileName: string;
-    fileType: string;
-    fileCategory: keyof typeof ALLOWED_FILE_TYPES;
-  } = req.body;
-
-  if (
-    !fileCategory ||
-    !["poster", "backdrop", "trailer"].includes(fileCategory)
-  ) {
-    throw new AppError("Invalid file category", STATUS.BAD_REQUEST);
-  }
-
-  if (!ALLOWED_FILE_TYPES[fileCategory]?.includes(fileType)) {
-    throw new AppError(
-      "Invalid file type for this category",
-      STATUS.BAD_REQUEST
-    );
-  }
-
-  const fileKey = `${fileCategory}s/${fileName}`;
-  const params = {
-    Bucket: AWS_S3_BUCKET_NAME,
-    Key: fileKey,
-    Expires: 60, //valid 60s
-    ContentType: fileType,
-    Conditions: [
-      ["content-length-range", 0, 10485760], //max 10mb
-    ],
-  };
-
   try {
+    const {
+      fileName,
+      fileType,
+      fileCategory,
+    }: {
+      fileName: string;
+      fileType: string;
+      fileCategory: keyof typeof ALLOWED_FILE_TYPES;
+    } = req.body;
+
+    if (
+      !fileCategory ||
+      !["poster", "backdrop", "trailer"].includes(fileCategory)
+    ) {
+      throw new AppError("Invalid file category", STATUS.BAD_REQUEST);
+    }
+
+    if (!ALLOWED_FILE_TYPES[fileCategory]?.includes(fileType)) {
+      throw new AppError(
+        "Invalid file type for this category",
+        STATUS.BAD_REQUEST
+      );
+    }
+
+    const fileKey = `${fileCategory}s/${fileName}`;
+    const params = {
+      Bucket: AWS_S3_BUCKET_NAME,
+      Key: fileKey,
+      Expires: 60, //valid 60s
+      ContentType: fileType,
+      Conditions: [
+        ["content-length-range", 0, 10485760], //max 10mb
+      ],
+    };
+
     const url = await s3.getSignedUrlPromise("putObject", params);
     return successRes(res, { url });
   } catch (e) {
