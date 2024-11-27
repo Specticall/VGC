@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
 import { Button } from "../ui/Button";
 import { cn } from "../../lib/utils";
+import useMediaMutation from "@/hooks/mutation/useMediaMutation";
+import axios from "axios";
 
 type Props = {
   title: string;
@@ -47,6 +49,7 @@ export const MediaInput = ({
   onChange,
   onError,
 }: Props) => {
+  const { presignedURLMutation } = useMediaMutation();
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string>();
 
@@ -56,7 +59,7 @@ export const MediaInput = ({
     }
   };
 
-  const handleFileChange = () => {
+  const handleFileChange = async () => {
     const file = inputRef.current?.files?.[0];
     if (!file) return;
     const validation =
@@ -68,6 +71,18 @@ export const MediaInput = ({
     }
 
     if (onChange) onChange(file);
+    const data = await presignedURLMutation.mutateAsync({
+      fileCategory: type === "image" ? "poster" : "trailer",
+      fileName: file.name,
+      fileType: file.type,
+    });
+
+    const result = await axios.put(data.data.data.url, file, {
+      headers: {
+        "Content-Type": file.type,
+      },
+    });
+    console.log(result);
     setPreview(URL.createObjectURL(file));
   };
 

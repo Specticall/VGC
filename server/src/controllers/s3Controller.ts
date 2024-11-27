@@ -58,11 +58,9 @@ export const generatePresignedUrl: RequestHandler = async (
       Key: fileKey,
       Expires: 60, //valid 60s
       ContentType: fileType,
-      Conditions: [
-        ["content-length-range", 0, 10485760], //max 10mb
-      ],
     };
 
+    // const url = s3.createPresignedPost(params);
     const url = await s3.getSignedUrlPromise("putObject", params);
     return successRes(res, { url });
   } catch (e) {

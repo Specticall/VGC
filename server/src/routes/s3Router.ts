@@ -10,7 +10,7 @@ s3Router.post("/", generatePresignedUrl);
  * tags:
  *   - name: Files
  *     description: API endpoints for file handling
- * 
+ *
  * /presigned:
  *   post:
  *     tags:
