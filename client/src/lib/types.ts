@@ -6,6 +6,13 @@ export type APISuccessResponse<T> = {
   data: T;
 };
 
+export type ActorData = {
+  CastId: string;
+  Name: string;
+  Image: string | null;
+  Character: string;
+};
+
 export type UserData = {
   UserId: string;
   Name: string;
@@ -17,4 +24,38 @@ export type UserData = {
   CreatedAt: string;
   UpdatedAt: string;
   Role: Role;
+};
+
+export type MovieData = {
+  MovieId: string;
+  Title: string;
+  Tagline: string;
+  DurationMinutes: number;
+  Price: string;
+  Poster: string;
+  Backdrop: string;
+  Trailer: string | null;
+  Status: string;
+  AgeRestriction: string;
+  ReleaseDate: string;
+  VoteAverage: number;
+  VoteCount: number;
+  LanguageId: string;
+  CreatedAt: string;
+  UpdatedAt: string;
+  language: {
+    LanguageId: string;
+    Name: string;
+  };
+  genres: {
+    MovieGenreId: string;
+    MovieId: string;
+    GenreId: number;
+    genre: GenreData;
+  }[];
+};
+
+export type GenreData = {
+  GenreId: number;
+  Name: string;
 };

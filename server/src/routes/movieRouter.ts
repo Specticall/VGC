@@ -1,4 +1,4 @@
-import { getMovies } from "@/controllers/movieController";
+import { getMovieById, getMovies } from "@/controllers/movieController";
 import express from "express";
 
 const movieRouter = express.Router();
@@ -8,7 +8,7 @@ const movieRouter = express.Router();
  * tags:
  *   - name: Movies
  *     description: API endpoints for managing movies
- * 
+ *
  * /movies:
  *   get:
  *     tags:
@@ -39,6 +39,7 @@ const movieRouter = express.Router();
  *         description: Bad Request
  */
 movieRouter.get("/", getMovies);
+movieRouter.get("/:id", getMovieById);
 
 export { movieRouter };
 

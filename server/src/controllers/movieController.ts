@@ -38,3 +38,31 @@ export const getMovies: RequestHandler = async (req, res, next) => {
     next(e);
   }
 };
+
+export const getMovieById: RequestHandler = async (request, response, next) => {
+  try {
+    const { id } = request.params;
+    if (!id) {
+      throw new AppError(
+        "id is missing the request parameter",
+        STATUS.BAD_REQUEST
+      );
+    }
+
+    const movieData = await prisma.movie.findUnique({
+      where: {
+        MovieId: id,
+      },
+    });
+    if (!movieData) {
+      throw new AppError(
+        `Movie with the id of ${id} was not found`,
+        STATUS.NOT_FOUND
+      );
+    }
+
+    return successRes(response, movieData);
+  } catch (error) {
+    next(error);
+  }
+};

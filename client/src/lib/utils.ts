@@ -29,3 +29,13 @@ export function getNamedMonth(input?: number) {
   if (!input) return;
   return months[input - 1];
 }
+
+export function formatDate(date?: Date) {
+  if (!date) return undefined;
+  const options: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  };
+  return new Intl.DateTimeFormat("en-US", options).format(date);
+}

@@ -1,8 +1,18 @@
 import Badge from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import Table from "@/components/ui/Table";
+import useMoviesQuery from "@/hooks/queries/useMoviesQuery";
+import { formatDate } from "@/lib/utils";
+import Skeleton from "react-loading-skeleton";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminMovies() {
+  const navigate = useNavigate();
+  const {
+    movieData,
+    movieQuery: { isLoading },
+  } = useMoviesQuery();
+
   return (
     <div className="p-6 bg-primary">
       <div className="flex justify-between items-center mb-8">
@@ -13,7 +23,7 @@ export default function AdminMovies() {
           </Button>
         </div>
       </div>
-      <Table.Root cols="minmax(24rem,2fr) minmax(8rem,0.5fr) minmax(16rem,1fr) minmax(16rem,1fr) minmax(8rem,0.5fr)">
+      <Table.Root cols="minmax(24rem,2fr) minmax(6rem,0.5fr) minmax(24rem,1fr) minmax(16rem,1fr) minmax(8rem,0.5fr)">
         <Table.Head>
           <li>Poster</li>
           <li>Duration</li>
@@ -22,25 +32,59 @@ export default function AdminMovies() {
           <li>Rating</li>
         </Table.Head>
 
-        {new Array(10).fill("x").map(() => {
+        {isLoading &&
+          new Array(10).fill("x").map((_, i) => {
+            return (
+              <Table.Body key={i}>
+                <div className="flex items-center w-full gap-8">
+                  <Skeleton className="h-20 aspect-square" />
+                  <div className="flex-1 flex flex-col gap-1">
+                    <Skeleton containerClassName="flex-1" />
+                    <Skeleton containerClassName="flex-1" />
+                  </div>
+                </div>
+                <Skeleton />
+                <Skeleton />
+                <Skeleton />
+                <Skeleton />
+              </Table.Body>
+            );
+          })}
+
+        {movieData?.map((movie) => {
           return (
-            <Table.Body>
-              <li className="flex items-center gap-8">
-                <div className="bg-border h-20 aspect-square rounded-md"></div>
-                <div>
-                  <h2 className="text-white">Venom: The Last Dance</h2>
-                  <p className="text-light">Eddie and Venom are on the...</p>
+            <Table.Body
+              key={movie.MovieId}
+              className="hover:bg-secondary/50 cursor-pointer transition"
+              onClick={() => {
+                navigate(`/movie-form/${movie.MovieId}`);
+              }}
+            >
+              <li className="flex items-center gap-8 ">
+                <img
+                  src={movie.Poster}
+                  className="bg-border object-cover h-20 aspect-square rounded-md"
+                ></img>
+                <div className="overflow-hidden">
+                  <h2 className="text-white truncate">{movie.Title}</h2>
+                  <p className="text-light truncate">{movie.Tagline}</p>
                 </div>
               </li>
-              <li className="text-light">1h 20m</li>
+              <li className="text-light">{movie.DurationMinutes}</li>
               <li className="flex gap-2">
-                <Badge variant={"default"}>Action</Badge>
                 <Badge variant={"default"} className="whitespace-nowrap">
-                  3 More...
+                  {movie.genres[0].genre.Name}
                 </Badge>
+                {movie.genres.length > 1 && (
+                  <Badge variant={"default"} className="whitespace-nowrap">
+                    {movie.genres.length - 1} More...
+                  </Badge>
+                )}
               </li>
-              <li className="text-light">18 November 2024</li>
-              <li className="text-light">8.75</li>
+              <li className="text-light">
+                {formatDate(new Date(movie.ReleaseDate))}
+              </li>
+              <li className="text-light">-</li>
             </Table.Body>
           );
         })}

@@ -2,23 +2,38 @@ import BackNavigation from "@/components/general/BackNavigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import MovieMediaInputs from "@/components/Movie/MovieMediaInputs";
 import MovieGeneralInputs from "@/components/Movie/MovieGeneralInputs";
+import { useParams } from "react-router-dom";
+import useMovieQuery from "@/hooks/queries/useMovieQuery";
 
 export type MovieFields = {
   title: string;
   description: string;
-  duration: string;
-  releaseDate: Date;
-  cast: string;
-  fileVideo: File;
-  fileImage: File;
+  duration: number;
+  releaseDate: string;
+  cast: string[];
+  fileVideo?: string;
+  fileImage?: string;
 };
 
 export default function MovieForm() {
+  const { id } = useParams();
+  const { movieData } = useMovieQuery({ id });
+
   const {
     control,
     clearErrors,
     formState: { errors },
-  } = useForm<MovieFields>();
+  } = useForm<MovieFields>({
+    values: {
+      title: movieData?.Title || "",
+      description: movieData?.Tagline || "",
+      releaseDate: movieData?.ReleaseDate || "",
+      duration: movieData?.DurationMinutes || 0,
+      cast: [],
+      fileImage: movieData?.Poster,
+      fileVideo: undefined,
+    },
+  });
 
   const onSubmit: SubmitHandler<MovieFields> = (value) => {
     console.log(value);

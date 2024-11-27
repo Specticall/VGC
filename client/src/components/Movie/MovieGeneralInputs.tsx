@@ -1,4 +1,9 @@
-import { Control, FieldErrors, SubmitHandler } from "react-hook-form";
+import {
+  Control,
+  Controller,
+  FieldErrors,
+  SubmitHandler,
+} from "react-hook-form";
 import { cn } from "../../lib/utils";
 import Input from "../ui/Input";
 import { MovieFields } from "../../pages/MovieForm";
@@ -75,7 +80,19 @@ export default function MovieGeneralInputs({
             required: "Release Date field is required",
           })}
         />
-        <MovieActorInput onSelect={() => {}} className="mt-4" />
+        <Controller
+          control={control}
+          name="cast"
+          render={({ field: { onChange, value } }) => {
+            return (
+              <MovieActorInput
+                onSelect={onChange}
+                value={value}
+                className="mt-4"
+              />
+            );
+          }}
+        />
         <div className="flex justify-end mt-8">
           <Button type="submit" className="px-8 py-3 text-white text-sm">
             Add Movie

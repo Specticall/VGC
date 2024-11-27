@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/Button";
 import { cn } from "../../lib/utils";
 import useMediaMutation from "@/hooks/mutation/useMediaMutation";
@@ -12,10 +12,11 @@ type Props = {
   onChange: (file?: File) => void;
   onError: (message: string) => void;
   errorMessage?: string;
+  value?: string;
 };
 
 function validateImage(imgFile: File) {
-  if (!imgFile.type.includes("png") && !imgFile.type.includes("jpg")) {
+  if (!imgFile.type.includes("png") && !imgFile.type.includes("jpeg")) {
     return "Invalid file type, File must either be .png or .png";
   }
 
@@ -45,6 +46,7 @@ export const MediaInput = ({
   description,
   uploadDescription,
   type,
+  value,
   errorMessage,
   onChange,
   onError,
@@ -52,6 +54,10 @@ export const MediaInput = ({
   const { presignedURLMutation } = useMediaMutation();
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string>();
+
+  useEffect(() => {
+    if (value) setPreview(value);
+  }, [value]);
 
   const handleButtonClick = () => {
     if (inputRef.current) {
@@ -77,12 +83,11 @@ export const MediaInput = ({
       fileType: file.type,
     });
 
-    const result = await axios.put(data.data.data.url, file, {
+    await axios.put(data.data.data.url, file, {
       headers: {
         "Content-Type": file.type,
       },
     });
-    console.log(result);
     setPreview(URL.createObjectURL(file));
   };
 

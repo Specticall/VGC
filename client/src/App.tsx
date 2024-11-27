@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GOOGLE_CLIENT_ID } from "./lib/config";
 import OrderTicket from "./pages/OrderTicket";
+import { SkeletonTheme } from "react-loading-skeleton";
 
 const router = createBrowserRouter([
   {
@@ -39,7 +40,7 @@ const router = createBrowserRouter([
         element: <div></div>,
       },
       {
-        path: "movie-form",
+        path: "movie-form/:id?",
         element: <MovieForm />,
       },
       {
@@ -67,7 +68,9 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-        <RouterProvider router={router} />
+        <SkeletonTheme baseColor="#1E1F21" highlightColor="#2A2B35">
+          <RouterProvider router={router} />
+        </SkeletonTheme>
       </GoogleOAuthProvider>
     </QueryClientProvider>
   );

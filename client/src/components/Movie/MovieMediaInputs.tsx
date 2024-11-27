@@ -30,7 +30,7 @@ export default function MovieMediaInputs({
         <Controller
           control={control}
           name="fileImage"
-          render={({ field: { onChange } }) => {
+          render={({ field: { onChange, value } }) => {
             return (
               <MediaInput
                 title="Upload Poster"
@@ -38,6 +38,7 @@ export default function MovieMediaInputs({
                 uploadDescription="Select From Device"
                 errorMessage={errors.fileImage?.message}
                 type="image"
+                value={value}
                 onChange={(file) => {
                   clearErrors("fileImage");
                   onChange(file);
