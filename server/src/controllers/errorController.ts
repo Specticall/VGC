@@ -13,7 +13,6 @@ export const errorHandler: ErrorRequestHandler = async (
   error: AppError | Error,
   request,
   response,
-  next
 ) => {
   if (error instanceof AppError) {
     response.status(error.statusCode).send({

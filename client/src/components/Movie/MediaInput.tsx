@@ -78,9 +78,9 @@ export const MediaInput = ({
 
     if (onChange) onChange(file);
     const data = await presignedURLMutation.mutateAsync({
-      fileCategory: type === "image" ? "poster" : "trailer",
-      fileName: file.name,
-      fileType: file.type,
+      category: type === "image" ? "poster" : "trailer",
+      path: file.name,
+      mimetype: file.type,
     });
 
     await axios.put(data.data.data.url, file, {
