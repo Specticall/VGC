@@ -1,6 +1,14 @@
 import { AppError } from "@/utils/AppError";
 import { ErrorRequestHandler } from "express";
 
+const specifyError = (error: Error) => {
+  if (error.message === "jwt expired") {
+    return "Token has expired";
+  }
+
+  return "Something went very wrong!";
+};
+
 export const errorHandler: ErrorRequestHandler = async (
   error: AppError | Error,
   request,
@@ -21,7 +29,7 @@ export const errorHandler: ErrorRequestHandler = async (
   response.status(500).send({
     status: "fail",
     statusCode: 500,
-    message: "Something went very wrong!",
+    message: specifyError(error),
     stack: error.stack,
   });
 };
