@@ -1,19 +1,17 @@
-import { Request, RequestHandler, Response } from "express";
-import AWS from "aws-sdk";
-import {
-  AWS_ACCESS_KEY_ID,
-  AWS_REGION,
-  AWS_S3_BUCKET_NAME,
-  AWS_SECRET_ACCESS_KEY,
-} from "@/config/config";
-import { successRes } from "@/utils";
+import { RequestHandler } from "express";
+import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import { AWS_ACCESS_KEY_ID, AWS_REGION, AWS_S3_BUCKET_NAME, AWS_SECRET_ACCESS_KEY } from "@/config/config";
+import { generateFileName, successRes } from "@/utils";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner"; 
 import { AppError } from "@/utils/AppError";
 import { STATUS } from "@/utils/statusCodes";
 
-const s3 = new AWS.S3({
-  accessKeyId: AWS_ACCESS_KEY_ID,
-  secretAccessKey: AWS_SECRET_ACCESS_KEY,
+const s3 = new S3Client({
   region: AWS_REGION,
+  credentials: {
+    accessKeyId: AWS_ACCESS_KEY_ID,
+    secretAccessKey: AWS_SECRET_ACCESS_KEY,
+  }
 });
 
 const ALLOWED_FILE_TYPES = {
@@ -22,68 +20,77 @@ const ALLOWED_FILE_TYPES = {
   trailer: ["video/mp4", "video/x-matroska"],
 };
 
-const generatePresignedUrl = async ( 
-  operation: "putObject" | "getObject",
-  fileName: string,                   
-  fileType: string | null,            
-  fileCategory: keyof typeof ALLOWED_FILE_TYPES 
-) => {
-
-  if (!fileCategory || !["poster", "backdrop", "trailer"].includes(fileCategory)) {
-    throw new AppError("Invalid file category", STATUS.BAD_REQUEST);
-  }
-
-  if (fileType && !ALLOWED_FILE_TYPES[fileCategory]?.includes(fileType)) {
-    throw new AppError(
-      "Invalid file type for this category",
-      STATUS.BAD_REQUEST
+export const getPresignedUrl: RequestHandler = async (req, res, next) => {
+  try {
+    if(!req.query.key){
+      throw new AppError("Key is required", STATUS.BAD_REQUEST);
+    }
+    const url = await getSignedUrl(
+      s3,
+      new GetObjectCommand({
+        Bucket: AWS_S3_BUCKET_NAME,
+        Key: req.query.key as string
+      }),
+      { expiresIn: 60 }
     );
+
+    return successRes(res, { url });
+
+  } catch(e){
+    next(e);
   }
 
-  const fileKey = `${fileCategory}s/${fileName}`; 
-  const params = {
-    Bucket: AWS_S3_BUCKET_NAME,
-    Key: fileKey,
-    Expires: 60, 
-    ContentType: fileType || undefined, 
-  };
-
-  const url = await s3.getSignedUrlPromise(operation, params);
-  return url;
 };
 
-export const uploadFile: RequestHandler = async (req: Request, res: Response, next) => {
+export const uploadFile: RequestHandler = async (req, res, next) => {
   try {
     const {
-      fileName,
-      fileType,
-      fileCategory,
-    } = req.params as {
-      fileName: string;
-      fileType: string;
-      fileCategory: keyof typeof ALLOWED_FILE_TYPES;
+      path,
+      mimetype,
+      category,
+    }: {
+      path: string;
+      mimetype: string;
+      category: keyof typeof ALLOWED_FILE_TYPES;
+    } = req.body;
+
+    if (!category || !["poster", "backdrop", "trailer"].includes(category)) {
+      throw new AppError("Invalid file category", STATUS.BAD_REQUEST);
+    }
+
+    if (!ALLOWED_FILE_TYPES[category]?.includes(mimetype)) {
+      throw new AppError(
+        "Invalid file type for this category",
+        STATUS.BAD_REQUEST
+      );
+    }
+
+    const fileKey = `${category}s/${generateFileName()}${path}`;
+
+    const params = {
+      Bucket: AWS_S3_BUCKET_NAME,
+      Key: fileKey,
+      ContentType: mimetype,
     };
 
-    const url = await generatePresignedUrl("putObject", fileName, fileType, fileCategory);
-    return successRes(res, { url });
+    const command = new PutObjectCommand(params);
+    const url = await getSignedUrl(s3, command, { expiresIn: 60 });
+
+    return successRes(res, { url, fileKey });
   } catch (e) {
     next(e);
   }
 };
 
-export const getFile: RequestHandler = async (req: Request, res: Response, next) => {
-  try {
-    const {
-      fileName,
-      fileCategory,
-    }: {
-      fileName: string;
-      fileCategory: keyof typeof ALLOWED_FILE_TYPES;
-    } = req.body;
-
-    const url = await generatePresignedUrl("getObject", fileName, null, fileCategory);
-    return successRes(res, { url });
-  } catch (e) {
-    next(e); 
-  }
-};
+// export const deleteFile: RequestHandler = async (req, res, next) => {
+//   try {
+//     const deleteParams = {
+//       Bucket: bucketName,
+//       Key: post.imageName,
+//     }
+  
+//     return s3Client.send(new DeleteObjectCommand(deleteParams))
+//   } catch(e) {
+//     next(e);
+//   }
+// };

@@ -3,9 +3,9 @@ import { APISuccessResponse } from "@/lib/types";
 import { useMutation } from "@tanstack/react-query";
 
 type PresignedPayload = {
-  fileName: string;
-  fileCategory: "poster" | "backdrop" | "trailer";
-  fileType: string;
+  path: string;
+  category: "poster" | "backdrop" | "trailer";
+  mimetype: string;
 };
 
 type PresignedResponse = {
