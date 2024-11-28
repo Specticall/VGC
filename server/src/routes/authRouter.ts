@@ -1,5 +1,4 @@
 import { loginWithGoogle } from "@/controllers/authController";
-import { getCasts } from "@/controllers/castController";
 import express from "express";
 
 const authRouter = express.Router();

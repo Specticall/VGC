@@ -1,6 +1,7 @@
 import { JWT_SECRET } from "@/config/config";
 import { User } from "@prisma/client";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 export const roundTimeDownToNearest5 = (date: Date): Date => {
   const minutes = date.getMinutes();
@@ -24,3 +25,5 @@ export const createJWT = (userData: User) => {
 
   return jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: "6h" });
 };
+
+export const generateFileName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex');

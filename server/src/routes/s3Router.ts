@@ -1,16 +1,17 @@
 import express from "express";
-import { generatePresignedUrl } from "@/controllers/s3Controller";
+import {  getPresignedUrl, uploadFile } from "@/controllers/s3Controller";
 
 const s3Router = express.Router();
 
-s3Router.post("/", generatePresignedUrl);
+s3Router.post("/", uploadFile);
+s3Router.get("/", getPresignedUrl);
 
 /**
  * @swagger
  * tags:
  *   - name: Files
  *     description: API endpoints for file handling
- * 
+ *
  * /presigned:
  *   post:
  *     tags:
