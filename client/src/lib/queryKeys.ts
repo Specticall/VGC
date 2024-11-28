@@ -3,4 +3,6 @@ export const QUERY_KEYS = {
   ACTORS: "actors",
   MOVIES: "movies",
   MOVIE: "movie",
+  SCHEDULES: "schedules",
+  MOVIE_SCHEDULE: "movie-schedule",
 };

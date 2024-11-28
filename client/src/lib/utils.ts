@@ -30,7 +30,8 @@ export function getNamedMonth(input?: number) {
   return months[input - 1];
 }
 
-export function formatDate(date?: Date) {
+export function formatDate(date?: string | Date) {
+  if (typeof date === "string") date = new Date(date);
   if (!date) return undefined;
   const options: Intl.DateTimeFormatOptions = {
     day: "numeric",
@@ -39,3 +40,10 @@ export function formatDate(date?: Date) {
   };
   return new Intl.DateTimeFormat("en-US", options).format(date);
 }
+export const isBetweenDate = (startDate?: string, endDate?: string) => {
+  if (!startDate || !endDate) return undefined;
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const now = Date.now();
+  return start.getTime() <= now && now <= end.getTime();
+};

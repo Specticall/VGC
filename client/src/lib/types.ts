@@ -1,5 +1,11 @@
 import { Role } from "./permissions";
 
+export type APIErrorResponse = {
+  message: string;
+  statusCode: number;
+  status: string;
+};
+
 export type APISuccessResponse<T> = {
   message: string;
   statusCode: number;
@@ -58,4 +64,30 @@ export type MovieData = {
 export type GenreData = {
   GenreId: number;
   Name: string;
+};
+
+export type ScheduleData = {
+  ScheduleId: string;
+  StartDate: string;
+  EndDate: string;
+  StartTime: string;
+  EndTime: string;
+  RoomId: string;
+  MovieId: string;
+  CreatedAt: string;
+  UpdatedAt: string;
+  movie: {
+    Title: string;
+    Poster?: string;
+    Tagline: string;
+  };
+  room: {
+    Name: string;
+    cinema: {
+      Name: string;
+    };
+  };
+  _count: {
+    reservations: number;
+  };
 };

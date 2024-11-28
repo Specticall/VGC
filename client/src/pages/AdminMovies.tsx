@@ -16,7 +16,7 @@ export default function AdminMovies() {
   return (
     <div className="p-6 bg-primary">
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-white text-3xl">Airing Movies</h2>
+        <h2 className="text-white text-3xl">Added Movies</h2>
         <div className="flex items-center gap-4">
           <Button variant={"primary"} to="/movie-form">
             + Add Movies

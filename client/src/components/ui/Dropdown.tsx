@@ -41,7 +41,7 @@ export default function Dropdown({
   return (
     <div {...props} className={cn("relative ", props.className)} ref={ref}>
       <button
-        className="flex justify-between items-center w-full border border-border px-6 py-3 hover:bg-secondary/20 transition rounded-md"
+        className="flex justify-between items-center w-full border border-border bg-primary px-6 py-3 hover:bg-secondary/20 transition rounded-md"
         onClick={() => setIsOpen((cur) => !cur)}
       >
         <p className={cn(usedValue ? "text-white" : "text-gray")}>

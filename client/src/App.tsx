@@ -13,6 +13,8 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GOOGLE_CLIENT_ID } from "./lib/config";
 import OrderTicket from "./pages/OrderTicket";
 import { SkeletonTheme } from "react-loading-skeleton";
+import Protect from "./components/general/Protect";
+import ScheduleForm from "./pages/ScheduleForm";
 
 const router = createBrowserRouter([
   {
@@ -29,7 +31,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <AppLayout />,
+    element: (
+      <Protect>
+        <AppLayout />
+      </Protect>
+    ),
     children: [
       {
         path: "dashboard",
@@ -42,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: "movie-form/:id?",
         element: <MovieForm />,
+      },
+      {
+        path: "schedule-form/:id?",
+        element: <ScheduleForm />,
       },
       {
         path: "movie-list",
