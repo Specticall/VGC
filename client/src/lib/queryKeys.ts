@@ -5,4 +5,6 @@ export const QUERY_KEYS = {
   MOVIE: "movie",
   SCHEDULES: "schedules",
   MOVIE_SCHEDULE: "movie-schedule",
+  LANGUAGES: "languages",
+  GENRES: "genres",
 };

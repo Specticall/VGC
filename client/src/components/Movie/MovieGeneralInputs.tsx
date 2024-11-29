@@ -9,6 +9,8 @@ import Input from "../ui/Input";
 import { MovieFields } from "../../pages/MovieForm";
 import { Button } from "../ui/Button";
 import MovieActorInput from "./MovieActorInput";
+import MovieLanguageInput from "./MovieLanguageInput";
+import MovieGenreInput from "./MovieGenreInput";
 
 type Props = {
   control: Control<MovieFields>;
@@ -16,12 +18,8 @@ type Props = {
   onSubmit: SubmitHandler<MovieFields>;
 };
 
-export default function MovieGeneralInputs({
-  errors,
-  onSubmit,
-  control,
-}: Props) {
-  const { handleSubmit, register } = control;
+export default function MovieGeneralInputs({ errors, control }: Props) {
+  const { register } = control;
 
   return (
     <div className="flex flex-col border-border border-2 rounded-[8px] bg-primary relative">
@@ -29,11 +27,7 @@ export default function MovieGeneralInputs({
         <p className="text-heading ">General Info</p>
         <div className="w-2 h-2 bg-accent rounded-full ml-2 "></div>
       </div>
-      <form
-        action=""
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-5 p-6"
-      >
+      <div className="flex flex-col gap-5 p-6">
         <Input
           label="Movie Title"
           placeholder="Venom : The last dance"
@@ -80,6 +74,8 @@ export default function MovieGeneralInputs({
             required: "Release Date field is required",
           })}
         />
+        <MovieLanguageInput control={control} />
+        <MovieGenreInput control={control} />
         <Controller
           control={control}
           name="cast"
@@ -98,7 +94,7 @@ export default function MovieGeneralInputs({
             Add Movie
           </Button>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

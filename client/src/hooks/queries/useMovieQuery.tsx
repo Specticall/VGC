@@ -10,7 +10,7 @@ type Props = {
 export default function useMovieQuery({ id }: Props) {
   const movieQuery = useQuery({
     queryFn: () => API.get<APISuccessResponse<MovieData>>(`/movies/${id}`),
-    queryKey: [QUERY_KEYS.MOVIE],
+    queryKey: [QUERY_KEYS.MOVIE, id],
     enabled: Boolean(id),
   });
 

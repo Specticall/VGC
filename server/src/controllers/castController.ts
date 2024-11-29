@@ -14,7 +14,7 @@ export const getCasts: RequestHandler = async (req, res, next) => {
           not: null,
         },
       },
-      take: 50,
+      // take: 50,
     });
 
     if (!actors) {

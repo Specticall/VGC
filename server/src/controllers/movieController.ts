@@ -11,6 +11,7 @@ export const getMovies: RequestHandler = async (req, res, next) => {
     const movies = await prisma.movie.findMany({
       include: {
         language: true,
+
         genres: {
           include: {
             genre: true,
@@ -52,6 +53,19 @@ export const getMovieById: RequestHandler = async (request, response, next) => {
     const movieData = await prisma.movie.findUnique({
       where: {
         MovieId: id,
+      },
+      include: {
+        language: true,
+        casts: {
+          select: {
+            CastId: true,
+          },
+        },
+        genres: {
+          include: {
+            genre: true,
+          },
+        },
       },
     });
     if (!movieData) {

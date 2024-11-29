@@ -65,7 +65,7 @@ export default function MovieActorInput({
       <div
         ref={elRef}
         className={cn(
-          "grid bg-primary border border-border rounded-md w-full top-[-26rem] absolute left-0 right-0 shadow-lg transition invisible opacity-0 scale-[97.5%] shadow-secondary",
+          "grid bg-primary border border-border rounded-md w-full bottom-[7rem] z-20 absolute left-0 right-0 shadow-lg transition invisible opacity-0 scale-[97.5%] shadow-secondary",
           show && "scale-100 visible opacity-100"
         )}
       >

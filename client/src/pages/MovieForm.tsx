@@ -9,10 +9,12 @@ export type MovieFields = {
   title: string;
   description: string;
   duration: number;
+  language: string;
   releaseDate: string;
   cast: string[];
   fileVideo?: string;
   fileImage?: string;
+  genres: string[];
 };
 
 export default function MovieForm() {
@@ -21,6 +23,7 @@ export default function MovieForm() {
 
   const {
     control,
+    handleSubmit,
     clearErrors,
     formState: { errors },
   } = useForm<MovieFields>({
@@ -29,11 +32,15 @@ export default function MovieForm() {
       description: movieData?.Tagline || "",
       releaseDate: movieData?.ReleaseDate || "",
       duration: movieData?.DurationMinutes || 0,
-      cast: [],
+      cast: movieData?.casts?.map((cast) => cast.CastId) || [],
       fileImage: movieData?.Poster,
+      language: movieData?.language?.Name || "",
+      genres: movieData?.genres?.map((genre) => genre.genre.Name) || [],
       fileVideo: undefined,
     },
   });
+
+  console.log(movieData);
 
   const onSubmit: SubmitHandler<MovieFields> = (value) => {
     console.log(value);
@@ -47,7 +54,10 @@ export default function MovieForm() {
           title="Add New Movie"
           to="/admin-movies"
         />
-        <div className="grid grid-cols-[minmax(20rem,1fr)_1fr] text-white gap-5">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="grid grid-cols-[minmax(20rem,1fr)_1fr] text-white gap-5"
+        >
           <MovieMediaInputs
             control={control}
             clearErrors={clearErrors}
@@ -58,7 +68,7 @@ export default function MovieForm() {
             errors={errors}
             onSubmit={onSubmit}
           />
-        </div>
+        </form>
       </div>
     </main>
   );

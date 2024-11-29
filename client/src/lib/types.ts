@@ -49,6 +49,9 @@ export type MovieData = {
   LanguageId: string;
   CreatedAt: string;
   UpdatedAt: string;
+  casts: {
+    CastId: string;
+  }[];
   language: {
     LanguageId: string;
     Name: string;
@@ -63,6 +66,11 @@ export type MovieData = {
 
 export type GenreData = {
   GenreId: number;
+  Name: string;
+};
+
+export type Language = {
+  LanguageId: string;
   Name: string;
 };
 
