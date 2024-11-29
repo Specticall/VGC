@@ -90,14 +90,14 @@ export default function Sidebar({ onClose, isOpen }: Props) {
           ></i>
         </div>
         <p className="pl-3 mt-4 text-gray text-[0.75rem]">MAIN MENU</p>
-        <ul className="mt-4 grid gap-2">
+        <ul className="mt-4 grid gap-1">
           {userMenus.map((menu, i) => {
             const active = pathname.includes(menu.redirect);
             return (
               <li
                 key={i}
                 className={cn(
-                  "px-3 py-2 rounded-md",
+                  "px-3 py-1.5 rounded-md",
                   active
                     ? "border-accent border bg-accent/10"
                     : "hover:bg-secondary/100 transition cursor-pointer"
@@ -120,14 +120,14 @@ export default function Sidebar({ onClose, isOpen }: Props) {
         {hasPermission(userData, "view:dashboard") && (
           <>
             <p className="pl-3 mt-8 text-gray text-[0.75rem]">ADMIN MENU</p>
-            <ul className="mt-4 grid gap-2">
+            <ul className="mt-4 grid gap-1">
               {adminMenus.map((menu, i) => {
                 const active = pathname.includes(menu.redirect);
                 return (
                   <li
                     key={i}
                     className={cn(
-                      "px-3 py-2 rounded-md",
+                      "px-3 py-1.5 rounded-md",
                       active
                         ? "border-accent border bg-accent/10"
                         : "hover:bg-secondary/100 transition cursor-pointer"

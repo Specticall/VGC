@@ -11,6 +11,7 @@ export const getMovies: RequestHandler = async (req, res, next) => {
     const movies = await prisma.movie.findMany({
       include: {
         language: true,
+
         genres: {
           include: {
             genre: true,
@@ -36,5 +37,46 @@ export const getMovies: RequestHandler = async (req, res, next) => {
     return successRes(res, movies);
   } catch (e) {
     next(e);
+  }
+};
+
+export const getMovieById: RequestHandler = async (request, response, next) => {
+  try {
+    const { id } = request.params;
+    if (!id) {
+      throw new AppError(
+        "id is missing the request parameter",
+        STATUS.BAD_REQUEST
+      );
+    }
+
+    const movieData = await prisma.movie.findUnique({
+      where: {
+        MovieId: id,
+      },
+      include: {
+        language: true,
+        casts: {
+          select: {
+            CastId: true,
+          },
+        },
+        genres: {
+          include: {
+            genre: true,
+          },
+        },
+      },
+    });
+    if (!movieData) {
+      throw new AppError(
+        `Movie with the id of ${id} was not found`,
+        STATUS.NOT_FOUND
+      );
+    }
+
+    return successRes(response, movieData);
+  } catch (error) {
+    next(error);
   }
 };

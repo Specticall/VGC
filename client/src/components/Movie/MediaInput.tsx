@@ -3,13 +3,16 @@ import { Button } from "../ui/Button";
 import { cn } from "../../lib/utils";
 import useMediaMutation from "@/hooks/mutation/useMediaMutation";
 import axios from "axios";
+import { API } from "@/lib/API";
+import { APISuccessResponse } from "@/lib/types";
+import { LoadingSpinner } from "../ui/LoadingSpinner";
 
 type Props = {
   title: string;
   description: string;
   uploadDescription: string;
   type: "image" | "video";
-  onChange: (file?: File) => void;
+  onChange: (file?: string) => void;
   onError: (message: string) => void;
   errorMessage?: string;
   value?: string;
@@ -53,6 +56,7 @@ export const MediaInput = ({
 }: Props) => {
   const { presignedURLMutation } = useMediaMutation();
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [preview, setPreview] = useState<string>();
 
   useEffect(() => {
@@ -66,29 +70,44 @@ export const MediaInput = ({
   };
 
   const handleFileChange = async () => {
-    const file = inputRef.current?.files?.[0];
-    if (!file) return;
-    const validation =
-      type === "image" ? validateImage(file) : validateVideo(file);
+    try {
+      setIsLoading(true);
+      const file = inputRef.current?.files?.[0];
+      if (!file) return;
+      const validation =
+        type === "image" ? validateImage(file) : validateVideo(file);
 
-    if (typeof validation === "string") {
-      onError(validation);
-      return;
+      if (typeof validation === "string") {
+        onError(validation);
+        return;
+      }
+
+      const data = await presignedURLMutation.mutateAsync({
+        category: type === "image" ? "poster" : "trailer",
+        path: file.name,
+        mimetype: file.type,
+      });
+
+      const { url, fileKey } = data.data.data;
+
+      await axios.put(url, file, {
+        headers: {
+          "Content-Type": file.type,
+        },
+      });
+
+      const getPresignedURLResponse = await API.get<
+        APISuccessResponse<{ url: string }>
+      >(`/presigned?key=${fileKey}`);
+
+      const presignedURL = getPresignedURLResponse.data.data.url;
+      setPreview(presignedURL);
+      if (onChange) onChange(presignedURL);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
     }
-
-    if (onChange) onChange(file);
-    const data = await presignedURLMutation.mutateAsync({
-      category: type === "image" ? "poster" : "trailer",
-      path: file.name,
-      mimetype: file.type,
-    });
-
-    await axios.put(data.data.data.url, file, {
-      headers: {
-        "Content-Type": file.type,
-      },
-    });
-    setPreview(URL.createObjectURL(file));
   };
 
   const handleDelete = () => {
@@ -96,8 +115,20 @@ export const MediaInput = ({
     setPreview(undefined);
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-[20rem] flex items-center justify-center border border-border border-dashed flex-col">
+        <LoadingSpinner className="w-14 h-14" />
+        <p className="text-2xl mb-2 mt-4">Uploading Media</p>
+        <p className="text-gray text-center">
+          Please Wait, this might take a while
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <div className="">
+    <div className="min-h-[20rem]">
       {preview ? (
         <div className="relative group">
           <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 cursor-pointer transition invisible group-hover:visible flex items-center justify-center gap-4">

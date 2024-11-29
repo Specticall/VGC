@@ -2,23 +2,45 @@ import BackNavigation from "@/components/general/BackNavigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import MovieMediaInputs from "@/components/Movie/MovieMediaInputs";
 import MovieGeneralInputs from "@/components/Movie/MovieGeneralInputs";
+import { useParams } from "react-router-dom";
+import useMovieQuery from "@/hooks/queries/useMovieQuery";
 
 export type MovieFields = {
   title: string;
   description: string;
-  duration: string;
-  releaseDate: Date;
-  cast: string;
-  fileVideo: File;
-  fileImage: File;
+  duration: number;
+  language: string;
+  releaseDate: string;
+  cast: string[];
+  fileVideo?: string;
+  fileImage?: string;
+  genres: string[];
 };
 
 export default function MovieForm() {
+  const { id } = useParams();
+  const { movieData } = useMovieQuery({ id });
+
   const {
     control,
+    handleSubmit,
     clearErrors,
     formState: { errors },
-  } = useForm<MovieFields>();
+  } = useForm<MovieFields>({
+    values: {
+      title: movieData?.Title || "",
+      description: movieData?.Tagline || "",
+      releaseDate: movieData?.ReleaseDate || "",
+      duration: movieData?.DurationMinutes || 0,
+      cast: movieData?.casts?.map((cast) => cast.CastId) || [],
+      fileImage: movieData?.Poster,
+      language: movieData?.language?.Name || "",
+      genres: movieData?.genres?.map((genre) => genre.genre.Name) || [],
+      fileVideo: undefined,
+    },
+  });
+
+  console.log(movieData);
 
   const onSubmit: SubmitHandler<MovieFields> = (value) => {
     console.log(value);
@@ -32,7 +54,10 @@ export default function MovieForm() {
           title="Add New Movie"
           to="/admin-movies"
         />
-        <div className="grid grid-cols-[minmax(20rem,1fr)_1fr] text-white gap-5">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="grid grid-cols-[minmax(20rem,1fr)_1fr] text-white gap-5"
+        >
           <MovieMediaInputs
             control={control}
             clearErrors={clearErrors}
@@ -43,7 +68,7 @@ export default function MovieForm() {
             errors={errors}
             onSubmit={onSubmit}
           />
-        </div>
+        </form>
       </div>
     </main>
   );

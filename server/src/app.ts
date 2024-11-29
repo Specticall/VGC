@@ -4,11 +4,14 @@ import cors from "cors";
 import {
   authRouter,
   castRouter,
+  languageRouter,
   movieRouter,
   s3Router,
   userRouter,
 } from "./routes";
 import { errorHandler } from "./controllers/errorController";
+import { schedulesRouter } from "./routes/schedulesRouter";
+import { genreRouter } from "./routes/genreRouter";
 
 const app = express();
 // Enable fetching from localhost
@@ -22,6 +25,9 @@ app.use("/casts", castRouter);
 app.use("/presigned", s3Router);
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
+app.use("/schedules", schedulesRouter);
+app.use("/languages", languageRouter);
+app.use("/genres", genreRouter);
 
 app.use(errorHandler);
 

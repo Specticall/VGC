@@ -3,3 +3,4 @@ export * from "./castRouter";
 export * from "./authRouter";
 export * from "./s3Router";
 export * from "./userRouter";
+export * from "./languageRouter";

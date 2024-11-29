@@ -1,9 +1,16 @@
-import { Control, FieldErrors, SubmitHandler } from "react-hook-form";
+import {
+  Control,
+  Controller,
+  FieldErrors,
+  SubmitHandler,
+} from "react-hook-form";
 import { cn } from "../../lib/utils";
 import Input from "../ui/Input";
 import { MovieFields } from "../../pages/MovieForm";
 import { Button } from "../ui/Button";
 import MovieActorInput from "./MovieActorInput";
+import MovieLanguageInput from "./MovieLanguageInput";
+import MovieGenreInput from "./MovieGenreInput";
 
 type Props = {
   control: Control<MovieFields>;
@@ -11,12 +18,8 @@ type Props = {
   onSubmit: SubmitHandler<MovieFields>;
 };
 
-export default function MovieGeneralInputs({
-  errors,
-  onSubmit,
-  control,
-}: Props) {
-  const { handleSubmit, register } = control;
+export default function MovieGeneralInputs({ errors, control }: Props) {
+  const { register } = control;
 
   return (
     <div className="flex flex-col border-border border-2 rounded-[8px] bg-primary relative">
@@ -24,11 +27,7 @@ export default function MovieGeneralInputs({
         <p className="text-heading ">General Info</p>
         <div className="w-2 h-2 bg-accent rounded-full ml-2 "></div>
       </div>
-      <form
-        action=""
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-5 p-6"
-      >
+      <div className="flex flex-col gap-5 p-6">
         <Input
           label="Movie Title"
           placeholder="Venom : The last dance"
@@ -75,13 +74,27 @@ export default function MovieGeneralInputs({
             required: "Release Date field is required",
           })}
         />
-        <MovieActorInput onSelect={() => {}} className="mt-4" />
+        <MovieLanguageInput control={control} />
+        <MovieGenreInput control={control} />
+        <Controller
+          control={control}
+          name="cast"
+          render={({ field: { onChange, value } }) => {
+            return (
+              <MovieActorInput
+                onSelect={onChange}
+                value={value}
+                className="mt-4"
+              />
+            );
+          }}
+        />
         <div className="flex justify-end mt-8">
           <Button type="submit" className="px-8 py-3 text-white text-sm">
             Add Movie
           </Button>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

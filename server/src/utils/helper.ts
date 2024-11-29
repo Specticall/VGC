@@ -26,4 +26,5 @@ export const createJWT = (userData: User) => {
   return jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: "6h" });
 };
 
-export const generateFileName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex');
+export const generateFileName = (bytes = 32) =>
+  crypto.randomBytes(bytes).toString("hex");

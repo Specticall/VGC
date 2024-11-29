@@ -1,4 +1,5 @@
-import { ReactNode, createContext, useContext } from "react";
+import { cn } from "@/lib/utils";
+import { HTMLAttributes, ReactNode, createContext, useContext } from "react";
 
 type TableContextValues = {
   cols: string;
@@ -24,7 +25,7 @@ function Head({ children }: { children: ReactNode }) {
   const { cols } = useTable();
   return (
     <ul
-      className="grid gap-4 bg-border text-white py-3 px-6 rounded-md"
+      className="grid gap-6 bg-border text-white py-3 px-6 rounded-md"
       style={{
         gridTemplateColumns: cols,
       }}
@@ -34,13 +35,21 @@ function Head({ children }: { children: ReactNode }) {
   );
 }
 
-function Body({ children }: { children: ReactNode }) {
+function Body({
+  children,
+  ...props
+}: { children: ReactNode } & HTMLAttributes<HTMLUListElement>) {
   const { cols } = useTable();
   return (
     <ul
-      className="grid gap-4 px-5 py-4 border-border border-b items-center"
+      {...props}
+      className={cn(
+        "grid gap-6 px-5 py-4 border-border border-b items-center",
+        props.className
+      )}
       style={{
         gridTemplateColumns: cols,
+        ...props.style,
       }}
     >
       {children}
