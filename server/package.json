@@ -25,7 +25,7 @@
     "crypto": "^1.0.1",
     "eslint": "^8.56.0",
     "nodemon": "^3.0.3",
-    "prisma": "^5.22.0",
+    "prisma": "^6.0.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "ts-node": "^10.9.2",
@@ -36,7 +36,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.701.0",
     "@aws-sdk/s3-request-presigner": "^3.701.0",
-    "@prisma/client": "^5.22.0",
+    "@prisma/client": "^6.0.0",
     "axios": "^1.7.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.1",

@@ -80,3 +80,33 @@ export const getMovieById: RequestHandler = async (request, response, next) => {
     next(error);
   }
 };
+
+export const createMovie: RequestHandler = async (req, res, next) => {
+  // try {
+  //   const {  
+  //     Title,
+  //     DurationMinutes,
+  //     Price,
+  //     Status,
+  //     ReleaseDate,
+  //   } = req.body;
+
+  //   await prisma.movie.create({
+  //     data: {
+  //       Title,
+  //       DurationMinutes,
+  //       Price,
+  //       Status,
+  //       ReleaseDate,
+  //       Tagline: req.body.Tagline,
+  //       AgeRestriction: req.body.AgeRestriction,
+  //       language: {
+  //         connect: { LanguageId: req.body.languageId }
+  //       }
+  //     }
+  //   });
+
+  // } catch (e) {
+  //   next(e);
+  // }
+};

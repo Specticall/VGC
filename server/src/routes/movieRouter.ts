@@ -1,4 +1,4 @@
-import { getMovieById, getMovies } from "@/controllers/movieController";
+import { getMovieById, getMovies, createMovie } from "@/controllers/movieController";
 import express from "express";
 
 const movieRouter = express.Router();
@@ -40,6 +40,7 @@ const movieRouter = express.Router();
  */
 movieRouter.get("/", getMovies);
 movieRouter.get("/:id", getMovieById);
+movieRouter.post("/", createMovie);
 
 export { movieRouter };
 

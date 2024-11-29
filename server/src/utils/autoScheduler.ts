@@ -42,8 +42,6 @@ export const autoScheduler = (
         }
 
         schedulesData.push({
-          StartDate: new Date(startOfDay),
-          EndDate: new Date(endDate),
           StartTime: roundTimeDownToNearest5(new Date(currentTime)),
           EndTime: roundTimeDownToNearest5(new Date(movieEndTime)),
           RoomId: room.RoomId,

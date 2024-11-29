@@ -6,7 +6,7 @@ import {
   TMDB_MEDIA_BASE_URL,
 } from "@/config/config";
 
-type TmdbMovieDetailDto = {
+type TmdbMovieDetailType = {
   genres: {
     id: number;
     name: string;
@@ -15,7 +15,7 @@ type TmdbMovieDetailDto = {
   runtime: number;
 }
 
-type TmdbPopularMovieDto = {
+type TmdbPopularMovieType = {
   adult: boolean;
   backdrop_path?: string;
   id: number;
@@ -30,7 +30,7 @@ type TmdbPopularMovieDto = {
   vote_count: number;
 }
 
-type TmdbCastDto = {
+type TmdbCastType = {
   id: number;
   name: string;
   original_name: string;
@@ -44,7 +44,7 @@ const prisma = new PrismaClient();
 
 const fetchMovies = async (page: number = 1) => {
   try {
-    const response = await axios.get<{ results: TmdbPopularMovieDto[] }>(
+    const response = await axios.get<{ results: TmdbPopularMovieType[] }>(
       `${TMDB_ENDPOINT_BASE_URL}/movie/popular`,
       {
         params: {
@@ -62,7 +62,7 @@ const fetchMovies = async (page: number = 1) => {
 
 const fetchMovieDetails = async (movieId: number) => {
   try {
-    const response = await axios.get<TmdbMovieDetailDto>(
+    const response = await axios.get<TmdbMovieDetailType>(
       `${TMDB_ENDPOINT_BASE_URL}/movie/${movieId}`,
       {
         params: {
@@ -78,7 +78,7 @@ const fetchMovieDetails = async (movieId: number) => {
 
 const fetchMovieCasts = async (movieId: number) => {
   try {
-    const response = await axios.get<{ cast: TmdbCastDto[] }>(
+    const response = await axios.get<{ cast: TmdbCastType[] }>(
       `${TMDB_ENDPOINT_BASE_URL}/movie/${movieId}/credits`,
       {
         params: {

@@ -161,8 +161,6 @@ enum Row {
 
 model Schedule {
   ScheduleId      String        @id @default(uuid())
-  StartDate       DateTime
-  EndDate         DateTime
   StartTime       DateTime
   EndTime         DateTime
   RoomId          String
