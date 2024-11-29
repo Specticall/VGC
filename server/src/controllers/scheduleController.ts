@@ -3,8 +3,6 @@ import { AppError } from "@/utils/AppError";
 import { STATUS } from "@/utils/statusCodes";
 import { PrismaClient } from "@prisma/client";
 import { RequestHandler } from "express";
-import { getRooms } from "./roomController";
-import { Decimal } from "@prisma/client/runtime/library";
 
 const prisma = new PrismaClient();
 
@@ -57,18 +55,8 @@ export const postSchedules: RequestHandler = async (
 	response,
 	next
 ) => {
-	// StartTime       DateTime
-	// EndTime         DateTime
-	// RoomId          String
-	// MovieId         String
-	// CreatedAt       DateTime     @default(now())
-	// UpdatedAt       DateTime     @updatedAt
-	// room            Room          @relation(fields: [RoomId], references: [RoomId])
-	// movie           Movie         @relation(fields: [MovieId], references: [MovieId])
-	// reservations    Reservation[]
 	try {
-		const { roomId, movieId, ticketPrice, startDate, time, duration } =
-			request.body;
+		const { roomId, movieId, ticketPrice, startDate, time } = request.body;
 
 		if (!roomId) {
 			throw new AppError(
@@ -76,6 +64,13 @@ export const postSchedules: RequestHandler = async (
 				STATUS.BAD_REQUEST
 			);
 		}
+		const duration = await prisma.movie.findUnique({
+			where: { MovieId: movieId },
+		});
+		if (!duration) {
+			throw new AppError("duration not found", STATUS.NOT_FOUND);
+		}
+		const durationMilisecond = duration.DurationMinutes * 60 * 1000;
 		if (!ticketPrice) {
 			throw new AppError("Price Not Found", STATUS.BAD_REQUEST);
 		}
@@ -90,20 +85,46 @@ export const postSchedules: RequestHandler = async (
 		if (!time || !Array.isArray(time)) {
 			throw new AppError("Time should be an array", STATUS.BAD_REQUEST);
 		}
-		// const schedules = await Promise.all(
-		// 	time.map(async (t: string) => {
-		// 		return await prisma.schedule.create({
-		// 			data: {
-		// 				RoomId: roomId,
-		// 				Date: date,
-		// 				Time: t,
-		// 			},
-		// 		});
-		// 	})
-		// );
 
-		// return successRes(response, schedules);
+		await Promise.all(
+			time.map(async (t: string) => {
+				return await prisma.schedule.create({
+					data: {
+						StartDate: new Date(`${startDate}T${t}`),
+						StartTime: new Date(`${startDate}T${t}`),
+						EndTime: new Date(
+							new Date(`${startDate}T${t}`).getTime() + durationMilisecond
+						),
+						EndDate: new Date(`${startDate}T${t}`),
+						RoomId: roomId,
+						MovieId: movieId,
+						room: { connect: { RoomId: roomId } },
+						movie: { connect: { MovieId: movieId } },
+					},
+				});
+			})
+		);
+
+		return successRes(response, "Schedules Created");
 	} catch (error) {
 		next(error);
+	}
+};
+
+export const deleteSchedules: RequestHandler = async (
+	request,
+	response,
+	next
+) => {
+	try {
+		const scheduleId = request.params.scheduleId as string;
+		await prisma.schedule.delete({
+			where: {
+				ScheduleId: scheduleId,
+			},
+		});
+		return successRes(response, "Schedules Deleted");
+	} catch (e) {
+		next(e);
 	}
 };
