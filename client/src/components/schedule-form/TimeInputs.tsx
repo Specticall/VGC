@@ -13,7 +13,7 @@ export default function TimeInputs({ onInputTime, value }: Props) {
   const handleAddTime = () => {
     setErrorMessage("");
     if (!current) return;
-    if (value.includes(current)) {
+    if (value && value.includes(current)) {
       setErrorMessage("Duplicate time not allowed");
       return;
     }
@@ -54,12 +54,12 @@ export default function TimeInputs({ onInputTime, value }: Props) {
               }}
               value={current}
             />
-            <button
+            <div
               className="py-3 px-4 rounded-r-md text-white bg-border hover:bg-border/75 transition cursor-pointer"
               onClick={handleAddTime}
             >
               <i className="bx bx-plus text-lg"></i>
-            </button>
+            </div>
           </div>
           {errorMessage && (
             <div className="mt-2 text-red-500 absolute -bottom-12 whitespace-nowrap">

@@ -1,7 +1,21 @@
-import { getMovieById, getMovies } from "@/controllers/movieController";
+import {
+  getMovieById,
+  getMovies,
+  createMovie,
+  updateMovie,
+  deleteMovie,
+} from "@/controllers/movieController";
 import express from "express";
 
 const movieRouter = express.Router();
+
+movieRouter.get("/", getMovies);
+movieRouter.get("/:id", getMovieById);
+movieRouter.post("/", createMovie);
+movieRouter.put("/:movieId", updateMovie);
+movieRouter.delete("/:movieId", deleteMovie);
+
+export { movieRouter };
 
 /**
  * @swagger
@@ -38,10 +52,6 @@ const movieRouter = express.Router();
  *       400:
  *         description: Bad Request
  */
-movieRouter.get("/", getMovies);
-movieRouter.get("/:id", getMovieById);
-
-export { movieRouter };
 
 /**
  * @swagger

@@ -4,6 +4,6 @@ import express from "express";
 
 const schedulesRouter = express.Router();
 schedulesRouter.get("/", protect, getSchedules);
-schedulesRouter.post("/", protect, postSchedules);
+schedulesRouter.post("/:movieId", protect, postSchedules);
 
 export { schedulesRouter };

@@ -30,7 +30,7 @@ model User {
 
 model Reservation {
   ReservationId   String       @id @default(uuid())
-  TotalPrice      Decimal      @db.Decimal(8, 2)
+  TotalPrice      Decimal      @db.Decimal(9, 2)
   Reminder1Status Boolean      @default(false)
   Reminder2Status Boolean      @default(false)
   Reminder3Status Boolean      @default(false)
@@ -39,8 +39,8 @@ model Reservation {
   ScheduleId      String
   CreatedAt       DateTime     @default(now())
   UpdatedAt       DateTime     @updatedAt
-  user            User         @relation(fields: [UserId], references: [UserId])
-  schedule        Schedule     @relation(fields: [ScheduleId], references: [ScheduleId])
+  user            User         @relation(fields: [UserId], references: [UserId], onDelete: Cascade)
+  schedule        Schedule     @relation(fields: [ScheduleId], references: [ScheduleId], onDelete: Cascade)
   payment         Payment?
   seats           ReservationSeat[]
 }
@@ -50,14 +50,14 @@ model Movie {
   Title           String
   Tagline         String
   DurationMinutes Int
-  Price           Decimal       @db.Decimal(8, 2)
+  Price           Decimal       @db.Decimal(9, 2)
   Poster          String?
   Backdrop        String?
   Trailer         String?
   Status          Status
   AgeRestriction  AgeRestriction
   ReleaseDate     DateTime?
-  VoteAverage     Decimal       @db.Decimal(3, 2) @default(0.00)
+  VoteAverage     Decimal       @db.Decimal(4, 2) @default(0.00)
   VoteCount       Int           @default(0)
   LanguageId      String
   CreatedAt       DateTime     @default(now())
@@ -66,12 +66,6 @@ model Movie {
   genres          MovieGenre[]
   casts           MovieCast[]
   schedules       Schedule[]
-}
-
-enum Status {
-  COMING_SOON
-  NOW_SHOWING
-  END_OF_SHOWING
 }
 
 model Language {
@@ -90,8 +84,8 @@ model MovieGenre {
   MovieGenreId    String        @id @default(uuid())
   MovieId         String
   GenreId         Int
-  movie           Movie         @relation(fields: [MovieId], references: [MovieId])
-  genre           Genre         @relation(fields: [GenreId], references: [GenreId])
+  movie           Movie         @relation(fields: [MovieId], references: [MovieId], onDelete: Cascade)
+  genre           Genre         @relation(fields: [GenreId], references: [GenreId], onDelete: Cascade)
 }
 
 model Cast {
@@ -106,8 +100,8 @@ model MovieCast {
   MovieCastId     String        @id @default(uuid())
   MovieId         String
   CastId          String
-  movie           Movie         @relation(fields: [MovieId], references: [MovieId])
-  cast            Cast          @relation(fields: [CastId], references: [CastId])
+  movie           Movie         @relation(fields: [MovieId], references: [MovieId], onDelete: Cascade)
+  cast            Cast          @relation(fields: [CastId], references: [CastId], onDelete: Cascade)
 }
 
 model Cinema {
@@ -123,7 +117,7 @@ model Room {
   Name            String
   SeatCapacity    Int
   CinemaId        String
-  cinema          Cinema        @relation(fields: [CinemaId], references: [CinemaId])
+  cinema          Cinema        @relation(fields: [CinemaId], references: [CinemaId], onDelete: Cascade)
   seats           Seat[]
   schedules       Schedule[]
 }
@@ -133,7 +127,7 @@ model Seat {
   Row             Row
   Number          Int
   RoomId          String
-  room            Room          @relation(fields: [RoomId], references: [RoomId])
+  room            Room          @relation(fields: [RoomId], references: [RoomId], onDelete: Cascade)
   seatReservations ReservationSeat[]
 }
 
@@ -141,8 +135,35 @@ model ReservationSeat {
   ReservationSeatId String       @id @default(uuid())
   ReservationId   String
   SeatId          String
-  reservation     Reservation   @relation(fields: [ReservationId], references: [ReservationId])
-  seat            Seat          @relation(fields: [SeatId], references: [SeatId])
+  reservation     Reservation   @relation(fields: [ReservationId], references: [ReservationId], onDelete: Cascade)
+  seat            Seat          @relation(fields: [SeatId], references: [SeatId], onDelete: Cascade)
+}
+
+model Schedule {
+  ScheduleId      String        @id @default(uuid())
+  StartTime       DateTime
+  EndTime         DateTime
+  RoomId          String
+  MovieId         String
+  CreatedAt       DateTime     @default(now())
+  UpdatedAt       DateTime     @updatedAt
+  room            Room          @relation(fields: [RoomId], references: [RoomId], onDelete: Cascade)
+  movie           Movie         @relation(fields: [MovieId], references: [MovieId], onDelete: Cascade)
+  reservations    Reservation[]
+}
+
+model Payment {
+  PaymentId       String        @id @default(uuid())
+  Method          PaymentMethod
+  Date            DateTime      @default(now())
+  ReservationId   String        @unique
+  reservation     Reservation   @relation(fields: [ReservationId], references: [ReservationId], onDelete: Cascade)
+}
+
+enum Status {
+  COMING_SOON
+  NOW_SHOWING
+  END_OF_SHOWING
 }
 
 enum Row {
@@ -157,29 +178,6 @@ enum Row {
   I
   J
   K
-}
-
-model Schedule {
-  ScheduleId      String        @id @default(uuid())
-  StartDate       DateTime
-  EndDate         DateTime
-  StartTime       DateTime
-  EndTime         DateTime
-  RoomId          String
-  MovieId         String
-  CreatedAt       DateTime     @default(now())
-  UpdatedAt       DateTime     @updatedAt
-  room            Room          @relation(fields: [RoomId], references: [RoomId])
-  movie           Movie         @relation(fields: [MovieId], references: [MovieId])
-  reservations    Reservation[]
-}
-
-model Payment {
-  PaymentId       String        @id @default(uuid())
-  Method          PaymentMethod
-  Date            DateTime      @default(now())
-  ReservationId   String        @unique
-  reservation     Reservation   @relation(fields: [ReservationId], references: [ReservationId])
 }
 
 enum UserRole {

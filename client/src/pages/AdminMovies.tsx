@@ -3,11 +3,13 @@ import { Button } from "@/components/ui/Button";
 import Table from "@/components/ui/Table";
 import useMoviesQuery from "@/hooks/queries/useMoviesQuery";
 import { formatDate } from "@/lib/utils";
+import { useRef } from "react";
 import Skeleton from "react-loading-skeleton";
 import { useNavigate } from "react-router-dom";
 
 export default function AdminMovies() {
   const navigate = useNavigate();
+  const scheduleButtonRef = useRef<HTMLButtonElement | null>(null);
   const {
     movieData,
     movieQuery: { isLoading },
@@ -23,13 +25,14 @@ export default function AdminMovies() {
           </Button>
         </div>
       </div>
-      <Table.Root cols="minmax(24rem,2fr) minmax(6rem,0.5fr) minmax(24rem,1fr) minmax(16rem,1fr) minmax(8rem,0.5fr)">
+      <Table.Root cols="minmax(24rem,2fr) minmax(6rem,0.5fr) minmax(24rem,1fr) minmax(16rem,1fr) minmax(8rem,0.5fr) minmax(10rem,1fr)">
         <Table.Head>
           <li>Poster</li>
           <li>Duration</li>
           <li>Genre</li>
           <li>Release Date</li>
           <li>Rating</li>
+          <li></li>
         </Table.Head>
 
         {isLoading &&
@@ -56,7 +59,9 @@ export default function AdminMovies() {
             <Table.Body
               key={movie.MovieId}
               className="hover:bg-secondary/50 cursor-pointer transition"
-              onClick={() => {
+              onClick={(e) => {
+                if ((e.target as HTMLElement).closest(".add-schedule-button"))
+                  return;
                 navigate(`/movie-form/${movie.MovieId}`);
               }}
             >
@@ -85,6 +90,14 @@ export default function AdminMovies() {
                 {formatDate(new Date(movie.ReleaseDate))}
               </li>
               <li className="text-light">-</li>
+              <Button
+                ref={scheduleButtonRef}
+                variant={"tertiary"}
+                className="max-w-[12rem] add-schedule-button"
+                to={`/schedule-form/${movie.MovieId}`}
+              >
+                + Add Schedule
+              </Button>
             </Table.Body>
           );
         })}

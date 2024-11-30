@@ -1,7 +1,7 @@
 import useMovieScheduleQuery from "@/hooks/queries/useMovieScheduleQuery";
 import Badge from "../ui/Badge";
 import Table from "../ui/Table";
-import { formatDate, isBetweenDate } from "@/lib/utils";
+import { formatDate, formatTime, isBetweenDate } from "@/lib/utils";
 import Skeleton from "react-loading-skeleton";
 
 type Props = {
@@ -45,19 +45,26 @@ export default function ScheduleTable({ movieId }: Props) {
               );
             })}
           {movieScheduleData?.map((schedule) => {
+            console.log(schedule);
             return (
               <Table.Body key={schedule.ScheduleId} className="text-light">
                 <li>{schedule.room.cinema.Name}</li>
                 <li>{schedule.room.Name}</li>
-                {isBetweenDate(schedule.StartDate, schedule.EndDate) ? (
-                  <Badge variant={"green"}>Airing</Badge>
-                ) : (
+                {new Date(schedule.StartTime).getTime() > Date.now() && (
                   <Badge variant={"red"}>Upcoming</Badge>
                 )}
-                <li>00:00 - 12:00</li>
+                {isBetweenDate(schedule.StartTime, schedule.EndTime) && (
+                  <Badge variant={"green"}>Airing</Badge>
+                )}
+                {new Date(schedule.StartTime).getTime() < Date.now() && (
+                  <Badge variant={"gray"}>Aired</Badge>
+                )}
+                <li>
+                  {formatTime(schedule.StartTime)} -{" "}
+                  {formatTime(schedule.EndTime)}
+                </li>
                 <li className="flex gap-2 text-light">
-                  {formatDate(schedule.StartDate)} -{" "}
-                  {formatDate(schedule.EndDate)}
+                  {formatDate(schedule.StartTime)}
                 </li>
                 <li>{schedule._count.reservations}</li>
               </Table.Body>
