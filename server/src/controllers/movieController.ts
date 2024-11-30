@@ -196,6 +196,7 @@ export const updateMovie: RequestHandler = async (req, res, next) => {
           },
         },
         genres: {
+          deleteMany: {},
           create: genreIds.map((genreId) => ({
             genre: {
               connect: {
@@ -205,6 +206,7 @@ export const updateMovie: RequestHandler = async (req, res, next) => {
           })),
         },
         casts: {
+          deleteMany: {},
           create: castIds.map((castId) => ({
             cast: {
               connect: {
