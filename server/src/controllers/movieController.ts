@@ -1,10 +1,24 @@
-import { successRes } from "@/utils";
-import { AppError } from "@/utils/AppError";
-import { STATUS } from "@/utils/statusCodes";
-import { PrismaClient } from "@prisma/client";
+import { successRes, AppError, STATUS } from "@/utils";
+import { AgeRestriction, PrismaClient, Status } from "@prisma/client";
 import { RequestHandler } from "express";
 
 const prisma = new PrismaClient();
+
+type CreateMovieType = {
+  title: string;
+  tagline: string;
+  durationMinutes: number;
+  price: number;
+  status: Status;
+  releaseDate: Date;
+  poster: string;
+  backdrop: string;
+  trailer: string;
+  ageRestriction: AgeRestriction;
+  genreIds: number[];
+  languageId: string;
+  castIds: string[];
+};
 
 export const getMovies: RequestHandler = async (req, res, next) => {
   try {
@@ -78,5 +92,56 @@ export const getMovieById: RequestHandler = async (request, response, next) => {
     return successRes(response, movieData);
   } catch (error) {
     next(error);
+  }
+};
+
+export const createMovie: RequestHandler = async (req, res, next) => {
+  try {
+    const {  
+      title, tagline, durationMinutes, price,
+      status, releaseDate, poster, backdrop,
+      trailer, ageRestriction, genreIds, languageId, castIds,
+    } : CreateMovieType= req.body;
+
+    await prisma.movie.create({
+      data: {
+        Title: title,
+        Tagline: tagline,
+        DurationMinutes: durationMinutes,
+        Price: price,
+        Poster: poster,
+        Backdrop: backdrop,
+        Status: status,
+        Trailer: trailer,
+        AgeRestriction: ageRestriction as AgeRestriction,
+        ReleaseDate: releaseDate,
+        genres: {
+          create: genreIds.map((genre) => ({
+            genre: {
+              connect: {
+                GenreId: genre,
+              },
+            },
+          })),
+        },
+        language: {
+          connect: {
+            LanguageId: languageId,
+          },
+        },
+        casts: {
+          create: castIds.map((cast) => ({
+            cast: {
+              connect: {
+                CastId: cast,
+              },
+            },
+          })),
+        },
+      },
+    });
+
+  } catch (e) {
+    next(e);
   }
 };

@@ -1,4 +1,4 @@
-import { AppError } from "@/utils/AppError";
+import { AppError } from "@/utils";
 import { ErrorRequestHandler } from "express";
 
 const specifyError = (error: Error) => {
@@ -13,6 +13,7 @@ export const errorHandler: ErrorRequestHandler = async (
   error: AppError | Error,
   request,
   response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next
 ) => {
   if (error instanceof AppError) {
