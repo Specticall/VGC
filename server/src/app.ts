@@ -6,6 +6,7 @@ import {
   castRouter,
   languageRouter,
   movieRouter,
+  paymentRouter,
   s3Router,
   userRouter,
 } from "./routes";
@@ -28,7 +29,7 @@ app.use("/user", userRouter);
 app.use("/schedules", schedulesRouter);
 app.use("/languages", languageRouter);
 app.use("/genres", genreRouter);
-
+app.use("/payments", paymentRouter);
 app.use(errorHandler);
 
 export default app;
