@@ -190,19 +190,27 @@ export const updateMovie: RequestHandler = async (req, res, next) => {
         Trailer: trailer,
         AgeRestriction: ageRestriction as AgeRestriction,
         ReleaseDate: releaseDate,
-        genres: {
-          set: genreIds.map((genreId) => ({
-            MovieGenreId: genreId.toString(),
-          })),
-        },
         language: {
           connect: {
             LanguageId: languageId,
           },
         },
+        genres: {
+          create: genreIds.map((genreId) => ({
+            genre: {
+              connect: {
+                GenreId: genreId,
+              },
+            },
+          })),
+        },
         casts: {
-          set: castIds.map((castId) => ({
-            MovieCastId: castId,
+          create: castIds.map((castId) => ({
+            cast: {
+              connect: {
+                CastId: castId,
+              },
+            },
           })),
         },
     }});

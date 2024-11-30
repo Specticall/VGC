@@ -88,12 +88,10 @@ export const postSchedules: RequestHandler = async (
 			time.map(async (t: string) => {
 				return await prisma.schedule.create({
 					data: {
-						StartDate: new Date(`${startDate}T${t}`),
 						StartTime: new Date(`${startDate}T${t}`),
 						EndTime: new Date(
 							new Date(`${startDate}T${t}`).getTime() + durationMilisecond
 						),
-						EndDate: new Date(`${startDate}T${t}`),
 						RoomId: roomId,
 						MovieId: movieId,
 						room: { connect: { RoomId: roomId } },
