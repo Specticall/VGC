@@ -3,6 +3,10 @@ import express from "express";
 
 const authRouter = express.Router();
 
+authRouter.post("/login/google", loginWithGoogle);
+
+export { authRouter };
+
 /**
  * @swagger
  * tags:
@@ -34,6 +38,3 @@ const authRouter = express.Router();
  *       500:
  *         description: Internal Server Error
  */
-authRouter.post("/login/google", loginWithGoogle);
-
-export { authRouter };

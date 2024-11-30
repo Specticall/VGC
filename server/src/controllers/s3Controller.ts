@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { AWS_S3_BUCKET_NAME, s3Client } from "@/config/config";
 import { generateFileName, successRes, AppError, STATUS } from "@/utils";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"; 
@@ -8,28 +8,6 @@ const ALLOWED_FILE_TYPES = {
   poster: ["image/jpeg", "image/png"],
   backdrop: ["image/jpeg", "image/png"],
   trailer: ["video/mp4", "video/x-matroska"],
-};
-
-export const getPresignedUrl: RequestHandler = async (req, res, next) => {
-  try {
-    if(!req.query.key){
-      throw new AppError("Key is required", STATUS.BAD_REQUEST);
-    }
-    const url = await getSignedUrl(
-      s3Client,
-      new GetObjectCommand({
-        Bucket: AWS_S3_BUCKET_NAME,
-        Key: req.query.key as string
-      }),
-      { expiresIn: 60 }
-    );
-
-    return successRes(res, { url });
-
-  } catch(e){
-    next(e);
-  }
-
 };
 
 export const uploadFile: RequestHandler = async (req, res, next) => {
@@ -70,4 +48,14 @@ export const uploadFile: RequestHandler = async (req, res, next) => {
   } catch (e) {
     next(e);
   }
+};
+
+export const deleteFile = (key: string) => {
+  if(!key){
+    throw new AppError("Key is required", STATUS.BAD_REQUEST);
+  }
+  s3Client.send(new DeleteObjectCommand({
+    Bucket: AWS_S3_BUCKET_NAME,
+    Key: key
+  }));
 };
