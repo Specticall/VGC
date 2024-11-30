@@ -30,7 +30,7 @@ model User {
 
 model Reservation {
   ReservationId   String       @id @default(uuid())
-  TotalPrice      Decimal      @db.Decimal(8, 2)
+  TotalPrice      Decimal      @db.Decimal(9, 2)
   Reminder1Status Boolean      @default(false)
   Reminder2Status Boolean      @default(false)
   Reminder3Status Boolean      @default(false)
@@ -50,14 +50,14 @@ model Movie {
   Title           String
   Tagline         String
   DurationMinutes Int
-  Price           Decimal       @db.Decimal(8, 2)
+  Price           Decimal       @db.Decimal(9, 2)
   Poster          String?
   Backdrop        String?
   Trailer         String?
   Status          Status
   AgeRestriction  AgeRestriction
   ReleaseDate     DateTime?
-  VoteAverage     Decimal       @db.Decimal(3, 2) @default(0.00)
+  VoteAverage     Decimal       @db.Decimal(4, 2) @default(0.00)
   VoteCount       Int           @default(0)
   LanguageId      String
   CreatedAt       DateTime     @default(now())
