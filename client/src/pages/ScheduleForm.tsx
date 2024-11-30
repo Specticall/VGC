@@ -15,7 +15,7 @@ export default function ScheduleForm() {
       <div className="flex gap-4">
         <i
           className="bx bx-arrow-back bg-primary border border-border rounded-md p-4 text-white flex items-center justify-center text-2xl w-16 transition hover:bg-secondary cursor-pointer"
-          onClick={() => navigate("admin-movies", { replace: true })}
+          onClick={() => navigate("/dashboard", { replace: true })}
         ></i>
         <div>
           <p className="text-light">Back to movie list</p>

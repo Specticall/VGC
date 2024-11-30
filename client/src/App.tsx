@@ -56,10 +56,6 @@ const router = createBrowserRouter([
         element: <ScheduleForm />,
       },
       {
-        path: "movie-list",
-        element: <MovieList />,
-      },
-      {
         path: "movie-air",
         element: <MovieAir />,
       },

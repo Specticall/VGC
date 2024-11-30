@@ -17,11 +17,13 @@ type Props = {
   errors: FieldErrors<MovieFields>;
   onSubmit: SubmitHandler<MovieFields>;
   isSubmitting: boolean;
+  isEditting: boolean;
 };
 
 export default function MovieGeneralInputs({
   errors,
   control,
+  isEditting,
   isSubmitting,
 }: Props) {
   const { register } = control;
@@ -72,6 +74,14 @@ export default function MovieGeneralInputs({
           errorMessage={errors.duration?.message}
         />
         <Input
+          label="Price"
+          placeholder="50.000"
+          {...register("price", {
+            required: "Price field is required",
+          })}
+          errorMessage={errors.price?.message}
+        />
+        <Input
           label="Release Date"
           type="date"
           placeholder=""
@@ -100,7 +110,7 @@ export default function MovieGeneralInputs({
             className="px-8 py-3 text-white text-sm"
             isLoading={isSubmitting}
           >
-            Add Movie
+            {isEditting ? "Save Changes" : "Add Movie"}
           </Button>
         </div>
       </div>

@@ -9,7 +9,7 @@ import { useMutation } from "@tanstack/react-query";
 
 */
 
-type CreateMoviePayload = {
+type MoviePayload = {
   title: string;
   tagline: string;
   durationMinutes: number;
@@ -27,9 +27,13 @@ type CreateMoviePayload = {
 
 export default function useMovieMutation() {
   const createMovieMutation = useMutation({
-    mutationFn: (data: CreateMoviePayload) =>
-      API.post<CreateMoviePayload>("/movies", data),
+    mutationFn: (data: MoviePayload) => API.post("/movies", data),
   });
 
-  return { createMovieMutation };
+  const updateMovieMutation = useMutation({
+    mutationFn: ({ data, id }: { data: MoviePayload; id: string }) =>
+      API.put(`/movies/${id}`, data),
+  });
+
+  return { createMovieMutation, updateMovieMutation };
 }

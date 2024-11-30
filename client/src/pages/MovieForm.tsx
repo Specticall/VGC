@@ -13,9 +13,10 @@ import { AxiosError } from "axios";
 export type MovieFields = {
   title: string;
   description: string;
-  duration: number;
+  duration?: number;
   language: string;
   releaseDate: string;
+  price?: number;
   cast: string[];
   fileVideo?: string;
   fileImage?: string;
@@ -27,7 +28,7 @@ export default function MovieForm() {
   const { movieData } = useMovieQuery({ id });
   const { languageData } = useLanguageQuery();
   const { genreData } = useGenreQuery();
-  const { createMovieMutation } = useMovieMutation();
+  const { createMovieMutation, updateMovieMutation } = useMovieMutation();
 
   const {
     control,
@@ -38,11 +39,12 @@ export default function MovieForm() {
     values: {
       title: movieData?.Title || "",
       description: movieData?.Tagline || "",
-      releaseDate: movieData?.ReleaseDate || "",
-      duration: movieData?.DurationMinutes || 0,
+      releaseDate: movieData?.ReleaseDate.split("T")[0] || "",
+      duration: movieData?.DurationMinutes,
       cast: movieData?.casts?.map((cast) => cast.CastId) || [],
       fileImage: movieData?.Poster,
       language: movieData?.language?.Name || "",
+      price: movieData?.Price ? Number(movieData?.Price) : undefined,
       genres: movieData?.genres?.map((genre) => genre.genre.Name) || [],
       fileVideo: undefined,
     },
@@ -69,7 +71,7 @@ export default function MovieForm() {
         genreIds,
         languageId,
         poster: value.fileImage || "",
-        price: 1000,
+        price: value.price || 0,
         releaseDate: new Date(value.releaseDate),
         status: "COMING_SOON",
         tagline: value.description,
@@ -77,22 +79,26 @@ export default function MovieForm() {
         trailer: value.fileVideo || "",
       } as const;
 
-      console.log(payload);
-      await createMovieMutation.mutateAsync(payload);
-
-      toast.success("Successfuly created movie");
+      if (id) {
+        await updateMovieMutation.mutateAsync({ data: payload, id });
+        toast.success("Successfuly saved changes");
+      } else {
+        await createMovieMutation.mutateAsync(payload);
+        toast.success("Successfuly created movie");
+      }
     } catch (err) {
       console.log((err as AxiosError).response?.data);
       toast.error("Oops, Something went wrong!");
     }
   };
 
+  const isEditting = Boolean(id);
   return (
     <main className="min-h-screen grid p-6 ">
       <div className="flex flex-col gap-6 pt-4">
         <BackNavigation
           subtitle="Back to movie list"
-          title="Add New Movie"
+          title={isEditting ? "Edit Movie" : "Add New Movie"}
           to="/admin-movies"
         />
         <form
@@ -105,7 +111,10 @@ export default function MovieForm() {
             errors={errors}
           />
           <MovieGeneralInputs
-            isSubmitting={createMovieMutation.isPending}
+            isEditting={isEditting}
+            isSubmitting={
+              createMovieMutation.isPending || updateMovieMutation.isPending
+            }
             control={control}
             errors={errors}
             onSubmit={onSubmit}

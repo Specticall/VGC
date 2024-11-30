@@ -1,11 +1,12 @@
 import AiringMoviesList from "@/components/dashboard/AiringMoviesList";
 import Statistics from "@/components/dashboard/Statistics";
+import AdminMovies from "./AdminMovies";
 
 export default function Dashboard() {
   return (
     <div className="w-full text-white">
       <Statistics />
-      <AiringMoviesList />
+      <AdminMovies />
     </div>
   );
 }
