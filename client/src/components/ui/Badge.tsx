@@ -8,11 +8,13 @@ const variants = cva("", {
       default: "text-white border-border",
       green: "text-[#78FFF4] bg-[#13231E] border-[#0E8F89]",
       red: "text-[#FC8F8F] bg-[#391818] border-[#FF6161]",
+      gray: "text-slate-300 bg-slate-900 border-slate-500",
     },
     dot: {
       default: "hidden",
       green: "bg-[#78FFF4]",
       red: "bg-[#FC8F8F]",
+      gray: "bg-slate-500",
     },
   },
 });

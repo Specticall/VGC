@@ -35,5 +35,9 @@ export default function useMovieMutation() {
       API.put(`/movies/${id}`, data),
   });
 
-  return { createMovieMutation, updateMovieMutation };
+  const deleteMovieMutation = useMutation({
+    mutationFn: ({ id }: { id: string }) => API.delete(`/movies/${id}`),
+  });
+
+  return { createMovieMutation, updateMovieMutation, deleteMovieMutation };
 }
