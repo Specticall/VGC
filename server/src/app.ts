@@ -13,6 +13,8 @@ import {
 import { errorHandler } from "./controllers/errorController";
 import { schedulesRouter } from "./routes/schedulesRouter";
 import { genreRouter } from "./routes/genreRouter";
+import { cinemaRouter } from "./routes/cinemaRouter";
+import { roomRouter } from "./routes/roomRouter";
 
 const app = express();
 // Enable fetching from localhost
@@ -30,6 +32,9 @@ app.use("/schedules", schedulesRouter);
 app.use("/languages", languageRouter);
 app.use("/genres", genreRouter);
 app.use("/payments", paymentRouter);
+app.use("/cinemas", cinemaRouter);
+app.use("/rooms", roomRouter);
+
 app.use(errorHandler);
 
 export default app;

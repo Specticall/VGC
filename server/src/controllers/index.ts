@@ -7,3 +7,4 @@ export * from "./movieController";
 export * from "./s3Controller";
 export * from "./scheduleController";
 export * from "./userController";
+export * from "./roomController";

@@ -28,16 +28,6 @@ const adminMenus = [
     icon: "bx-grid-alt",
     redirect: "/dashboard",
   },
-  {
-    title: "Movie List",
-    icon: "bx-movie",
-    redirect: "/admin-movies",
-  },
-  {
-    title: "Ordered Tickets",
-    icon: "bxs-discount",
-    redirect: "/admin-tickets",
-  },
 ];
 
 type Props = {

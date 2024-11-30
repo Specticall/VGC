@@ -54,7 +54,8 @@ export const postSchedules: RequestHandler = async (
 	next
 ) => {
 	try {
-		const { roomId, movieId, ticketPrice, startDate, time } = request.body;
+		const { movieId } = request.params;
+		const { roomId, startDate, time } = request.body;
 
 		if (!roomId) {
 			throw new AppError(
@@ -69,9 +70,6 @@ export const postSchedules: RequestHandler = async (
 			throw new AppError("duration not found", STATUS.NOT_FOUND);
 		}
 		const durationMilisecond = duration.DurationMinutes * 60 * 1000;
-		if (!ticketPrice) {
-			throw new AppError("Price Not Found", STATUS.BAD_REQUEST);
-		}
 		if (!startDate) {
 			throw new AppError("Date Not Found", STATUS.BAD_REQUEST);
 		}
@@ -94,8 +92,6 @@ export const postSchedules: RequestHandler = async (
 						),
 						RoomId: roomId,
 						MovieId: movieId,
-						room: { connect: { RoomId: roomId } },
-						movie: { connect: { MovieId: movieId } },
 					},
 				});
 			})
