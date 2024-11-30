@@ -6,6 +6,8 @@ import {
   TMDB_MEDIA_BASE_URL,
 } from "@/config/config";
 
+const TOTAL_MOVIES = 100;
+
 type TmdbMovieDetailType = {
   genres: {
     id: number;
@@ -218,15 +220,16 @@ export const movieSeeder = async () => {
             },
           },
         });
-
-        console.log(`Stored ${movie.original_title}`);
         total++;
+        console.log(`(${total}/${TOTAL_MOVIES}) Stored ${movie.original_title} with ${movieCasts
+          ?.filter((cast) => cast.character).length} casts`);
+        
       }
-      if (total === 100) {
+      if (total === TOTAL_MOVIES) {
         break;
       }
     }
-    if (total === 100) {
+    if (total === TOTAL_MOVIES) {
       break;
     }
   }
