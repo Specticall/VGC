@@ -13,7 +13,7 @@ type ScheduleFields = {
 };
 
 export default function CreateSchedule({ movieId }: Props) {
-  const { register, control, handleSubmit } = useForm<ScheduleFields>();
+  const { register, control, handleSubbmit } = useForm<ScheduleFields>();
 
   const onSubmit: SubmitHandler<ScheduleFields> = (value) => {
     console.log(value);
