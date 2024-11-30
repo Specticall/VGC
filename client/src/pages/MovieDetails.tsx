@@ -5,11 +5,12 @@ import Topbar from "../components/general/Topbar";
 import Upcoming from "../components/Movie/Upcoming";
 import upcomingImage from "../../public/Movie/upcoming.png";
 import { Button } from "../components/ui/Button";
+import { useParams } from "react-router-dom";
 
 export default function MovieDetails() {
+  const { id } = useParams();
   return (
     <main className="min-h-screen">
-      <Topbar searchBar={true} />
       <div className="h-[600px]">
         <HeroMovieDetails
           image={movieDetails}

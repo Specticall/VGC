@@ -11,7 +11,6 @@ type Props = {
   rating: string;
   duration: string;
   date: string;
-  
 };
 
 export default function HeroMovieDetails({
@@ -45,7 +44,7 @@ export default function HeroMovieDetails({
               <i className="bx bxs-star text-yellow-300 "></i>
               <p className="text-paragraph font-light">{rating}</p>
             </div>
-            <p className="text-white opacity-50 text-paragraph leading-[175%] max-w-[80%]">
+            <p className="text-white opacity-50 text-paragraph leading-[175%] max-w-[80%] mt-2 mb-4">
               Eddie and Venom are on the run. Hunted by both of their worlds and
               with the net closing in, the duo are forced into a devastating
               decision that will bring the curtains down on Venom and Eddie's
@@ -57,8 +56,8 @@ export default function HeroMovieDetails({
               <i className="bx bxs-calendar text-2xl pl-3"></i>
               <p className="font-light text-paragraph">{date}</p>
             </div>
-            <div className="flex flex-col text-white">
-              <p>Actors</p>
+            <div className="mt-4 flex flex-col text-white">
+              <p className="">Actors</p>
               <div className="flex flex-row">
                 <div className="flex flex-col"></div>
               </div>
