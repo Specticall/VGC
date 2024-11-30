@@ -4,7 +4,6 @@ import Login from "./pages/Login";
 import AppLayout from "./pages/AppLayout";
 import Dashboard from "./pages/Dashboard";
 import MovieForm from "./pages/MovieForm";
-import MovieList from "./pages/MovieList";
 import MovieAir from "./pages/MovieAir";
 import DesignSystem from "./pages/DesignSystem";
 import AdminMovies from "./pages/AdminMovies";
@@ -16,7 +15,8 @@ import { SkeletonTheme } from "react-loading-skeleton";
 import Protect from "./components/general/Protect";
 import ScheduleForm from "./pages/ScheduleForm";
 import ToastProvider from "./components/ui/Toast";
-import { useEffect } from "react";
+import MovieDetails from "./pages/MovieDetails";
+import Movies from "./pages/Movies";
 
 const router = createBrowserRouter([
   {
@@ -66,6 +66,14 @@ const router = createBrowserRouter([
       {
         path: "order-ticket",
         element: <OrderTicket />,
+      },
+      {
+        path: "movies",
+        element: <Movies />,
+      },
+      {
+        path: "movies-details",
+        element: <MovieDetails />,
       },
     ],
   },

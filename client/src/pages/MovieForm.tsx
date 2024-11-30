@@ -4,10 +4,11 @@ import MovieMediaInputs from "@/components/Movie/MovieMediaInputs";
 import MovieGeneralInputs from "@/components/Movie/MovieGeneralInputs";
 import { useParams } from "react-router-dom";
 import useMovieQuery from "@/hooks/queries/useMovieQuery";
+import Topbar from "@/components/general/Topbar";
+import { useToast } from "@/components/ui/Toast";
 import useLanguageQuery from "@/hooks/queries/useLanguageQuery";
 import useGenreQuery from "@/hooks/queries/useGenreQuery";
 import useMovieMutation from "@/hooks/mutation/useMovieMutation";
-import { useToast } from "@/components/ui/Toast";
 import { AxiosError } from "axios";
 
 export type MovieFields = {
@@ -96,6 +97,7 @@ export default function MovieForm() {
   return (
     <main className="min-h-screen grid p-6 ">
       <div className="flex flex-col gap-6 pt-4">
+        <Topbar title="Movies" />
         <BackNavigation
           subtitle="Back to movie list"
           title={isEditting ? "Edit Movie" : "Add New Movie"}
