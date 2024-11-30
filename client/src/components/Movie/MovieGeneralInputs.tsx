@@ -16,9 +16,14 @@ type Props = {
   control: Control<MovieFields>;
   errors: FieldErrors<MovieFields>;
   onSubmit: SubmitHandler<MovieFields>;
+  isSubmitting: boolean;
 };
 
-export default function MovieGeneralInputs({ errors, control }: Props) {
+export default function MovieGeneralInputs({
+  errors,
+  control,
+  isSubmitting,
+}: Props) {
   const { register } = control;
 
   return (
@@ -90,7 +95,11 @@ export default function MovieGeneralInputs({ errors, control }: Props) {
           }}
         />
         <div className="flex justify-end mt-8">
-          <Button type="submit" className="px-8 py-3 text-white text-sm">
+          <Button
+            type="submit"
+            className="px-8 py-3 text-white text-sm"
+            isLoading={isSubmitting}
+          >
             Add Movie
           </Button>
         </div>

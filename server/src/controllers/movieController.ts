@@ -42,6 +42,9 @@ export const getMovies: RequestHandler = async (req, res, next) => {
           },
         },
       },
+      orderBy: {
+        CreatedAt: "desc",
+      },
     });
 
     if (!movies) {
@@ -97,11 +100,21 @@ export const getMovieById: RequestHandler = async (request, response, next) => {
 
 export const createMovie: RequestHandler = async (req, res, next) => {
   try {
-    const {  
-      title, tagline, durationMinutes, price,
-      status, releaseDate, poster, backdrop,
-      trailer, ageRestriction, genreIds, languageId, castIds,
-    } : CreateMovieType= req.body;
+    const {
+      title,
+      tagline,
+      durationMinutes,
+      price,
+      status,
+      releaseDate,
+      poster,
+      backdrop,
+      trailer,
+      ageRestriction,
+      genreIds,
+      languageId,
+      castIds,
+    }: CreateMovieType = req.body;
 
     await prisma.movie.create({
       data: {
@@ -141,6 +154,7 @@ export const createMovie: RequestHandler = async (req, res, next) => {
       },
     });
 
+    return successRes(res, "Successfuly created movie");
   } catch (e) {
     next(e);
   }
