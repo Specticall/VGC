@@ -30,6 +30,15 @@ export function getNamedMonth(input?: number) {
   return months[input - 1];
 }
 
+export function formatTime(dateString: string) {
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(date);
+}
+
 export function formatDate(date?: string | Date) {
   if (typeof date === "string") date = new Date(date);
   if (!date) return undefined;

@@ -32,6 +32,13 @@ export type UserData = {
   Role: Role;
 };
 
+export type CinemaData = {
+  CinemaId: string;
+  Contact: string;
+  Location: string;
+  Name: string;
+};
+
 export type MovieData = {
   MovieId: string;
   Title: string;
@@ -76,8 +83,6 @@ export type Language = {
 
 export type ScheduleData = {
   ScheduleId: string;
-  StartDate: string;
-  EndDate: string;
   StartTime: string;
   EndTime: string;
   RoomId: string;
@@ -98,4 +103,11 @@ export type ScheduleData = {
   _count: {
     reservations: number;
   };
+};
+
+export type RoomData = {
+  CinemaId: string;
+  Name: string;
+  RoomId: string;
+  SeatCapacity: number;
 };
