@@ -4,6 +4,7 @@ import MovieMediaInputs from "@/components/Movie/MovieMediaInputs";
 import MovieGeneralInputs from "@/components/Movie/MovieGeneralInputs";
 import { useParams } from "react-router-dom";
 import useMovieQuery from "@/hooks/queries/useMovieQuery";
+import Topbar from "@/components/general/Topbar";
 
 export type MovieFields = {
   title: string;
@@ -49,6 +50,7 @@ export default function MovieForm() {
   return (
     <main className="min-h-screen grid p-6 ">
       <div className="flex flex-col gap-6 pt-4">
+        <Topbar title="Movies" />
         <BackNavigation
           subtitle="Back to movie list"
           title="Add New Movie"

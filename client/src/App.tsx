@@ -15,6 +15,8 @@ import OrderTicket from "./pages/OrderTicket";
 import { SkeletonTheme } from "react-loading-skeleton";
 import Protect from "./components/general/Protect";
 import ScheduleForm from "./pages/ScheduleForm";
+import MovieDetails from "./pages/MovieDetails";
+import Movies from "./pages/Movies";
 
 const router = createBrowserRouter([
   {
@@ -68,6 +70,14 @@ const router = createBrowserRouter([
       {
         path: "order-ticket",
         element: <OrderTicket />,
+      },
+      {
+        path: "movies",
+        element: <Movies />,
+      },
+      {
+        path: "movies-details",
+        element: <MovieDetails />,
       },
     ],
   },
