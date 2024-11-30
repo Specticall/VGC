@@ -1,10 +1,11 @@
 import { successRes, AppError, STATUS } from "@/utils";
 import { AgeRestriction, PrismaClient, Status } from "@prisma/client";
 import { RequestHandler } from "express";
+import { deleteFile } from "./s3Controller";
 
 const prisma = new PrismaClient();
 
-type CreateMovieType = {
+type MovieType = {
   title: string;
   tagline: string;
   durationMinutes: number;
@@ -114,7 +115,7 @@ export const createMovie: RequestHandler = async (req, res, next) => {
       genreIds,
       languageId,
       castIds,
-    }: CreateMovieType = req.body;
+    }: MovieType = req.body;
 
     await prisma.movie.create({
       data: {
@@ -129,10 +130,10 @@ export const createMovie: RequestHandler = async (req, res, next) => {
         AgeRestriction: ageRestriction as AgeRestriction,
         ReleaseDate: releaseDate,
         genres: {
-          create: genreIds.map((genre) => ({
+          create: genreIds.map((genreId) => ({
             genre: {
               connect: {
-                GenreId: genre,
+                GenreId: genreId,
               },
             },
           })),
@@ -143,10 +144,10 @@ export const createMovie: RequestHandler = async (req, res, next) => {
           },
         },
         casts: {
-          create: castIds.map((cast) => ({
+          create: castIds.map((castId) => ({
             cast: {
               connect: {
-                CastId: cast,
+                CastId: castId,
               },
             },
           })),
@@ -155,6 +156,115 @@ export const createMovie: RequestHandler = async (req, res, next) => {
     });
 
     return successRes(res, "Successfuly created movie");
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const updateMovie: RequestHandler = async (req, res, next) => {
+  try {
+    const { movieId } = req.params;
+    const {
+      title,
+      tagline,
+      durationMinutes,
+      price,
+      status,
+      releaseDate,
+      poster,
+      backdrop,
+      trailer,
+      ageRestriction,
+      genreIds,
+      languageId,
+      castIds,
+    }: MovieType = req.body;
+
+    const movie = await prisma.movie.findUnique({
+      where: {
+        MovieId: movieId,
+      },
+    });
+
+    if (movie?.Poster && movie.Poster !== poster) {
+      deleteFile(movie.Poster);
+    }
+
+    if (movie?.Backdrop && movie.Backdrop !== backdrop) {
+      deleteFile(movie.Backdrop);
+    }
+
+    if (movie?.Trailer && movie.Trailer !== trailer) {
+      deleteFile(movie.Trailer);
+    }
+
+    await prisma.movie.update({
+      where: {
+        MovieId: movieId,
+      },
+      data: {
+        Title: title,
+        Tagline: tagline,
+        DurationMinutes: durationMinutes,
+        Price: price,
+        Poster: poster,
+        Backdrop: backdrop,
+        Status: status,
+        Trailer: trailer,
+        AgeRestriction: ageRestriction as AgeRestriction,
+        ReleaseDate: releaseDate,
+        genres: {
+          set: genreIds.map((genreId) => ({
+            MovieGenreId: genreId.toString(),
+          })),
+        },
+        language: {
+          connect: {
+            LanguageId: languageId,
+          },
+        },
+        casts: {
+          set: castIds.map((castId) => ({
+            MovieCastId: castId,
+          })),
+        },
+      },
+    });
+
+    return successRes(res, "Movie updated successfully");
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const deleteMovie: RequestHandler = async (req, res, next) => {
+  try {
+    const { movieId } = req.params;
+    const movie = await prisma.movie.findUnique({
+      where: {
+        MovieId: movieId,
+      },
+    });
+
+    if (movie?.Poster) {
+      deleteFile(movie.Poster);
+    }
+
+    if (movie?.Backdrop) {
+      deleteFile(movie.Backdrop);
+    }
+
+    if (movie?.Trailer) {
+      deleteFile(movie.Trailer);
+    }
+
+    await prisma.movie.delete({
+      where: {
+        MovieId: movieId,
+      },
+    });
+
+    return successRes(res, "Movie deleted successfully");
   } catch (e) {
     next(e);
   }

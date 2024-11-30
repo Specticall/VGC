@@ -1,10 +1,12 @@
 import express from "express";
-import {  getPresignedUrl, uploadFile } from "@/controllers/s3Controller";
+import { deleteFile, uploadFile } from "@/controllers/s3Controller";
 
 const s3Router = express.Router();
 
 s3Router.post("/", uploadFile);
-s3Router.get("/", getPresignedUrl);
+s3Router.delete("/", deleteFile);
+
+export { s3Router };
 
 /**
  * @swagger
@@ -56,4 +58,3 @@ s3Router.get("/", getPresignedUrl);
  *       500:
  *         description: Internal server error.
  */
-export { s3Router };

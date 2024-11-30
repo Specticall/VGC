@@ -3,6 +3,10 @@ import express from "express";
 
 const castRouter = express.Router();
 
+castRouter.get("/", getCasts);
+
+export { castRouter };
+
 /**
  * @swagger
  * tags:
@@ -36,9 +40,6 @@ const castRouter = express.Router();
  *       500:
  *         description: Internal Server Error
  */
-castRouter.get("/", getCasts);
-
-export { castRouter };
 
 /**
  * @swagger
