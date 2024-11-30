@@ -43,6 +43,9 @@ export const getMovies: RequestHandler = async (req, res, next) => {
           },
         },
       },
+      orderBy: {
+        CreatedAt: "desc",
+      },
     });
 
     if (!movies) {
@@ -98,11 +101,21 @@ export const getMovieById: RequestHandler = async (request, response, next) => {
 
 export const createMovie: RequestHandler = async (req, res, next) => {
   try {
-    const {  
-      title, tagline, durationMinutes, price,
-      status, releaseDate, poster, backdrop,
-      trailer, ageRestriction, genreIds, languageId, castIds,
-    } : MovieType = req.body;
+    const {
+      title,
+      tagline,
+      durationMinutes,
+      price,
+      status,
+      releaseDate,
+      poster,
+      backdrop,
+      trailer,
+      ageRestriction,
+      genreIds,
+      languageId,
+      castIds,
+    }: MovieType = req.body;
 
     await prisma.movie.create({
       data: {
@@ -142,20 +155,30 @@ export const createMovie: RequestHandler = async (req, res, next) => {
       },
     });
 
+    return successRes(res, "Successfuly created movie");
   } catch (e) {
     next(e);
   }
 };
 
-
 export const updateMovie: RequestHandler = async (req, res, next) => {
   try {
     const { movieId } = req.params;
-    const { 
-      title, tagline, durationMinutes, price,
-      status, releaseDate, poster, backdrop,
-      trailer, ageRestriction, genreIds, languageId, castIds,
-     } : MovieType = req.body;
+    const {
+      title,
+      tagline,
+      durationMinutes,
+      price,
+      status,
+      releaseDate,
+      poster,
+      backdrop,
+      trailer,
+      ageRestriction,
+      genreIds,
+      languageId,
+      castIds,
+    }: MovieType = req.body;
 
     const movie = await prisma.movie.findUnique({
       where: {
@@ -163,15 +186,15 @@ export const updateMovie: RequestHandler = async (req, res, next) => {
       },
     });
 
-    if(movie?.Poster && movie.Poster !== poster ){
+    if (movie?.Poster && movie.Poster !== poster) {
       deleteFile(movie.Poster);
     }
 
-    if(movie?.Backdrop && movie.Backdrop !== backdrop ){
+    if (movie?.Backdrop && movie.Backdrop !== backdrop) {
       deleteFile(movie.Backdrop);
     }
 
-    if(movie?.Trailer && movie.Trailer !== trailer ){
+    if (movie?.Trailer && movie.Trailer !== trailer) {
       deleteFile(movie.Trailer);
     }
 
@@ -215,10 +238,10 @@ export const updateMovie: RequestHandler = async (req, res, next) => {
             },
           })),
         },
-    }});
-    
-    return successRes(res, "Movie updated successfully");
+      },
+    });
 
+    return successRes(res, "Movie updated successfully");
   } catch (e) {
     next(e);
   }
@@ -233,26 +256,26 @@ export const deleteMovie: RequestHandler = async (req, res, next) => {
       },
     });
 
-    if(movie?.Poster){
+    if (movie?.Poster) {
       deleteFile(movie.Poster);
     }
 
-    if(movie?.Backdrop){
+    if (movie?.Backdrop) {
       deleteFile(movie.Backdrop);
     }
 
-    if(movie?.Trailer){
+    if (movie?.Trailer) {
       deleteFile(movie.Trailer);
     }
 
     await prisma.movie.delete({
       where: {
         MovieId: movieId,
-      }
+      },
     });
 
     return successRes(res, "Movie deleted successfully");
-  } catch(e) {
+  } catch (e) {
     next(e);
   }
 };

@@ -30,11 +30,17 @@ export default function CreateSchedule({ movieId }: Props) {
       <div className="grid grid-cols-4 gap-4 p-6 min-w-[60rem]">
         <div>
           <p className="text-white mb-2">Cinema</p>
-          <Dropdown data={["test"]} placeholder="Select Cinema" />
+          <Dropdown
+            data={["CINEMA 1", "CINEMA 2", "CINEMA 3"]}
+            placeholder="Select Cinema"
+          />
         </div>
         <div>
           <p className="text-white mb-2">Room</p>
-          <Dropdown data={["test"]} placeholder="Select Room" />
+          <Dropdown
+            data={["ROOM 1", "ROOM 2", "ROOM 3"]}
+            placeholder="Select Room"
+          />
         </div>
         <Input label="Ticket Price" placeholder="50.000" />
         <Input type="date" label="Date" placeholder="Select Date" />

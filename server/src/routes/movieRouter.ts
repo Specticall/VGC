@@ -1,4 +1,10 @@
-import { getMovieById, getMovies, createMovie, updateMovie, deleteMovie } from "@/controllers/movieController";
+import {
+  getMovieById,
+  getMovies,
+  createMovie,
+  updateMovie,
+  deleteMovie,
+} from "@/controllers/movieController";
 import express from "express";
 
 const movieRouter = express.Router();
@@ -6,8 +12,8 @@ const movieRouter = express.Router();
 movieRouter.get("/", getMovies);
 movieRouter.get("/:id", getMovieById);
 movieRouter.post("/", createMovie);
-movieRouter.put("/:id", updateMovie);
-movieRouter.delete("/:id", deleteMovie);
+movieRouter.put("/:movieId", updateMovie);
+movieRouter.delete("/:movieId", deleteMovie);
 
 export { movieRouter };
 

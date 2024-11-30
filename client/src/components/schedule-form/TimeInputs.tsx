@@ -13,7 +13,7 @@ export default function TimeInputs({ onInputTime, value }: Props) {
   const handleAddTime = () => {
     setErrorMessage("");
     if (!current) return;
-    if (value.includes(current)) {
+    if (value && value.includes(current)) {
       setErrorMessage("Duplicate time not allowed");
       return;
     }

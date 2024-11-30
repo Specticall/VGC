@@ -15,6 +15,8 @@ import OrderTicket from "./pages/OrderTicket";
 import { SkeletonTheme } from "react-loading-skeleton";
 import Protect from "./components/general/Protect";
 import ScheduleForm from "./pages/ScheduleForm";
+import ToastProvider from "./components/ui/Toast";
+import { useEffect } from "react";
 
 const router = createBrowserRouter([
   {
@@ -54,10 +56,6 @@ const router = createBrowserRouter([
         element: <ScheduleForm />,
       },
       {
-        path: "movie-list",
-        element: <MovieList />,
-      },
-      {
         path: "movie-air",
         element: <MovieAir />,
       },
@@ -78,9 +76,11 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-        <SkeletonTheme baseColor="#1E1F21" highlightColor="#2A2B35">
-          <RouterProvider router={router} />
-        </SkeletonTheme>
+        <ToastProvider>
+          <SkeletonTheme baseColor="#1E1F21" highlightColor="#2A2B35">
+            <RouterProvider router={router} />
+          </SkeletonTheme>
+        </ToastProvider>
       </GoogleOAuthProvider>
     </QueryClientProvider>
   );

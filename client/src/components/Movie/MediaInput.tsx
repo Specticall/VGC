@@ -6,6 +6,7 @@ import axios from "axios";
 import { API } from "@/lib/API";
 import { APISuccessResponse } from "@/lib/types";
 import { LoadingSpinner } from "../ui/LoadingSpinner";
+import { S3_URL } from "@/lib/config";
 
 type Props = {
   title: string;
@@ -96,11 +97,7 @@ export const MediaInput = ({
         },
       });
 
-      const getPresignedURLResponse = await API.get<
-        APISuccessResponse<{ url: string }>
-      >(`/presigned?key=${fileKey}`);
-
-      const presignedURL = getPresignedURLResponse.data.data.url;
+      const presignedURL = `${S3_URL}${fileKey}`;
       setPreview(presignedURL);
       if (onChange) onChange(presignedURL);
     } catch (err) {
