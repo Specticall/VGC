@@ -192,6 +192,7 @@ enum AgeRestriction {
 }
 
 enum PaymentMethod {
+  DANA
   GOPAY
   BCA
   BNI

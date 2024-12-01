@@ -1,9 +1,11 @@
-import { loginWithGoogle } from "@/controllers/authController";
+import { login, loginWithGoogle, register } from "@/controllers/authController";
 import express from "express";
 
 const authRouter = express.Router();
 
 authRouter.post("/login/google", loginWithGoogle);
+authRouter.post("/login", login);
+authRouter.post("/register", register);
 
 export { authRouter };
 

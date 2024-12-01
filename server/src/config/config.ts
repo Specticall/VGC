@@ -1,4 +1,5 @@
 import { S3Client } from "@aws-sdk/client-s3";
+import { Snap } from "midtrans-client";
 
 export const JWT_SECRET = process.env.JWT_SECRET as string;
 export const TMDB_API_KEY = process.env.TMDB_API_KEY as string;
@@ -20,3 +21,12 @@ export const s3Client = new S3Client({
     secretAccessKey: AWS_SECRET_ACCESS_KEY,
   }
 });
+
+//midtrans
+export const MIDTRANS_SERVER_KEY = process.env.MIDTRANS_SERVER_KEY as string;
+
+export const snapApi = new Snap({
+  isProduction: false,
+  serverKey: MIDTRANS_SERVER_KEY,
+});
+

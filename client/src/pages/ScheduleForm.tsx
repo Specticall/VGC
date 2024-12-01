@@ -1,4 +1,3 @@
-import BackNavigation from "@/components/general/BackNavigation";
 import CreateSchedule from "@/components/schedule-form/CreateSchedule";
 import ScheduleTable from "@/components/schedule-form/ScheduleTable";
 import useMovieQuery from "@/hooks/queries/useMovieQuery";

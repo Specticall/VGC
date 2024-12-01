@@ -2,7 +2,7 @@ import BackNavigation from "@/components/general/BackNavigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import MovieMediaInputs from "@/components/Movie/MovieMediaInputs";
 import MovieGeneralInputs from "@/components/Movie/MovieGeneralInputs";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useMovieQuery from "@/hooks/queries/useMovieQuery";
 import Topbar from "@/components/general/Topbar";
 import { useToast } from "@/components/ui/Toast";
@@ -10,6 +10,7 @@ import useLanguageQuery from "@/hooks/queries/useLanguageQuery";
 import useGenreQuery from "@/hooks/queries/useGenreQuery";
 import useMovieMutation from "@/hooks/mutation/useMovieMutation";
 import { AxiosError } from "axios";
+import { Button } from "@/components/ui/Button";
 
 export type MovieFields = {
   title: string;
@@ -26,10 +27,12 @@ export type MovieFields = {
 
 export default function MovieForm() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { movieData } = useMovieQuery({ id });
   const { languageData } = useLanguageQuery();
   const { genreData } = useGenreQuery();
-  const { createMovieMutation, updateMovieMutation } = useMovieMutation();
+  const { createMovieMutation, updateMovieMutation, deleteMovieMutation } =
+    useMovieMutation();
 
   const {
     control,
@@ -97,12 +100,31 @@ export default function MovieForm() {
   return (
     <main className="min-h-screen grid p-6 ">
       <div className="flex flex-col gap-6 pt-4">
-        <Topbar title="Movies" />
-        <BackNavigation
-          subtitle="Back to movie list"
-          title={isEditting ? "Edit Movie" : "Add New Movie"}
-          to="/admin-movies"
-        />
+        <div className="flex items-center justify-between">
+          <BackNavigation
+            subtitle="Back to movie list"
+            title={isEditting ? "Edit Movie" : "Add New Movie"}
+            to="/admin-movies"
+          />
+          <Button
+            isLoading={deleteMovieMutation.isPending}
+            onClick={() => {
+              if (!id) return;
+              deleteMovieMutation.mutate(
+                { id },
+                {
+                  onError: () => toast.error("Something went wrong"),
+                  onSuccess: () => {
+                    toast.success("Successfuly deleted movie");
+                    navigate("/dashboard");
+                  },
+                }
+              );
+            }}
+          >
+            Delete
+          </Button>
+        </div>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="grid grid-cols-[minmax(20rem,1fr)_1fr] text-white gap-5"
@@ -115,7 +137,9 @@ export default function MovieForm() {
           <MovieGeneralInputs
             isEditting={isEditting}
             isSubmitting={
-              createMovieMutation.isPending || updateMovieMutation.isPending
+              createMovieMutation.isPending ||
+              updateMovieMutation.isPending ||
+              deleteMovieMutation.isPending
             }
             control={control}
             errors={errors}
