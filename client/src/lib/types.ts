@@ -77,6 +77,14 @@ export type MovieData = {
   }[];
 };
 
+export type SearchHistory = {
+  MovieId: string;
+  UserId: string;
+  CreatedAt: string;
+  Query: string;
+  SearchHistoryId: string;
+};
+
 export type GenreData = {
   GenreId: number;
   Name: string;

@@ -43,7 +43,10 @@ export default function SeatSelector() {
                 return <li key={i} className="h-[3rem]"></li>;
               }
               return (
-                <li key={i} className="h-[3rem] rounded-md bg-border"></li>
+                <li
+                  key={i}
+                  className="h-[3rem] rounded-md bg-border hover:bg-gray/70 cursor-pointer transition"
+                ></li>
               );
             })}
           </ul>{" "}

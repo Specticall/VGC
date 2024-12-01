@@ -1,8 +1,10 @@
 import { useMemo, useState } from "react";
-import BackNavigation from "@/components/general/BackNavigation";
 import DateSelector from "@/components/ticketing/DateSelector";
 import TimeSelector from "@/components/ticketing/TimeSelector";
 import SeatSelector from "@/components/ticketing/SeatSelector";
+import { useNavigate, useParams } from "react-router-dom";
+import useMovieQuery from "@/hooks/queries/useMovieQuery";
+import { useForm } from "react-hook-form";
 
 const dummy = [
   {
@@ -142,8 +144,15 @@ const dummy = [
   },
 ];
 
+type OrderFields = {};
+
 export default function OrderTicket() {
+  const {} = useForm();
+
   const schedules = dummy;
+  const { movieId } = useParams();
+  const navigate = useNavigate();
+  const { movieData } = useMovieQuery({ id: movieId });
   const [selectedDate, setSelectedDate] = useState<string | undefined>();
 
   const scheduleGroupedByDate = useMemo(() => {
@@ -171,11 +180,16 @@ export default function OrderTicket() {
 
   return (
     <div className="p-6 h-full flex flex-col">
-      <BackNavigation
-        to="/movies"
-        title="Venom : The Last Dance"
-        subtitle="Back to movie list"
-      />
+      <div className="flex gap-4">
+        <i
+          className="bx bx-arrow-back bg-primary border border-border rounded-md p-4 text-white flex items-center justify-center text-2xl w-16 transition hover:bg-secondary cursor-pointer"
+          onClick={() => navigate("/movies", { replace: true })}
+        ></i>
+        <div>
+          <p className="text-light">Back to movie list</p>
+          <h2 className="text-white text-3xl mt-1">{movieData?.Title}</h2>
+        </div>
+      </div>
       <DateSelector
         scheduleDates={Object.keys(scheduleGroupedByDate)}
         className="mt-4"

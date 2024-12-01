@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import MovieSlider from "@/components/ui/MovieSlider";
 import useMovieQuery from "@/hooks/queries/useMovieQuery";
 import { formatDate } from "@/lib/utils";
@@ -9,6 +9,8 @@ export default function MovieDetails() {
   const { id } = useParams();
   const { movieData: movieListData } = useMoviesQuery();
   const { movieData } = useMovieQuery({ id });
+
+  const navigate = useNavigate();
 
   return (
     <main className="min-h-screen">
@@ -85,6 +87,7 @@ export default function MovieDetails() {
               <Button
                 variant={"secondary"}
                 className="text-black px-8 py-1 rounded flex items-center gap-2 mt-8"
+                onClick={() => navigate(`/order-ticket/${movieData?.MovieId}`)}
               >
                 <i className="bx bxs-discount text-3xl"></i>
                 Get tickets
@@ -93,8 +96,9 @@ export default function MovieDetails() {
           </div>
         </div>
       </div>
-
-      <MovieSlider data={movieListData} />
+      <div className="px-8">
+        <MovieSlider data={movieListData} />
+      </div>
     </main>
   );
 }

@@ -9,4 +9,6 @@ export const QUERY_KEYS = {
   GENRES: "genres",
   CINEMA: "string",
   ROOM: "rooms",
+  SEARCH_HISTORY: "search-history",
+  MOVIE_SEARCH: "movie-search",
 };

@@ -8,19 +8,20 @@ const prisma = new PrismaClient();
 
 export const createSnapTransaction: RequestHandler = async (req, res, next) => {
   try {
-    const { userId, movieId, seatIds } = req.body;
+    const { id: userId } = req.body.payload;
+    const { movieId, seatIds } = req.body;
     const movie = await prisma.movie.findUnique({
       where: {
         MovieId: movieId,
-      }
+      },
     });
 
     const user = await prisma.user.findUnique({
       where: {
         UserId: userId,
-      }
+      },
     });
-    const name = user?.Name || ""; 
+    const name = user?.Name || "";
     const nameParts = name.split(" ");
     const quantity = seatIds.length;
     const snapTransaction = {
@@ -35,16 +36,18 @@ export const createSnapTransaction: RequestHandler = async (req, res, next) => {
         gross_amount: quantity * Number(movie?.Price || 0),
       },
       customer_details: {
-        first_name:  nameParts.length > 1 ? nameParts.slice(0, -1).join(" ") : nameParts[0],
+        first_name:
+          nameParts.length > 1
+            ? nameParts.slice(0, -1).join(" ")
+            : nameParts[0],
         last_name: nameParts.length > 1 ? nameParts.slice(-1)[0] : "",
         email: user?.Email || "",
         phone: "",
-      }
+      },
     };
 
     const token = await snapApi.createTransactionToken(snapTransaction);
-    return successRes(res, {token});
-
+    return successRes(res, { token });
   } catch (e) {
     next(e);
   }

@@ -23,10 +23,11 @@ type MovieType = {
 
 export const getMovies: RequestHandler = async (req, res, next) => {
   try {
+    const { id: userId } = req.body.payload;
+    const { query } = req.query;
     const movies = await prisma.movie.findMany({
       include: {
         language: true,
-
         genres: {
           include: {
             genre: true,
@@ -46,13 +47,50 @@ export const getMovies: RequestHandler = async (req, res, next) => {
       orderBy: {
         CreatedAt: "desc",
       },
+      where: query
+        ? {
+            OR: [
+              {
+                Title: {
+                  contains: query as string | undefined,
+                  mode: "insensitive",
+                },
+              },
+              {
+                Tagline: {
+                  contains: query as string | undefined,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          }
+        : undefined,
+      take: 10,
     });
+
+    let searchHistory;
+    if (query) {
+      searchHistory = await prisma.searchHistory.findMany({
+        where: {
+          Query: {
+            contains: query as string,
+            mode: "insensitive",
+          },
+          UserId: userId,
+        },
+        orderBy: {
+          CreatedAt: "desc",
+        },
+        distinct: ["Query"],
+        take: 4,
+      });
+    }
 
     if (!movies) {
       throw new AppError("No movies found", STATUS.NOT_FOUND);
     }
 
-    return successRes(res, movies);
+    return successRes(res, query ? { movies, searchHistory } : movies);
   } catch (e) {
     next(e);
   }
@@ -75,8 +113,13 @@ export const getMovieById: RequestHandler = async (request, response, next) => {
       include: {
         language: true,
         casts: {
-          select: {
-            CastId: true,
+          include: {
+            cast: {
+              select: {
+                Image: true,
+                Name: true,
+              },
+            },
           },
         },
         genres: {

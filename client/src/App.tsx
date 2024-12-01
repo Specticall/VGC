@@ -68,7 +68,7 @@ const router = createBrowserRouter([
         element: <AdminMovies />,
       },
       {
-        path: "order-ticket",
+        path: "order-ticket/:movieId",
         element: <OrderTicket />,
       },
       {

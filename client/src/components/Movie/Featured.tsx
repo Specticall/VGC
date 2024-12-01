@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Badge from "../ui/Badge";
 import { Button } from "../ui/Button";
 
@@ -15,6 +16,7 @@ export default function Featured({
   badge,
   altImage,
 }: Props) {
+  const navigate = useNavigate();
   return (
     <div className="relative h-[30rem] w-full rounded-lg overflow-hidden">
       <img
@@ -48,6 +50,9 @@ export default function Featured({
           <Button
             variant={"secondary"}
             className="text-black px-8 py-1 rounded flex items-center gap-2 self-end"
+            onClick={() => {
+              navigate("/movies/00d53775-5bed-4dbc-b22f-e2d0f6c90ee7");
+            }}
           >
             <i className="bx bxs-discount text-3xl"></i>
             Get tickets
