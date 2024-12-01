@@ -85,6 +85,23 @@ export type SearchHistory = {
   SearchHistoryId: string;
 };
 
+export type SeatsData = {
+  CinemaId: string;
+  Name: string;
+  Location: string;
+  Contact: string;
+  Schedules: Record<
+    string,
+    {
+      RoomId: string;
+      StartTime: string;
+      EndTime: string;
+      ScheduleId: string;
+      Reservations: unknown[];
+    }[]
+  >;
+};
+
 export type GenreData = {
   GenreId: number;
   Name: string;

@@ -1,19 +1,24 @@
-import { HTMLAttributes, useState } from "react";
+import { HTMLAttributes, useMemo, useState } from "react";
 import { cn, getNamedDays, getNamedMonth } from "../../lib/utils";
+import { OrderFields } from "@/pages/OrderTicket";
+import { Control, useController } from "react-hook-form";
+import { SeatsData } from "@/lib/types";
 
 type Props = {
   scheduleDates?: string[];
-  onSelectDate: (date?: string) => void;
-  defaultValue?: string;
+  schedules?: SeatsData["Schedules"];
+  selectedDate: string;
+  onSelectDate: (date: string) => void;
 };
 
 export default function DateSelector({
-  scheduleDates,
+  schedules,
   onSelectDate,
-  defaultValue,
+  selectedDate,
   ...props
 }: Props & HTMLAttributes<HTMLDivElement>) {
-  const [selected, setSelected] = useState<string | undefined>(defaultValue);
+  const scheduleDates = Object.keys(schedules || {});
+
   return (
     <div
       {...props}
@@ -28,7 +33,7 @@ export default function DateSelector({
           const day = getNamedDays(date.getDay());
           const month = getNamedMonth(date.getMonth());
           const dateNumber = date.getDate();
-          const isSelected = dateString === selected;
+          const isSelected = dateString === selectedDate;
           return (
             <li
               key={i}
@@ -39,7 +44,6 @@ export default function DateSelector({
                   : "hover:bg-secondary transition cursor-pointer"
               )}
               onClick={() => {
-                setSelected(dateString);
                 onSelectDate(dateString);
               }}
             >

@@ -83,6 +83,7 @@ export default function SearchPopup() {
                           e.stopPropagation();
                           setQuery(search.Query);
                         }}
+                        key={search.MovieId}
                       >
                         <i className="bx bx-history text-2xl"></i>
                         <p>{search.Query}</p>

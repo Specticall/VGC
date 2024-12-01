@@ -1,9 +1,10 @@
 import { HTMLAttributes, useEffect, useState } from "react";
 import { cn } from "../../lib/utils";
+import { SeatsData } from "@/lib/types";
 
 type Props = {
-  times?: number[];
-  onSelectTime: (timestamp: number) => void;
+  schedulesBasedOnDate?: SeatsData["Schedules"][number];
+  onSelectTime: (scheduleId: string) => void;
 };
 
 const formatTimestamp = (timestamp: number) => {
@@ -14,37 +15,39 @@ const formatTimestamp = (timestamp: number) => {
 };
 
 export default function TimeSelector({
-  times,
+  schedulesBasedOnDate,
   onSelectTime,
   ...props
 }: Props & HTMLAttributes<HTMLDivElement>) {
-  const [selected, setSelected] = useState<number | undefined>();
+  const [selected, setSelected] = useState<string | undefined>();
 
   useEffect(() => {
     setSelected(undefined);
-  }, [times]);
+  }, [schedulesBasedOnDate]);
 
-  if (!times) return <p>Select Date</p>;
+  console.log(schedulesBasedOnDate);
+  if (!schedulesBasedOnDate) return <p>Select Date</p>;
 
   return (
     <div {...props} className={cn("", props.className)}>
       <ul className="flex gap-4 overflow-x-auto min-w-full w-0 py-6">
-        {times.map((time, i) => {
+        {schedulesBasedOnDate?.map((schedule, i) => {
+          console.log(schedulesBasedOnDate);
           return (
             <li
               key={i}
               className={cn(
                 "text-light px-4 py-2 border border-border rounded-md transition cursor-pointer",
-                selected === time
+                selected === schedule.ScheduleId
                   ? "bg-accent text-white border-accent"
                   : "hover:bg-secondary"
               )}
               onClick={() => {
-                setSelected(time);
-                onSelectTime(time);
+                setSelected(schedule.ScheduleId);
+                onSelectTime(schedule.ScheduleId);
               }}
             >
-              {formatTimestamp(time)}
+              {formatTimestamp(new Date(schedule.StartTime).getTime())}
             </li>
           );
         })}

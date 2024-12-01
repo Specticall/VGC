@@ -14,7 +14,8 @@ type SearchResponse = APISuccessResponse<{
 
 export default function useMovieSearchQuery({ query }: Props) {
   const movieSearchQuery = useQuery({
-    queryFn: () => API.get<SearchResponse>(`/movies?query=${query}`),
+    queryFn: () =>
+      API.get<SearchResponse>(`/movies?query=${query}&showing=true`),
     queryKey: [QUERY_KEYS.MOVIE_SEARCH, query],
     enabled: Boolean(query),
   });

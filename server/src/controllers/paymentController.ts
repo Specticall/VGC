@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 export const createSnapTransaction: RequestHandler = async (req, res, next) => {
   try {
     const { id: userId } = req.body.payload;
-    const { movieId, seatIds, scheduleId } = req.body;
+    const { seatIds, scheduleId } = req.body;
 
     const user = await prisma.user.findUnique({
       where: {

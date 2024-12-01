@@ -1,23 +1,52 @@
+import { Control, Controller } from "react-hook-form";
 import { Button } from "../ui/Button";
 import SeatSelectorLegend from "./SeatSelectorLegend";
+import { OrderFields } from "@/pages/OrderTicket";
+import { SeatsData } from "@/lib/types";
+import { useState } from "react";
 
 const COLUMNS = 24 + 2;
 const ROWS = 6 + 1;
 
-export default function SeatSelector() {
+type Props = {
+  control: Control<OrderFields>;
+  cinemas?: {
+    name: string;
+    id: string;
+    location: string;
+  }[];
+};
+
+export default function SeatSelector({ cinemas, control }: Props) {
+  const [cinemaIdx, setCinemaIdx] = useState(0);
   return (
     <div className="flex-1 flex flex-col bg-primary border border-border p-6 rounded-md">
       <div className="flex justify-between">
-        <div className="flex items-center gap-8">
-          <div className="grid grid-cols-[auto_1fr] gap-x-3">
-            <i className="bx bx-map text-white text-3xl row-span-2 "></i>
-            <h2 className="text-white text-xl">VGC Central Park</h2>
-            <p className="text-light mt-1">
-              Central Park, Jl. Letjen S. Parman No.28, Tj. Duren Sel.,
-            </p>
-          </div>
-          <i className="text-white text-3xl bx bx-chevron-right transition hover:text-light cursor-pointer"></i>
-        </div>
+        <Controller
+          control={control}
+          name="cinemaId"
+          render={({ field: { onChange, value } }) => {
+            const cinema = cinemas?.find((cinema) => cinema.id === value);
+            return (
+              <div className="flex items-center gap-8">
+                <div className="grid grid-cols-[auto_20rem] gap-x-3">
+                  <i className="bx bx-map text-white text-3xl row-span-2 "></i>
+                  <h2 className="text-white text-xl">{cinema?.name}</h2>
+                  <p className="text-light mt-1">{cinema?.location}</p>
+                </div>
+                <i
+                  className="text-white text-3xl bx bx-chevron-right transition hover:text-light cursor-pointer"
+                  onClick={() => {
+                    if (!cinemas) return;
+                    const newIdx = (cinemaIdx + 1) % cinemas.length;
+                    setCinemaIdx(newIdx);
+                    onChange(cinemas[newIdx].id);
+                  }}
+                ></i>
+              </div>
+            );
+          }}
+        />
         <div>
           <p className="text-light">Price / Seat</p>
           <p className="text-2xl text-white mt-1">Rp.70.000</p>

@@ -1,5 +1,5 @@
 import { successRes, AppError, STATUS } from "@/utils";
-import { AgeRestriction, PrismaClient, Status } from "@prisma/client";
+import { AgeRestriction, Prisma, PrismaClient, Status } from "@prisma/client";
 import { RequestHandler } from "express";
 import { deleteFile } from "./s3Controller";
 
@@ -24,7 +24,34 @@ type MovieType = {
 export const getMovies: RequestHandler = async (req, res, next) => {
   try {
     const { id: userId } = req.body.payload;
-    const { query } = req.query;
+    const { query, showing } = req.query;
+
+    const buildWhereClause = () => {
+      const clause: Prisma.MovieWhereInput = {};
+      if (query) {
+        clause.OR = [
+          {
+            Title: {
+              contains: query as string | undefined,
+              mode: "insensitive",
+            },
+          },
+          {
+            Tagline: {
+              contains: query as string | undefined,
+              mode: "insensitive",
+            },
+          },
+        ];
+      }
+
+      if (showing) {
+        clause.Status = "NOW_SHOWING";
+      }
+
+      return clause;
+    };
+
     const movies = await prisma.movie.findMany({
       include: {
         language: true,
@@ -47,25 +74,8 @@ export const getMovies: RequestHandler = async (req, res, next) => {
       orderBy: {
         CreatedAt: "desc",
       },
-      where: query
-        ? {
-            OR: [
-              {
-                Title: {
-                  contains: query as string | undefined,
-                  mode: "insensitive",
-                },
-              },
-              {
-                Tagline: {
-                  contains: query as string | undefined,
-                  mode: "insensitive",
-                },
-              },
-            ],
-          }
-        : undefined,
-      take: 10,
+      where: buildWhereClause(),
+      take: query ? 10 : undefined,
     });
 
     let searchHistory;

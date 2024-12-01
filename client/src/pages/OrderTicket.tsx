@@ -4,7 +4,8 @@ import TimeSelector from "@/components/ticketing/TimeSelector";
 import SeatSelector from "@/components/ticketing/SeatSelector";
 import { useNavigate, useParams } from "react-router-dom";
 import useMovieQuery from "@/hooks/queries/useMovieQuery";
-import { useForm } from "react-hook-form";
+import useSeatsQuery from "@/hooks/queries/useSeatsQuery";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 const dummy = [
   {
@@ -144,42 +145,62 @@ const dummy = [
   },
 ];
 
-type OrderFields = {};
+export type OrderFields = {
+  cinemaId: string;
+  scheduleId: string;
+};
 
 export default function OrderTicket() {
-  const {} = useForm();
-
   const schedules = dummy;
   const { movieId } = useParams();
   const navigate = useNavigate();
   const { movieData } = useMovieQuery({ id: movieId });
-  const [selectedDate, setSelectedDate] = useState<string | undefined>();
+  const [selectedDate, setSelectedDate] = useState("");
+  const { seatsData } = useSeatsQuery({ movieId });
+  const { handleSubmit, control, watch } = useForm<OrderFields>({
+    values: {
+      cinemaId: seatsData?.[0]?.CinemaId || "",
+      scheduleId: "",
+    },
+  });
 
-  const scheduleGroupedByDate = useMemo(() => {
-    const grouped: Record<string, typeof schedules> = {};
-    const sortedSchedule = [...schedules];
-    sortedSchedule.sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-    );
-    schedules.forEach((schedule) => {
-      if (grouped[schedule.date]) {
-        grouped[schedule.date].push(schedule);
-      } else {
-        grouped[schedule.date] = [schedule];
-      }
+  // const times = useMemo(() => {
+  //   if (selectedDate) {
+  //     return scheduleGroupedByDate[selectedDate].map((date) => date.startTime);
+  //   }
+  //   return undefined;
+  // }, [scheduleGroupedByDate, selectedDate]);
+  const onSubmit: SubmitHandler<OrderFields> = (value) => {
+    console.log(value);
+  };
+  const cinemaId = watch("cinemaId");
+
+  const cinemaNames = useMemo(() => {
+    return seatsData?.map((cinema) => {
+      return {
+        name: cinema.Name,
+        id: cinema.CinemaId,
+        location: cinema.Location,
+      };
     });
-    return grouped;
-  }, [schedules]);
+  }, [seatsData]);
+  const schedulesBasedOnCinema = useMemo(() => {
+    setSelectedDate("");
+    return seatsData?.find((cinema) => cinema.CinemaId === cinemaId)?.Schedules;
+  }, [seatsData, cinemaId]);
 
-  const times = useMemo(() => {
-    if (selectedDate) {
-      return scheduleGroupedByDate[selectedDate].map((date) => date.startTime);
-    }
-    return undefined;
-  }, [scheduleGroupedByDate, selectedDate]);
+  const schedulesBasedOnDate = useMemo(() => {
+    if (!schedulesBasedOnCinema) return;
+    return schedulesBasedOnCinema[selectedDate]?.filter((sched) =>
+      sched.StartTime.includes(selectedDate)
+    );
+  }, [schedulesBasedOnCinema, selectedDate]);
 
   return (
-    <div className="p-6 h-full flex flex-col">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="p-6 h-full flex flex-col"
+    >
       <div className="flex gap-4">
         <i
           className="bx bx-arrow-back bg-primary border border-border rounded-md p-4 text-white flex items-center justify-center text-2xl w-16 transition hover:bg-secondary cursor-pointer"
@@ -191,12 +212,16 @@ export default function OrderTicket() {
         </div>
       </div>
       <DateSelector
-        scheduleDates={Object.keys(scheduleGroupedByDate)}
+        selectedDate={selectedDate}
         className="mt-4"
         onSelectDate={setSelectedDate}
+        schedules={schedulesBasedOnCinema}
       />
-      <TimeSelector times={times} onSelectTime={() => {}} />
-      <SeatSelector />
-    </div>
+      <TimeSelector
+        schedulesBasedOnDate={schedulesBasedOnDate}
+        onSelectTime={() => {}}
+      />
+      <SeatSelector control={control} cinemas={cinemaNames} />
+    </form>
   );
 }

@@ -1,14 +1,11 @@
-import Topbar from "../components/general/Topbar";
 import Featured from "../components/Movie/Featured";
 import Badge from "../components/ui/Badge";
 import featuredImage from "../../public/Movie/featured.png";
-import Upcoming from "../components/Movie/Upcoming";
-import upcomingImage from "../../public/Movie/upcoming.png";
 import MovieSlider from "@/components/ui/MovieSlider";
-import useMoviesQuery from "@/hooks/queries/useMoviesQuery";
+import useShowingMovieQuery from "@/hooks/queries/useShowingMovieQuery";
 
 export default function Movies() {
-  const { movieData } = useMoviesQuery();
+  const { showingMovieData } = useShowingMovieQuery();
 
   return (
     <main className="min-h-screen">
@@ -34,7 +31,7 @@ export default function Movies() {
             />
           </div>
         </div>
-        <MovieSlider data={movieData} />
+        <MovieSlider data={showingMovieData} />
         {/* <div className="flex flex-col pt-5 pb-10 relative">
           <h1 className="text-light text-large">Upcoming Movies</h1>
           <div className=" absolute inset-0">

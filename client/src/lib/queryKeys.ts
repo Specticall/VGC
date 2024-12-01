@@ -11,4 +11,6 @@ export const QUERY_KEYS = {
   ROOM: "rooms",
   SEARCH_HISTORY: "search-history",
   MOVIE_SEARCH: "movie-search",
+  SEATS: "seats",
+  SHOWING_MOVIE: "showing-movie",
 };
