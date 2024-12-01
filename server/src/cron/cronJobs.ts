@@ -65,8 +65,7 @@ export const reminder = async () => {
 			},
 		});
 		if (!reservation.Reminder1Status) {
-			//currentTime >= oneHourBefore && currentTime <= movieStartTime
-			if (currentTime == currentTime) {
+			if (currentTime >= oneHourBefore && currentTime <= movieStartTime) {
 				const mailOptions = {
 					to: userEmail,
 					subject: "Movie Reminder",
@@ -94,8 +93,7 @@ export const reminder = async () => {
 			});
 		}
 		if (!reservation.Reminder2Status) {
-			// currentTime < oneHourBefore && currentTime >= sixHourBefore
-			if (currentTime == currentTime) {
+			if (currentTime < oneHourBefore && currentTime >= sixHourBefore) {
 				const mailOptions = {
 					to: userEmail,
 					subject: "Movie Reminder",
@@ -123,9 +121,7 @@ export const reminder = async () => {
 			});
 		}
 		if (!reservation.Reminder3Status) {
-			console.log("AOWOAKWOKAW");
-			// currentTime < sixHourBefore && currentTime >= oneDayBefore
-			if (currentTime == currentTime) {
+			if (currentTime < sixHourBefore && currentTime >= oneDayBefore) {
 				const mailOptions = {
 					to: userEmail,
 					subject: "Movie Reminder",
