@@ -2,13 +2,15 @@ import express from "express";
 import cors from "cors";
 
 import {
-	authRouter,
-	castRouter,
-	languageRouter,
-	movieRouter,
-	paymentRouter,
-	s3Router,
-	userRouter,
+
+  authRouter,
+  castRouter,
+  languageRouter,
+  movieRouter,
+  paymentRouter,
+  s3Router,
+  seatRouter,
+  userRouter,
 } from "./routes";
 import { errorHandler } from "./controllers/errorController";
 import { schedulesRouter } from "./routes/schedulesRouter";
@@ -36,6 +38,8 @@ app.use("/payments", paymentRouter);
 app.use("/cinemas", cinemaRouter);
 app.use("/rooms", roomRouter);
 app.use("/invoice", invoiceRouter);
+app.use("/seats", seatRouter);
+
 
 app.use(errorHandler);
 
