@@ -30,3 +30,6 @@ export const snapApi = new Snap({
   serverKey: MIDTRANS_SERVER_KEY,
 });
 
+//Mail
+export const MAIL_USERNAME = process.env.MAIL_USERNAME as string;
+export const MAIL_PASSWORD = process.env.MAIL_PASSWORD as string;
