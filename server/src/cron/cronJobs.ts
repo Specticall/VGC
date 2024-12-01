@@ -14,6 +14,9 @@ export const reminder = async () => {
 		where: {
 			payment: {
 				IsPaid: false,
+				Date: {
+					lte: new Date(new Date().getTime() - 15 * 60000)
+				}
 			},
 		},
 	});

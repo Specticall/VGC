@@ -8,6 +8,7 @@ import {
   movieRouter,
   paymentRouter,
   s3Router,
+  seatRouter,
   userRouter,
 } from "./routes";
 import { errorHandler } from "./controllers/errorController";
@@ -34,6 +35,7 @@ app.use("/genres", genreRouter);
 app.use("/payments", paymentRouter);
 app.use("/cinemas", cinemaRouter);
 app.use("/rooms", roomRouter);
+app.use("/seats", seatRouter);
 
 app.use(errorHandler);
 
