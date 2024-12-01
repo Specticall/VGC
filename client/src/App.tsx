@@ -18,6 +18,7 @@ import ToastProvider from "./components/ui/Toast";
 import MovieDetails from "./pages/MovieDetails";
 import Movies from "./pages/Movies";
 import Checkout from "./pages/Checkout";
+import MovieTicket from "./pages/MovieTicket";
 
 const router = createBrowserRouter([
   {
@@ -83,6 +84,10 @@ const router = createBrowserRouter([
       {
         path: "checkout",
         element: <Checkout />,
+      },
+      {
+        path: "movies-ticket",
+        element: <MovieTicket />,
       },
     ],
   },
