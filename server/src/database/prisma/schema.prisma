@@ -147,8 +147,8 @@ model Schedule {
 
 model Payment {
   PaymentId     String        @id @default(uuid())
-  Method        PaymentMethod
-  Date          DateTime      @default(now())
+  Date          DateTime      @default(now()) @updatedAt
+  IsPaid        Boolean       @default(false)
   ReservationId String        @unique
   reservation   Reservation   @relation(fields: [ReservationId], references: [ReservationId], onDelete: Cascade)
 }
@@ -182,10 +182,4 @@ enum AgeRestriction {
   SU
   R13
   D17
-}
-
-enum PaymentMethod {
-  BANK_TRANSFER
-  DANA
-  GOPAY
 }

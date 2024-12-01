@@ -1,3 +1,4 @@
+import { MAIL_PASSWORD, MAIL_USERNAME } from "@/config/config";
 import { PrismaClient } from "@prisma/client";
 import cron from "node-cron";
 import nodemailer from "nodemailer";
@@ -9,6 +10,14 @@ cron.schedule("*/2 * * * *", () => {
 });
 
 export const reminder = async () => {
+	await prisma.reservation.deleteMany({
+		where: {
+			payment: {
+				IsPaid: false,
+			},
+		},
+	});
+
 	const listOfReservation = await prisma.reservation.findMany({
 		where: {
 			IsUsed: false,
@@ -60,8 +69,8 @@ export const reminder = async () => {
 		const transporter = nodemailer.createTransport({
 			service: "gmail",
 			auth: {
-				user: "fierynx@gmail.com",
-				pass: "qszh zeot ifog wzoy",
+				user: MAIL_USERNAME,
+				pass: MAIL_PASSWORD,
 			},
 		});
 		if (!reservation.Reminder1Status) {

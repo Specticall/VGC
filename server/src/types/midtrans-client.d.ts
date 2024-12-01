@@ -4,7 +4,7 @@
 declare module "midtrans-client" {
   export interface ItemDetail {
     id: string;
-    price: number;
+    price: any;
     quantity: number;
     name: string;
   }
@@ -18,7 +18,7 @@ declare module "midtrans-client" {
 
   export interface TransactionDetails {
     order_id: string;
-    gross_amount: number;
+    gross_amount: any;
   }
 
   export interface RefundParameter {
@@ -41,7 +41,7 @@ declare module "midtrans-client" {
   export interface TransactionStatusResponse {
     transaction_status: string;
     order_id: string;
-    gross_amount: number;
+    gross_amount: any;
     [key: string]: any;
   }
 
