@@ -16,7 +16,7 @@ export default function Featured({
   altImage,
 }: Props) {
   return (
-    <div className="relative h-[400px] w-full rounded-lg overflow-hidden">
+    <div className="relative h-[30rem] w-full rounded-lg overflow-hidden">
       <img
         src={image}
         alt={altImage}

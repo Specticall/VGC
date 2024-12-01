@@ -58,6 +58,12 @@ export type MovieData = {
   UpdatedAt: string;
   casts: {
     CastId: string;
+    MovieCastId: string;
+    MovieId: string;
+    cast: {
+      Image: null | string;
+      Name: string;
+    };
   }[];
   language: {
     LanguageId: string;

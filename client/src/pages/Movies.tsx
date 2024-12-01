@@ -4,11 +4,15 @@ import Badge from "../components/ui/Badge";
 import featuredImage from "../../public/Movie/featured.png";
 import Upcoming from "../components/Movie/Upcoming";
 import upcomingImage from "../../public/Movie/upcoming.png";
+import MovieSlider from "@/components/ui/MovieSlider";
+import useMoviesQuery from "@/hooks/queries/useMoviesQuery";
 
 export default function Movies() {
+  const { movieData } = useMoviesQuery();
+
   return (
     <main className="min-h-screen">
-      <div className="px-5 pt-5">
+      <div className="p-8">
         <div className="flex flex-col">
           <div className="flex flex-col">
             <div className="flex items-center  text-white gap-5 pb-5">
@@ -30,41 +34,13 @@ export default function Movies() {
             />
           </div>
         </div>
-        <div className="flex flex-col pt-5 pb-10">
+        <MovieSlider data={movieData} />
+        {/* <div className="flex flex-col pt-5 pb-10 relative">
           <h1 className="text-light text-large">Upcoming Movies</h1>
-          <div className="grid grid-cols-[repeat(auto-fit,16rem)] gap-5 pt-5">
-            <Upcoming
-              image={upcomingImage}
-              badge={["Action"]}
-              title="Venom : The Last Dance"
-              rating="8.8"
-            />
-            <Upcoming
-              image={upcomingImage}
-              badge={["Action"]}
-              title="Venom : The Last Dance"
-              rating="8.8"
-            />
-            <Upcoming
-              image={upcomingImage}
-              badge={["Action"]}
-              title="Venom : The Last Dance"
-              rating="8.8"
-            />
-            <Upcoming
-              image={upcomingImage}
-              badge={["Action"]}
-              title="Venom : The Last Dance"
-              rating="8.8"
-            />
-            <Upcoming
-              image={upcomingImage}
-              badge={["Action"]}
-              title="Venom : The Last Dance"
-              rating="8.8"
-            />
+          <div className=" absolute inset-0">
+            <MovieSlider data={movieData} />
           </div>
-        </div>
+        </div> */}
       </div>
     </main>
   );
