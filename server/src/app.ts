@@ -2,19 +2,20 @@ import express from "express";
 import cors from "cors";
 
 import {
-  authRouter,
-  castRouter,
-  languageRouter,
-  movieRouter,
-  paymentRouter,
-  s3Router,
-  userRouter,
+	authRouter,
+	castRouter,
+	languageRouter,
+	movieRouter,
+	paymentRouter,
+	s3Router,
+	userRouter,
 } from "./routes";
 import { errorHandler } from "./controllers/errorController";
 import { schedulesRouter } from "./routes/schedulesRouter";
 import { genreRouter } from "./routes/genreRouter";
 import { cinemaRouter } from "./routes/cinemaRouter";
 import { roomRouter } from "./routes/roomRouter";
+import { invoiceRouter } from "./routes/invoiceRouter";
 
 const app = express();
 // Enable fetching from localhost
@@ -34,6 +35,7 @@ app.use("/genres", genreRouter);
 app.use("/payments", paymentRouter);
 app.use("/cinemas", cinemaRouter);
 app.use("/rooms", roomRouter);
+app.use("/invoice", invoiceRouter);
 
 app.use(errorHandler);
 
