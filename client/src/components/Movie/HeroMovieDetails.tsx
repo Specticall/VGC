@@ -58,22 +58,33 @@ export default function HeroMovieDetails({
             </div>
             <div className="mt-4 flex flex-col text-white">
               <p className="">Actors</p>
-              <div className="flex flex-row">
-                <div className="flex flex-col"></div>
+              <div className="flex flex-wrap gap-5 pt-5">
+                {[
+                  { name: "Robert D." },
+                  { name: "Davin T." },
+                  { name: "Chriss Patt" },
+                ].map((actor, index) => (
+                  <div key={index} className="flex flex-col items-center gap-2">
+                    <div className="rounded-full bg-slate-300 w-14 h-14 flex items-center justify-center"></div>
+                    <p className="text-white text-xs text-center">
+                      {actor.name}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <div className="pt-5">
+                <Button
+                  variant={"secondary"}
+                  className="text-black px-8 py-1 rounded flex items-center gap-2"
+                >
+                  <i className="bx bxs-discount text-3xl"></i>
+                  Order tickets
+                </Button>
               </div>
             </div>
           </div>
         </div>
       </div>
-      {/* <div className="absolute bottom-4 right-4">
-        <Button
-          variant={"secondary"}
-          className="text-black px-8 py-1 rounded flex items-center gap-2"
-        >
-          <i className="bx bxs-discount text-3xl"></i>
-          Get tickets
-        </Button>
-      </div> */}
     </div>
   );
 }
