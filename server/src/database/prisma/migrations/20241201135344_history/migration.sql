@@ -1,5 +1,4 @@
--- AlterEnum
-ALTER TYPE "PaymentMethod" ADD VALUE 'DANA';
+
 
 -- CreateTable
 CREATE TABLE "SearchHistory" (
