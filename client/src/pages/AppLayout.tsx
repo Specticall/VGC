@@ -15,7 +15,7 @@ export default function AppLayout() {
     >
       <Sidebar isOpen={isOpen} onClose={toggleIsOpen} />
       <div className="flex flex-col ">
-        <Topbar />
+        <Topbar searchBar />
         <main className="flex-1 flex flex-col w-full relative">
           <div className="flex column absolute inset-0 overflow-auto">
             <div className="flex-1">
