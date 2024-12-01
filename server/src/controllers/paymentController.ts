@@ -1,5 +1,5 @@
 import { snapApi } from "@/config/config";
-import { successRes } from "@/utils";
+import { AppError, STATUS, successRes } from "@/utils";
 import { PrismaClient } from "@prisma/client";
 import { randomUUID } from "crypto";
 import { RequestHandler } from "express";
@@ -8,24 +8,47 @@ const prisma = new PrismaClient();
 
 export const createSnapTransaction: RequestHandler = async (req, res, next) => {
   try {
-    const { userId, movieId, seatIds } = req.body;
-    const movie = await prisma.movie.findUnique({
-      where: {
-        MovieId: movieId,
-      }
-    });
+    const { userId, scheduleId, seatIds } = req.body;
 
     const user = await prisma.user.findUnique({
       where: {
         UserId: userId,
       }
     });
+
+    const schedule = await prisma.schedule.findUnique({
+      where: {
+        ScheduleId: scheduleId,
+      }
+    });
+
+    const movie = await prisma.movie.findUnique({
+      where: {
+        MovieId: schedule?.MovieId,
+      }
+    });
+
+    const seats = await prisma.seat.findMany({
+      where: {
+        SeatId: {
+          in: seatIds,
+        },
+      },
+    });
+
+    const roomIdsFromSeats = seats.map(seat => seat.RoomId);
+    const uniqueRoomIds = new Set(roomIdsFromSeats);
+
+    if (uniqueRoomIds.size > 1) {
+      throw new AppError("SeatIds must be in the same room", STATUS.BAD_REQUEST);
+    }
+
     const name = user?.Name || ""; 
     const nameParts = name.split(" ");
     const quantity = seatIds.length;
     const snapTransaction = {
       item_details: {
-        id: movieId,
+        id: movie?.MovieId || "",
         price: Number(movie?.Price || 0),
         quantity: quantity,
         name: movie?.Title || "",
@@ -39,7 +62,7 @@ export const createSnapTransaction: RequestHandler = async (req, res, next) => {
         last_name: nameParts.length > 1 ? nameParts.slice(-1)[0] : "",
         email: user?.Email || "",
         phone: "",
-      }
+      },
     };
 
     const token = await snapApi.createTransactionToken(snapTransaction);
