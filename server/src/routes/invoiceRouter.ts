@@ -4,6 +4,6 @@ import express from "express";
 
 const invoiceRouter = express.Router();
 
-invoiceRouter.post("/", generateInvoice);
+invoiceRouter.post("/", protect, generateInvoice);
 
 export { invoiceRouter };

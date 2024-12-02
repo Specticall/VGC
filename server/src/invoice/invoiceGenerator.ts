@@ -1,13 +1,10 @@
 import { AppError, STATUS } from "@/utils";
 import { successRes } from "@/utils/responses";
-// import { MAIL_PASSWORD, MAIL_USERNAME } from "@/config/config"; (Tolong nanti di uncomment yak ini, saya udah gila aowkaowk)
+import { MAIL_PASSWORD, MAIL_USERNAME, s3Client } from "@/config/config";
 import { PrismaClient } from "@prisma/client";
 import { RequestHandler } from "express";
 import nodemailer from "nodemailer";
 import QRCode from "qrcode";
-
-export const MAIL_USERNAME = process.env.MAIL_USERNAME as string;
-export const MAIL_PASSWORD = process.env.MAIL_PASSWORD as string;
 
 const prisma = new PrismaClient();
 
@@ -86,6 +83,7 @@ export const generateInvoice: RequestHandler = async (req, res, next) => {
 
 						const qrCode = QRCode.toDataURL(JSON.stringify(qrData));
 						// send To S3
+                        s3Client.send
 						return successRes(res, qrCode);
 					}
 				});
