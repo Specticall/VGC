@@ -19,6 +19,7 @@ import MovieDetails from "./pages/MovieDetails";
 import Movies from "./pages/Movies";
 import Checkout from "./pages/Checkout";
 import MovieTicket from "./pages/MovieTicket";
+import Ticket from "./pages/Ticket";
 
 const router = createBrowserRouter([
   {
@@ -88,6 +89,10 @@ const router = createBrowserRouter([
       {
         path: "movies-ticket",
         element: <MovieTicket />,
+      },
+      {
+        path: "ticket",
+        element: <Ticket />,
       },
     ],
   },
