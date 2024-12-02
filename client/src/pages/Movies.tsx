@@ -1,6 +1,5 @@
 import Featured from "../components/Movie/Featured";
 import Badge from "../components/ui/Badge";
-import featuredImage from "../../public/Movie/featured.png";
 import MovieSlider from "@/components/ui/MovieSlider";
 import useShowingMovieQuery from "@/hooks/queries/useShowingMovieQuery";
 
@@ -22,22 +21,10 @@ export default function Movies() {
               </Badge>
             </div>
 
-            <Featured
-              image={featuredImage}
-              altImage="Featured"
-              title="Venom : The Last Dance"
-              description="Eddie and Venom are on the run. Hunted by both of their worlds and with the net closing in, the duo are forced into a devastating decision that will bring the curtains down on Venom and Eddie's last dance."
-              badge={["Action", "Thriller"]}
-            />
+            <Featured movie={showingMovieData?.[0]} />
           </div>
         </div>
         <MovieSlider data={showingMovieData} />
-        {/* <div className="flex flex-col pt-5 pb-10 relative">
-          <h1 className="text-light text-large">Upcoming Movies</h1>
-          <div className=" absolute inset-0">
-            <MovieSlider data={movieData} />
-          </div>
-        </div> */}
       </div>
     </main>
   );

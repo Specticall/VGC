@@ -70,6 +70,42 @@ export const getSeatsByMovieId: RequestHandler = async (req, res, next) => {
     next(e);
   }
 };
+
+export const getSeatsByRoomId: RequestHandler = async (
+  request,
+  response,
+  next
+) => {
+  try {
+    const { roomId } = request.params;
+    const seats = await prisma.seat.findMany({
+      where: {
+        RoomId: roomId,
+      },
+      orderBy: {
+        Row: "asc",
+      },
+    });
+
+    const reservedSeats = await prisma.reservationSeat.findMany({
+      where: {
+        seat: {
+          RoomId: roomId,
+        },
+      },
+      orderBy: {
+        seat: {
+          Row: "asc",
+        },
+      },
+    });
+
+    return successRes(response, { seats, reservedSeats });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // export const getSeatsByMovieId: RequestHandler = async (req, res, next) => {
 //   try {
 //     const { id } = req.params;

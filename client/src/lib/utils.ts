@@ -39,6 +39,14 @@ export function formatTime(dateString: string) {
   }).format(date);
 }
 
+export function formatToRupiah(number?: number) {
+  if (!number) return undefined;
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+  }).format(number);
+}
+
 export function formatDate(date?: string | Date) {
   if (typeof date === "string") date = new Date(date);
   if (!date) return undefined;

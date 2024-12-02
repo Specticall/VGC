@@ -16,6 +16,7 @@ import { schedulesRouter } from "./routes/schedulesRouter";
 import { genreRouter } from "./routes/genreRouter";
 import { cinemaRouter } from "./routes/cinemaRouter";
 import { roomRouter } from "./routes/roomRouter";
+import { ticketRouter } from "./routes/ticketRouter";
 
 const app = express();
 // Enable fetching from localhost
@@ -36,6 +37,7 @@ app.use("/payments", paymentRouter);
 app.use("/cinemas", cinemaRouter);
 app.use("/rooms", roomRouter);
 app.use("/seats", seatRouter);
+app.use("/tickets", ticketRouter);
 
 app.use(errorHandler);
 

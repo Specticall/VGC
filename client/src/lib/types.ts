@@ -85,7 +85,7 @@ export type SearchHistory = {
   SearchHistoryId: string;
 };
 
-export type SeatsData = {
+export type CinemaScheduleData = {
   CinemaId: string;
   Name: string;
   Location: string;
@@ -100,6 +100,62 @@ export type SeatsData = {
       Reservations: unknown[];
     }[]
   >;
+};
+
+export type SeatsData = {
+  SeatId: string;
+  RoomId: string;
+  Row: string;
+  Number: number;
+};
+
+export type LocalCheckoutData = {
+  cinemaId: string;
+  seatsId: string[];
+  scheduleId: string;
+  movieId?: string;
+  roomId?: string;
+  startTime?: string;
+  location?: string;
+  selectedDate: string;
+};
+
+export type MidtransSuccess = {
+  bca_va_number: string;
+  finish_redirect_url: string;
+  fraud_status: string;
+  gross_amount: string;
+  order_id: string;
+  payment_type: string;
+  pdf_url: string;
+  status_code: string;
+  status_message: string;
+  transaction_id: string;
+  transaction_status: string;
+  transaction_time: string;
+};
+export type TicketData = {
+  ReservationId: string;
+  seats: {
+    seat: {
+      Number: number;
+      Row: string;
+    };
+  }[];
+  schedule: {
+    StartTime: string;
+    EndTime: string;
+    room: {
+      Name: string;
+      cinema: {
+        Name: string;
+        Location: string;
+      };
+    };
+    movie: {
+      Title: string;
+    };
+  };
 };
 
 export type GenreData = {

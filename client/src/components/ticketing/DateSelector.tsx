@@ -1,12 +1,11 @@
-import { HTMLAttributes, useMemo, useState } from "react";
+import { HTMLAttributes } from "react";
 import { cn, getNamedDays, getNamedMonth } from "../../lib/utils";
-import { OrderFields } from "@/pages/OrderTicket";
-import { Control, useController } from "react-hook-form";
-import { SeatsData } from "@/lib/types";
+import { CinemaScheduleData } from "@/lib/types";
+import Skeleton from "react-loading-skeleton";
 
 type Props = {
   scheduleDates?: string[];
-  schedules?: SeatsData["Schedules"];
+  schedules?: CinemaScheduleData["Schedules"];
   selectedDate: string;
   onSelectDate: (date: string) => void;
 };
@@ -28,10 +27,21 @@ export default function DateSelector({
       )}
     >
       <ul className={cn("flex gap-4 overflow-x-auto min-w-full w-0 p-4")}>
+        {(!scheduleDates || scheduleDates.length === 0) &&
+          new Array(10).fill("x").map((_, i) => {
+            return (
+              <Skeleton
+                key={i}
+                width={"4.5rem"}
+                height={"6.5rem"}
+                containerClassName="flex"
+              />
+            );
+          })}
         {scheduleDates?.map((dateString, i) => {
           const date = new Date(dateString);
           const day = getNamedDays(date.getDay());
-          const month = getNamedMonth(date.getMonth());
+          const month = getNamedMonth(date.getMonth() + 1);
           const dateNumber = date.getDate();
           const isSelected = dateString === selectedDate;
           return (

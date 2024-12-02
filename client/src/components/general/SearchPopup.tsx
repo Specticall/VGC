@@ -137,14 +137,16 @@ export default function SearchPopup() {
                     src={movie.Poster}
                     className="w-[3.5rem] aspect-square object-cover rounded-sm"
                   />
-                  <div>
+                  <div className="overflow-hidden">
                     <h3 className="text-white">{movie.Title}</h3>
-                    <div className="flex gap-2 ">
+                    <div className="flex gap-2">
                       <p>{movie.genres[0].genre.Name}</p>
                       <p>•</p>
                       <p>{movie.DurationMinutes}m</p>
                       <p>•</p>
-                      <p>{formatDate(movie.ReleaseDate)}</p>
+                      <p className="truncate">
+                        {formatDate(movie.ReleaseDate)}
+                      </p>
                     </div>
                   </div>
                 </li>

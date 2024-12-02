@@ -4,15 +4,17 @@ import { APISuccessResponse, SeatsData } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
 
 type Props = {
-  movieId?: string;
+  roomId?: string;
 };
 
-export default function useSeatsQuery({ movieId }: Props) {
+export default function useSeatsQuery({ roomId }: Props) {
   const seatsQuery = useQuery({
     queryFn: () =>
-      API.get<APISuccessResponse<SeatsData[]>>(`/seats/${movieId}`),
+      API.get<
+        APISuccessResponse<{ seats: SeatsData[]; reservedSeats: SeatsData[] }>
+      >(`/seats/room/${roomId}`),
     queryKey: [QUERY_KEYS.SEATS],
-    enabled: Boolean(movieId),
+    enabled: Boolean(roomId),
   });
 
   const seatsData = seatsQuery.data?.data.data;

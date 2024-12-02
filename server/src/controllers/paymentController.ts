@@ -64,11 +64,6 @@ export const createSnapTransaction: RequestHandler = async (req, res, next) => {
         ScheduleId: scheduleId,
         IsUsed: false,
         TotalPrice: quantity * Number(movie?.Price || 0),
-        seats: {
-          create: seatIds.map((seatId: string) => ({
-            SeatId: seatId,
-          })),
-        },
         payment: {
           create: {
             IsPaid: false,
@@ -100,7 +95,7 @@ export const createSnapTransaction: RequestHandler = async (req, res, next) => {
     };
 
     const token = await snapApi.createTransactionToken(snapTransaction);
-    return successRes(res, { token });
+    return successRes(res, { token, reservationId: reservation.ReservationId });
   } catch (e) {
     next(e);
   }
@@ -108,7 +103,7 @@ export const createSnapTransaction: RequestHandler = async (req, res, next) => {
 
 export const updatePaidStatus: RequestHandler = async (req, res, next) => {
   try {
-    const { reservationId } = req.body;
+    const { reservationId, seatIds } = req.body;
 
     const reservation = await prisma.reservation.findUnique({
       where: {
@@ -136,6 +131,11 @@ export const updatePaidStatus: RequestHandler = async (req, res, next) => {
           update: {
             IsPaid: true,
           },
+        },
+        seats: {
+          create: seatIds.map((seatId: string) => ({
+            SeatId: seatId,
+          })),
         },
       },
     });

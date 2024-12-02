@@ -18,6 +18,7 @@ import ToastProvider from "./components/ui/Toast";
 import MovieDetails from "./pages/MovieDetails";
 import Movies from "./pages/Movies";
 import Checkout from "./pages/Checkout";
+import Tickets from "./pages/Tickets";
 
 const router = createBrowserRouter([
   {
@@ -67,6 +68,10 @@ const router = createBrowserRouter([
       {
         path: "admin-movies",
         element: <AdminMovies />,
+      },
+      {
+        path: "Tickets",
+        element: <Tickets />,
       },
       {
         path: "order-ticket/:movieId",

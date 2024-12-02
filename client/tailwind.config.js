@@ -22,6 +22,7 @@ export default {
       },
     },
     screens: {
+      "3xl": { max: "1600px" },
       "2xl": { max: "1440px" },
       xl: { max: "1200px" },
       lg: { max: "900px" },
