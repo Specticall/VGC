@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.scheduleSeeder = void 0;
-const autoScheduler_1 = require("@/utils/autoScheduler");
+const autoScheduler_1 = require("../../utils/autoScheduler");
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const scheduleSeeder = async () => {

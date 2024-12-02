@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteMovie = exports.updateMovie = exports.createMovie = exports.getMovieById = exports.getMovies = void 0;
-const utils_1 = require("@/utils");
+const utils_1 = require("../utils");
 const client_1 = require("@prisma/client");
 const s3Controller_1 = require("./s3Controller");
 const prisma = new client_1.PrismaClient();

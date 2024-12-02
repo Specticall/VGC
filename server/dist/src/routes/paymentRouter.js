@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.paymentRouter = void 0;
-const paymentController_1 = require("@/controllers/paymentController");
-const protect_1 = require("@/middleware/protect");
+const paymentController_1 = require("../controllers/paymentController");
+const protect_1 = require("../middleware/protect");
 const express_1 = __importDefault(require("express"));
 const paymentRouter = express_1.default.Router();
 exports.paymentRouter = paymentRouter;

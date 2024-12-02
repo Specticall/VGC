@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.cinemaRouter = void 0;
-const cinemaController_1 = require("@/controllers/cinemaController");
-const protect_1 = require("@/middleware/protect");
+const cinemaController_1 = require("../controllers/cinemaController");
+const protect_1 = require("../middleware/protect");
 const express_1 = __importDefault(require("express"));
 const cinemaRouter = express_1.default.Router();
 exports.cinemaRouter = cinemaRouter;

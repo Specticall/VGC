@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.protect = void 0;
-const config_1 = require("@/config/config");
-const utils_1 = require("@/utils");
+const config_1 = require("../config/config");
+const utils_1 = require("../utils");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const protect = async (request, response, next) => {
     try {

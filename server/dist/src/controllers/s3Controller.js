@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteFile = exports.uploadFile = void 0;
 const client_s3_1 = require("@aws-sdk/client-s3");
-const config_1 = require("@/config/config");
-const utils_1 = require("@/utils");
+const config_1 = require("../config/config");
+const utils_1 = require("../utils");
 const s3_request_presigner_1 = require("@aws-sdk/s3-request-presigner");
 const ALLOWED_FILE_TYPES = {
     poster: ["image/jpeg", "image/png"],

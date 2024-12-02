@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.errorHandler = void 0;
-const utils_1 = require("@/utils");
+const utils_1 = require("../utils");
 const specifyError = (error) => {
     if (error.message === "jwt expired") {
         return "Token has expired";

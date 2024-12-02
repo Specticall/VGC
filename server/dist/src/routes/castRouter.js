@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.castRouter = void 0;
-const castController_1 = require("@/controllers/castController");
+const castController_1 = require("../controllers/castController");
 const express_1 = __importDefault(require("express"));
 const castRouter = express_1.default.Router();
 exports.castRouter = castRouter;

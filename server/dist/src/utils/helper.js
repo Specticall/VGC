@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateFileName = exports.createJWT = exports.shuffleArray = exports.roundTimeDownToNearest5 = void 0;
-const config_1 = require("@/config/config");
+const config_1 = require("../config/config");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const crypto_1 = __importDefault(require("crypto"));
 const roundTimeDownToNearest5 = (date) => {

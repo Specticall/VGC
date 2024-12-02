@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.cinemaSeeder = void 0;
 const client_1 = require("@prisma/client");
-const cinemas_1 = __importDefault(require("@/assets/cinemas"));
+const cinemas_1 = __importDefault(require("../../assets/cinemas"));
 const prisma = new client_1.PrismaClient();
 const cinemaSeeder = () => {
     console.log('Seeding cinemas...');

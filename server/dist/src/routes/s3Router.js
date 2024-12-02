@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.s3Router = void 0;
 const express_1 = __importDefault(require("express"));
-const s3Controller_1 = require("@/controllers/s3Controller");
+const s3Controller_1 = require("../controllers/s3Controller");
 const s3Router = express_1.default.Router();
 exports.s3Router = s3Router;
 s3Router.post("/", s3Controller_1.uploadFile);

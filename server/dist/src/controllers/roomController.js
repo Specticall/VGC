@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getRooms = void 0;
-const utils_1 = require("@/utils");
-const AppError_1 = require("@/utils/AppError");
-const statusCodes_1 = require("@/utils/statusCodes");
+const utils_1 = require("../utils");
+const AppError_1 = require("../utils/AppError");
+const statusCodes_1 = require("../utils/statusCodes");
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 // get list of cinema aja

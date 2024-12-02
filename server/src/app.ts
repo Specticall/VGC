@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 
 import {
-
   authRouter,
   castRouter,
   languageRouter,
@@ -41,7 +40,6 @@ app.use("/rooms", roomRouter);
 app.use("/invoice", invoiceRouter);
 app.use("/seats", seatRouter);
 app.use("/tickets", ticketRouter);
-
 
 app.use(errorHandler);
 

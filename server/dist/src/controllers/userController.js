@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.storeSearchHistory = exports.getSearchHistory = exports.getUsers = void 0;
-const utils_1 = require("@/utils");
+const utils_1 = require("../utils");
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getUsers = async (request, response, next) => {

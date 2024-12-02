@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.movieSeeder = void 0;
 const client_1 = require("@prisma/client");
 const axios_1 = __importDefault(require("axios"));
-const config_1 = require("@/config/config");
+const config_1 = require("../../config/config");
 const TOTAL_MOVIES = 100;
 const prisma = new client_1.PrismaClient();
 const fetchMovies = async (page = 1) => {

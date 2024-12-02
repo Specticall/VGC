@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateInvoice = exports.MAIL_PASSWORD = exports.MAIL_USERNAME = void 0;
-const utils_1 = require("@/utils");
-const responses_1 = require("@/utils/responses");
-// import { MAIL_PASSWORD, MAIL_USERNAME } from "@/config/config"; (Tolong nanti di uncomment yak ini, saya udah gila aowkaowk)
+const utils_1 = require("../utils");
+const responses_1 = require("../utils/responses");
+// import { MAIL_PASSWORD, MAIL_USERNAME } from "../config/config"; (Tolong nanti di uncomment yak ini, saya udah gila aowkaowk)
 const client_1 = require("@prisma/client");
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const qrcode_1 = __importDefault(require("qrcode"));

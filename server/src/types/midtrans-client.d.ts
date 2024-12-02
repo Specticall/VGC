@@ -79,7 +79,8 @@ declare module "midtrans-client" {
     });
 
     createTransactionToken(parameter: ChargeParameter): Promise<string>;
-    createTransaction(parameter: ChargeParameter): Promise<CreateTransactionResponse>;
-    
+    createTransaction(
+      parameter: ChargeParameter
+    ): Promise<CreateTransactionResponse>;
   }
 }

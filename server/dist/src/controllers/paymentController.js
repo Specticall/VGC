@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updatePaidStatus = exports.createSnapTransaction = void 0;
-const config_1 = require("@/config/config");
-const utils_1 = require("@/utils");
+const config_1 = require("../config/config");
+const utils_1 = require("../utils");
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const createSnapTransaction = async (req, res, next) => {

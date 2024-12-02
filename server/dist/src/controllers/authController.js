@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.register = exports.login = exports.loginWithGoogle = void 0;
-const utils_1 = require("@/utils");
+const utils_1 = require("../utils");
 const client_1 = require("@prisma/client");
 const axios_1 = __importDefault(require("axios"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
