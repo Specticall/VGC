@@ -14,6 +14,8 @@ export default function ScheduleTable({ movieId }: Props) {
     movieScheduleQuery: { isLoading },
   } = useMovieScheduleQuery({ id: movieId });
 
+  console.log(movieScheduleData);
+
   return (
     <div className="mt-6 rounded-md border border-border bg-primary border-md">
       <div className="p-6 pb-0">
