@@ -7,32 +7,32 @@ const prisma = new PrismaClient();
 
 export const createSnapTransaction: RequestHandler = async (req, res, next) => {
   try {
-    //belom implement middleware authnya
-    const { userId, scheduleId, seatIds } = req.body;
+    const { id: userId } = req.body.payload;
+    const { seatIds, scheduleId } = req.body;
 
     const user = await prisma.user.findUnique({
       where: {
         UserId: userId,
-      }
+      },
     });
 
-    if(!user){
+    if (!user) {
       throw new AppError("User not found", STATUS.NOT_FOUND);
     }
 
     const schedule = await prisma.schedule.findUnique({
       where: {
         ScheduleId: scheduleId,
-      }
+      },
     });
 
     const movie = await prisma.movie.findUnique({
       where: {
         MovieId: schedule?.MovieId,
-      }
+      },
     });
 
-    if(!movie){
+    if (!movie) {
       throw new AppError("Movie not found", STATUS.NOT_FOUND);
     }
 
@@ -44,14 +44,17 @@ export const createSnapTransaction: RequestHandler = async (req, res, next) => {
       },
     });
 
-    const roomIdsFromSeats = seats.map(seat => seat.RoomId);
+    const roomIdsFromSeats = seats.map((seat) => seat.RoomId);
     const uniqueRoomIds = new Set(roomIdsFromSeats);
 
     if (uniqueRoomIds.size > 1) {
-      throw new AppError("SeatIds must be in the same room", STATUS.BAD_REQUEST);
+      throw new AppError(
+        "SeatIds must be in the same room",
+        STATUS.BAD_REQUEST
+      );
     }
 
-    const name = user?.Name || ""; 
+    const name = user?.Name || "";
     const nameParts = name.split(" ");
     const quantity = seatIds.length;
 
@@ -61,11 +64,6 @@ export const createSnapTransaction: RequestHandler = async (req, res, next) => {
         ScheduleId: scheduleId,
         IsUsed: false,
         TotalPrice: quantity * Number(movie?.Price || 0),
-        seats: {
-          create: seatIds.map((seatId: string) => ({
-            SeatId: seatId, 
-          })),
-        },
         payment: {
           create: {
             IsPaid: false,
@@ -77,7 +75,7 @@ export const createSnapTransaction: RequestHandler = async (req, res, next) => {
     const snapTransaction = {
       item_details: {
         id: movie.MovieId,
-        price:movie.Price,
+        price: movie.Price,
         quantity: quantity,
         name: movie.Title,
       },
@@ -86,7 +84,10 @@ export const createSnapTransaction: RequestHandler = async (req, res, next) => {
         gross_amount: reservation.TotalPrice,
       },
       customer_details: {
-        first_name:  nameParts.length > 1 ? nameParts.slice(0, -1).join(" ") : nameParts[0],
+        first_name:
+          nameParts.length > 1
+            ? nameParts.slice(0, -1).join(" ")
+            : nameParts[0],
         last_name: nameParts.length > 1 ? nameParts.slice(-1)[0] : "",
         email: user?.Email,
         phone: "",
@@ -94,8 +95,7 @@ export const createSnapTransaction: RequestHandler = async (req, res, next) => {
     };
 
     const token = await snapApi.createTransactionToken(snapTransaction);
-    return successRes(res, {token});
-
+    return successRes(res, { token, reservationId: reservation.ReservationId });
   } catch (e) {
     next(e);
   }
@@ -103,7 +103,7 @@ export const createSnapTransaction: RequestHandler = async (req, res, next) => {
 
 export const updatePaidStatus: RequestHandler = async (req, res, next) => {
   try {
-    const { reservationId } = req.body;
+    const { reservationId, seatIds } = req.body;
 
     const reservation = await prisma.reservation.findUnique({
       where: {
@@ -119,7 +119,7 @@ export const updatePaidStatus: RequestHandler = async (req, res, next) => {
     }
 
     if (reservation && reservation.payment && reservation.payment.IsPaid) {
-      return successRes(res, {message: "Already paid"});
+      return successRes(res, { message: "Already paid" });
     }
 
     await prisma.reservation.update({
@@ -132,11 +132,15 @@ export const updatePaidStatus: RequestHandler = async (req, res, next) => {
             IsPaid: true,
           },
         },
+        seats: {
+          create: seatIds.map((seatId: string) => ({
+            SeatId: seatId,
+          })),
+        },
       },
     });
 
-    return successRes(res, {message: "Payment success"});
-
+    return successRes(res, { message: "Payment success" });
   } catch (e) {
     next(e);
   }

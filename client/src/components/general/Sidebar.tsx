@@ -69,7 +69,7 @@ export default function Sidebar({ onClose, isOpen }: Props) {
           isOpen ? "translate-x-0" : "translate-x-[-17.5rem]"
         )}
       >
-        <div className="flex justify-between items-center border-b border-border pb-4">
+        <div className="flex justify-between items-center border-b border-border pb-4 pt-2">
           <div className="flex gap-3 items-center">
             <Logo />
             <p className="font-bold text-white text-2xl">VGC</p>

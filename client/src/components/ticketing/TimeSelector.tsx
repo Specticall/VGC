@@ -1,9 +1,12 @@
-import { HTMLAttributes, useEffect, useState } from "react";
+import { HTMLAttributes } from "react";
 import { cn } from "../../lib/utils";
+import { CinemaScheduleData } from "@/lib/types";
+import { OrderFields } from "@/pages/OrderTicket";
+import { Control, useController } from "react-hook-form";
 
 type Props = {
-  times?: number[];
-  onSelectTime: (timestamp: number) => void;
+  schedulesBasedOnDate?: CinemaScheduleData["Schedules"][number];
+  control: Control<OrderFields>;
 };
 
 const formatTimestamp = (timestamp: number) => {
@@ -14,37 +17,37 @@ const formatTimestamp = (timestamp: number) => {
 };
 
 export default function TimeSelector({
-  times,
-  onSelectTime,
+  schedulesBasedOnDate,
+  control,
   ...props
 }: Props & HTMLAttributes<HTMLDivElement>) {
-  const [selected, setSelected] = useState<number | undefined>();
+  const {
+    field: { onChange, value },
+  } = useController({
+    control,
+    name: "scheduleId",
+  });
 
-  useEffect(() => {
-    setSelected(undefined);
-  }, [times]);
-
-  if (!times) return <p>Select Date</p>;
+  if (!schedulesBasedOnDate) return <p>Select Date</p>;
 
   return (
     <div {...props} className={cn("", props.className)}>
       <ul className="flex gap-4 overflow-x-auto min-w-full w-0 py-6">
-        {times.map((time, i) => {
+        {schedulesBasedOnDate?.map((schedule, i) => {
           return (
             <li
               key={i}
               className={cn(
                 "text-light px-4 py-2 border border-border rounded-md transition cursor-pointer",
-                selected === time
+                value === schedule.ScheduleId
                   ? "bg-accent text-white border-accent"
                   : "hover:bg-secondary"
               )}
               onClick={() => {
-                setSelected(time);
-                onSelectTime(time);
+                onChange(schedule.ScheduleId);
               }}
             >
-              {formatTimestamp(time)}
+              {formatTimestamp(new Date(schedule.StartTime).getTime())}
             </li>
           );
         })}

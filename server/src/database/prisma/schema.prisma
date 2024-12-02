@@ -8,17 +8,18 @@ datasource db {
 }
 
 model User {
-  UserId         String        @id @default(uuid())
+  UserId         String          @id @default(uuid())
   Name           String
-  Email          String        @unique
+  Email          String          @unique
   Password       String
   ProfilePicture String?
-  Point          Int           @default(0)
+  Point          Int             @default(0)
   Age            Int
-  Role           UserRole      @default(USER)
-  CreatedAt      DateTime      @default(now())
-  UpdatedAt      DateTime      @updatedAt
+  Role           UserRole        @default(USER)
+  CreatedAt      DateTime        @default(now())
+  UpdatedAt      DateTime        @updatedAt
   reservations   Reservation[]
+  SearchHistory  SearchHistory[]
 }
 
 model Reservation {
@@ -39,7 +40,7 @@ model Reservation {
 }
 
 model Movie {
-  MovieId         String         @id @default(uuid())
+  MovieId         String          @id @default(uuid())
   Title           String
   Tagline         String
   DurationMinutes Int
@@ -49,16 +50,27 @@ model Movie {
   Status          Status
   AgeRestriction  AgeRestriction
   ReleaseDate     DateTime?
-  Price           Decimal        @db.Decimal(9, 2)
-  CreatedAt       DateTime       @default(now())
-  UpdatedAt       DateTime       @updatedAt
+  Price           Decimal         @db.Decimal(9, 2)
+  CreatedAt       DateTime        @default(now())
+  UpdatedAt       DateTime        @updatedAt
   LanguageId      String
-  VoteAverage     Decimal        @default(0.00) @db.Decimal(4, 2)
-  VoteCount       Int            @default(0)
-  language        Language       @relation(fields: [LanguageId], references: [LanguageId])
+  VoteAverage     Decimal         @default(0.00) @db.Decimal(4, 2)
+  VoteCount       Int             @default(0)
+  language        Language        @relation(fields: [LanguageId], references: [LanguageId])
   casts           MovieCast[]
   genres          MovieGenre[]
   schedules       Schedule[]
+  SearchHistory   SearchHistory[]
+}
+
+model SearchHistory {
+  SearchHistoryId String   @id @default(uuid())
+  Query           String
+  MovieId         String
+  UserId          String
+  CreatedAt       DateTime @default(now())
+  movie           Movie    @relation(fields: [MovieId], references: [MovieId])
+  user            User     @relation(fields: [UserId], references: [UserId])
 }
 
 model Language {
@@ -146,11 +158,11 @@ model Schedule {
 }
 
 model Payment {
-  PaymentId     String        @id @default(uuid())
-  Date          DateTime      @default(now()) @updatedAt
-  IsPaid        Boolean       @default(false)
-  ReservationId String        @unique
-  reservation   Reservation   @relation(fields: [ReservationId], references: [ReservationId], onDelete: Cascade)
+  PaymentId     String      @id @default(uuid())
+  Date          DateTime    @default(now()) @updatedAt
+  IsPaid        Boolean     @default(false)
+  ReservationId String      @unique
+  reservation   Reservation @relation(fields: [ReservationId], references: [ReservationId], onDelete: Cascade)
 }
 
 enum Status {

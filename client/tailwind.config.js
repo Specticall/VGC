@@ -11,6 +11,7 @@ export default {
         light: "#BFC2E4", // Darkmode white
         background: "#0D0D0F", // background color belakang
         gray: "#656998", // buat placeholder (white secondary)
+        orange: "#FF9335",
       },
       fontSize: {
         heading: "18px",
@@ -21,6 +22,7 @@ export default {
       },
     },
     screens: {
+      "3xl": { max: "1600px" },
       "2xl": { max: "1440px" },
       xl: { max: "1200px" },
       lg: { max: "900px" },

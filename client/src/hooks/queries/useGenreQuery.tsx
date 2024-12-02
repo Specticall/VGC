@@ -5,7 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function useGenreQuery() {
   const genreQuery = useQuery({
-    queryFn: () => API.get<APISuccessResponse<GenreData[]>>("/genres"),
+    queryFn: () => {
+      return API.get<APISuccessResponse<GenreData[]>>("/genres");
+    },
     queryKey: [QUERY_KEYS.GENRES],
   });
 
