@@ -5,22 +5,12 @@ import nodemailer from "nodemailer";
 
 const prisma = new PrismaClient();
 
+
 cron.schedule("*/2 * * * *", () => {
 	reminder();
 });
 
 export const reminder = async () => {
-	await prisma.reservation.deleteMany({
-		where: {
-			payment: {
-				IsPaid: false,
-				Date: {
-					lte: new Date(new Date().getTime() - 15 * 60000)
-				}
-			},
-		},
-	});
-
 	const listOfReservation = await prisma.reservation.findMany({
 		where: {
 			IsUsed: false,
@@ -44,8 +34,7 @@ export const reminder = async () => {
 			},
 		});
 		const movieStartTime = movieInfo?.StartTime;
-		const userEmail = "sandjayawilliams16072005@gmail.com";
-		// console.log(userEmail);
+		const userEmail = userInfo?.Name;
 		const listofSeat = userSeat.map((seat) => seat.SeatId);
 		const seatDetails = await Promise.all(
 			listofSeat.map(async (seatId) => {
@@ -77,8 +66,7 @@ export const reminder = async () => {
 			},
 		});
 		if (!reservation.Reminder1Status) {
-			//currentTime >= oneHourBefore && currentTime <= movieStartTime
-			if (currentTime == currentTime) {
+			if (currentTime >= oneHourBefore && currentTime <= movieStartTime) {
 				const mailOptions = {
 					to: userEmail,
 					subject: "Movie Reminder",
@@ -106,8 +94,7 @@ export const reminder = async () => {
 			});
 		}
 		if (!reservation.Reminder2Status) {
-			// currentTime < oneHourBefore && currentTime >= sixHourBefore
-			if (currentTime == currentTime) {
+			if (currentTime < oneHourBefore && currentTime >= sixHourBefore) {
 				const mailOptions = {
 					to: userEmail,
 					subject: "Movie Reminder",
@@ -135,9 +122,7 @@ export const reminder = async () => {
 			});
 		}
 		if (!reservation.Reminder3Status) {
-			console.log("AOWOAKWOKAW");
-			// currentTime < sixHourBefore && currentTime >= oneDayBefore
-			if (currentTime == currentTime) {
+			if (currentTime < sixHourBefore && currentTime >= oneDayBefore) {
 				const mailOptions = {
 					to: userEmail,
 					subject: "Movie Reminder",
@@ -164,58 +149,7 @@ export const reminder = async () => {
 				},
 			});
 		}
-		// const oneHourBefore = new Date(movieStartTime);
-		// oneHourBefore.setHours(oneHourBefore.getHours() - 1);
-
-		// const sixHoursBefore = new Date(movieStartTime);
-		// sixHoursBefore.setHours(sixHoursBefore.getHours() - 6);
-
-		// const oneDayBefore = new Date(movieStartTime);
-		// oneDayBefore.setDate(oneDayBefore.getDate() - 1);
-
-		// if (currentTime >= oneHourBefore && currentTime < movieStartTime) {
-		// 	cron.schedule(
-		// 		oneHourBefore,
-		// 		() => {
-		// 			console.log(
-		// 				`Reminder: Your movie starts in 1 hour. Seats: ${seatDetails.join(
-		// 					", "
-		// 				)}`
-		// 			);
-		// 		},
-		// 		{ scheduled: true, timezone: "UTC" }
-		// 	);
-		// }
-
-		// if (currentTime >= sixHoursBefore && currentTime < oneHourBefore) {
-		// 	cron.schedule(
-		// 		sixHoursBefore,
-		// 		() => {
-		// 			console.log(
-		// 				`Reminder: Your movie starts in 6 hours. Seats: ${seatDetails.join(
-		// 					", "
-		// 				)}`
-		// 			);
-		// 		},
-		// 		{ scheduled: true, timezone: "UTC" }
-		// 	);
-		// }
-
-		// if (currentTime >= oneDayBefore && currentTime < sixHoursBefore) {
-		// 	cron.schedule(
-		// 		oneDayBefore,
-		// 		() => {
-		// 			console.log(
-		// 				`Reminder: Your movie starts in 24 hours. Seats: ${seatDetails.join(
-		// 					", "
-		// 				)}`
-		// 			);
-		// 		},
-		// 		{ scheduled: true, timezone: "UTC" }
-		// 	);
-		// }
 	}
 };
 
-// Call the reminder function to set up the cron jobs
 reminder();
