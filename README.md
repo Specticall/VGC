@@ -1,2 +1,2 @@
 # VGC Documentation
-Apa itu Documentation?
+Apa itu Documentation? Documentation adalah...
