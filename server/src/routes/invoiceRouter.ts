@@ -1,5 +1,5 @@
-import { generateInvoice } from "@/invoice/invoiceGenerator";
-import { protect } from "@/middleware/protect";
+import { generateInvoice } from "src/invoice/invoiceGenerator";
+import { protect } from "src/middleware/protect";
 import express from "express";
 
 const invoiceRouter = express.Router();

@@ -1,4 +1,4 @@
-import { AppError } from "@/utils";
+import { AppError } from "src/utils";
 import { ErrorRequestHandler } from "express";
 
 const specifyError = (error: Error) => {

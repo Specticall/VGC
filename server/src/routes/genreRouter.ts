@@ -1,5 +1,5 @@
-import { getGenres } from "@/controllers/genreController";
-import { protect } from "@/middleware/protect";
+import { getGenres } from "src/controllers/genreController";
+import { protect } from "src/middleware/protect";
 import express from "express";
 
 const genreRouter = express.Router();

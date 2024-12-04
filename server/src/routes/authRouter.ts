@@ -1,4 +1,4 @@
-import { login, loginWithGoogle, register } from "@/controllers/authController";
+import { login, loginWithGoogle, register } from "src/controllers/authController";
 import express from "express";
 
 const authRouter = express.Router();

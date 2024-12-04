@@ -1,5 +1,5 @@
-import { AppError, STATUS } from "@/utils";
-import { successRes } from "@/utils/responses";
+import { AppError, STATUS } from "src/utils";
+import { successRes } from "src/utils/responses";
 // import { MAIL_PASSWORD, MAIL_USERNAME } from "@/config/config"; (Tolong nanti di uncomment yak ini, saya udah gila aowkaowk)
 import { PrismaClient } from "@prisma/client";
 import { RequestHandler } from "express";

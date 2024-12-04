@@ -1,6 +1,6 @@
-import { AppError, STATUS } from "@/utils";
-import { successRes } from "@/utils/responses";
-import { MAIL_PASSWORD, MAIL_USERNAME, s3Client } from "@/config/config";
+import { AppError, STATUS } from "src/utils";
+import { successRes } from "src/utils/responses";
+import { MAIL_PASSWORD, MAIL_USERNAME, s3Client } from "src/config/config";
 import { PrismaClient } from "@prisma/client";
 import { RequestHandler } from "express";
 import nodemailer from "nodemailer";
@@ -41,7 +41,7 @@ export const generateInvoice: RequestHandler = async (req, res, next) => {
 							select: {
 								TotalPrice: true,
 							},
-					})
+					  })
 					: null;
 
 				if (!totalPayment) {
@@ -80,10 +80,10 @@ export const generateInvoice: RequestHandler = async (req, res, next) => {
 							movieId: movieId,
 							paymentId: paymentId,
 						};
-
+						console.log(info);
 						const qrCode = QRCode.toDataURL(JSON.stringify(qrData));
 						// send To S3
-                        
+
 						return successRes(res, qrCode);
 					}
 				});

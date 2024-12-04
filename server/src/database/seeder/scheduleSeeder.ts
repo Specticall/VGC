@@ -1,4 +1,4 @@
-import { autoScheduler } from "@/utils/autoScheduler";
+import { autoScheduler } from "src/utils/autoScheduler";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();

@@ -1,5 +1,5 @@
-import { getSchedules, postSchedules } from "@/controllers/scheduleController";
-import { protect } from "@/middleware/protect";
+import { getSchedules, postSchedules } from "src/controllers/scheduleController";
+import { protect } from "src/middleware/protect";
 import express from "express";
 
 const schedulesRouter = express.Router();

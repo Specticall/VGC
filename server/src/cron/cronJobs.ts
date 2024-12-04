@@ -1,4 +1,4 @@
-import { MAIL_PASSWORD, MAIL_USERNAME } from "@/config/config";
+import { MAIL_PASSWORD, MAIL_USERNAME } from "src/config/config";
 import { PrismaClient } from "@prisma/client";
 import cron from "node-cron";
 import nodemailer from "nodemailer";

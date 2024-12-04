@@ -2,8 +2,8 @@ import {
   getSearchHistory,
   getUsers,
   storeSearchHistory,
-} from "@/controllers/userController";
-import { protect } from "@/middleware/protect";
+} from "src/controllers/userController";
+import { protect } from "src/middleware/protect";
 import express from "express";
 
 const userRouter = express.Router();

@@ -4,8 +4,8 @@ import {
   createMovie,
   updateMovie,
   deleteMovie,
-} from "@/controllers/movieController";
-import { protect } from "@/middleware/protect";
+} from "src/controllers/movieController";
+import { protect } from "src/middleware/protect";
 import express from "express";
 
 const movieRouter = express.Router();

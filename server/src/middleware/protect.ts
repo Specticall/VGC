@@ -1,5 +1,5 @@
-import { JWT_SECRET } from "@/config/config";
-import { AppError, STATUS } from "@/utils";
+import { JWT_SECRET } from "src/config/config";
+import { AppError, STATUS } from "src/utils";
 import { UserRole } from "@prisma/client";
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";

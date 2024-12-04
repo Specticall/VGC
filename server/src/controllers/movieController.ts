@@ -1,4 +1,4 @@
-import { successRes, AppError, STATUS } from "@/utils";
+import { successRes, AppError, STATUS } from "src/utils";
 import { AgeRestriction, Prisma, PrismaClient, Status } from "@prisma/client";
 import { RequestHandler } from "express";
 import { deleteFile } from "./s3Controller";

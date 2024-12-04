@@ -1,4 +1,4 @@
-import { successRes } from "@/utils";
+import { successRes } from "src/utils";
 import { PrismaClient } from "@prisma/client";
 import { RequestHandler } from "express";
 

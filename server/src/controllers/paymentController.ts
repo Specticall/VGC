@@ -1,5 +1,5 @@
-import { snapApi } from "@/config/config";
-import { AppError, STATUS, successRes } from "@/utils";
+import { snapApi } from "src/config/config";
+import { AppError, STATUS, successRes } from "src/utils";
 import { PrismaClient } from "@prisma/client";
 import { RequestHandler } from "express";
 

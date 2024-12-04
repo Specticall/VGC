@@ -4,7 +4,7 @@ import {
   TMDB_API_KEY,
   TMDB_ENDPOINT_BASE_URL,
   TMDB_MEDIA_BASE_URL,
-} from "@/config/config";
+} from "src/config/config";
 
 const TOTAL_MOVIES = 100;
 
