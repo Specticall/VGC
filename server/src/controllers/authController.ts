@@ -104,6 +104,7 @@ export const login: RequestHandler = async (request, response, next) => {
     }
 
     const jwtToken = createJWT(userData);
+
     if (!jwtToken) {
       throw new AppError(
         "Something went wrong while trying to create the token",
