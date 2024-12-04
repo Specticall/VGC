@@ -1,8 +1,6 @@
-import { AppError, STATUS } from "@/utils";
-import { successRes } from "@/utils/responses";
-// import { MAIL_PASSWORD, MAIL_USERNAME } from "@/config/config"; (Tolong nanti di uncomment yak ini, saya udah gila aowkaowk)
 import { PrismaClient } from "@prisma/client";
 import { RequestHandler } from "express";
+import { AppError, STATUS, successRes } from "../utils";
 
 const prisma = new PrismaClient();
 

@@ -1,8 +1,8 @@
 import express from "express";
 import {
-  getSeatsByMovieId,
-  getSeatsByRoomId,
-} from "@/controllers/seatController";
+	getSeatsByMovieId,
+	getSeatsByRoomId,
+} from "../controllers/seatController";
 
 const seatRouter = express.Router();
 

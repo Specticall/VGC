@@ -1,5 +1,5 @@
-import { getCasts } from "@/controllers/castController";
 import express from "express";
+import { getCasts } from "../controllers/castController";
 
 const castRouter = express.Router();
 

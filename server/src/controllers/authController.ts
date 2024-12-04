@@ -1,4 +1,4 @@
-import { createJWT, successRes, AppError, STATUS } from "@/utils";
+import { createJWT, AppError, STATUS, successRes } from "../utils";
 import { PrismaClient } from "@prisma/client";
 import axios from "axios";
 import { RequestHandler } from "express";

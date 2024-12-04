@@ -1,5 +1,5 @@
 import express from "express";
-import { deleteFile, uploadFile } from "@/controllers/s3Controller";
+import { deleteFile, uploadFile } from "../controllers";
 
 const s3Router = express.Router();
 

@@ -1,7 +1,7 @@
-import { MAIL_PASSWORD, MAIL_USERNAME } from "@/config/config";
 import { PrismaClient } from "@prisma/client";
 import cron from "node-cron";
 import nodemailer from "nodemailer";
+import { MAIL_PASSWORD, MAIL_USERNAME } from "../config/config";
 
 const prisma = new PrismaClient();
 

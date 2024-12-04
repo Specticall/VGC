@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { PrismaClient } from "@prisma/client";
-import { successRes, AppError, STATUS } from "@/utils";
+import { AppError, STATUS, successRes } from "../utils";
 
 const prisma = new PrismaClient();
 

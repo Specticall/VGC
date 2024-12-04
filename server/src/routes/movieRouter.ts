@@ -1,11 +1,11 @@
 import {
-  getMovieById,
-  getMovies,
-  createMovie,
-  updateMovie,
-  deleteMovie,
-} from "@/controllers/movieController";
-import { protect } from "@/middleware/protect";
+	getMovieById,
+	getMovies,
+	createMovie,
+	updateMovie,
+	deleteMovie,
+} from "../controllers";
+import { protect } from "../middleware/protect";
 import express from "express";
 
 const movieRouter = express.Router();
