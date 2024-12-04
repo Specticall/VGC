@@ -82,7 +82,7 @@ export const generateInvoice: RequestHandler = async (req, res, next) => {
 						console.log(info);
 						const qrCode = QRCode.toDataURL(JSON.stringify(qrData));
 						// send To S3
-						const params = (Bucket: AWS_BUCKET_)
+						// const params = (Bucket: AWS_BUCKET_)
 						return successRes(res, qrCode);
 					}
 				});
