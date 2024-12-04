@@ -8,7 +8,7 @@
     /* Linting */
     "strict": true,
     "noFallthroughCasesInSwitch": true,
-    "baseUrl": ".",
+    // "baseUrl": ".",
     // "paths": {
     //   "@/*": ["src/*"]
     // },

@@ -1,6 +1,4 @@
-import { successRes } from "src/utils";
-import { AppError } from "src/utils/AppError";
-import { STATUS } from "src/utils/statusCodes";
+import { AppError, STATUS, successRes } from "../utils";
 import { PrismaClient } from "@prisma/client";
 import { RequestHandler } from "express";
 

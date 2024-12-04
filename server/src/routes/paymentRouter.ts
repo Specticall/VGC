@@ -1,9 +1,7 @@
-import {
-  createSnapTransaction,
-  updatePaidStatus,
-} from "src/controllers/paymentController";
-import { protect } from "src/middleware/protect";
+
 import express from "express";
+import { createSnapTransaction, updatePaidStatus } from "../controllers/paymentController";
+import { protect } from "../middleware/protect";
 
 const paymentRouter = express.Router();
 

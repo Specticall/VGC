@@ -1,10 +1,9 @@
-import { AppError, STATUS } from "src/utils";
-import { successRes } from "src/utils/responses";
-import { MAIL_PASSWORD, MAIL_USERNAME, s3Client } from "src/config/config";
 import { PrismaClient } from "@prisma/client";
 import { RequestHandler } from "express";
 import nodemailer from "nodemailer";
 import QRCode from "qrcode";
+import { AppError, STATUS, successRes } from "../utils";
+import { MAIL_PASSWORD, MAIL_USERNAME } from "../config/config";
 
 const prisma = new PrismaClient();
 
@@ -41,7 +40,7 @@ export const generateInvoice: RequestHandler = async (req, res, next) => {
 							select: {
 								TotalPrice: true,
 							},
-					  })
+					})
 					: null;
 
 				if (!totalPayment) {

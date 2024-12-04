@@ -1,7 +1,9 @@
-import { JWT_SECRET } from "src/config/config";
+
 import { User } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import { JWT_SECRET } from "../config/config";
+
 
 export const roundTimeDownToNearest5 = (date: Date): Date => {
 	const minutes = date.getMinutes();
