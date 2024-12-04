@@ -1,4 +1,4 @@
-import { createJWT, successRes, AppError, STATUS } from "@/utils";
+import { createJWT, AppError, STATUS, successRes } from "../utils";
 import { PrismaClient } from "@prisma/client";
 import axios from "axios";
 import { RequestHandler } from "express";
@@ -104,6 +104,7 @@ export const login: RequestHandler = async (request, response, next) => {
     }
 
     const jwtToken = createJWT(userData);
+
     if (!jwtToken) {
       throw new AppError(
         "Something went wrong while trying to create the token",

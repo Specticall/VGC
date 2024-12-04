@@ -8,10 +8,10 @@
     /* Linting */
     "strict": true,
     "noFallthroughCasesInSwitch": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    },
+    // "baseUrl": ".",
+    // "paths": {
+    //   "@/*": ["src/*"]
+    // },
     "plugins": [{ "transform": "typescript-transform-paths" }]
   },
   "include": ["src/**/*", "enviroment.d.ts", "./api/*.ts"],

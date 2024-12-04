@@ -1,8 +1,8 @@
 import { UserData } from "./types";
 
 const ROLES = {
-  ADMIN: ["view:dashboard"],
-  USER: [],
+  ADMIN: ["view:dashboard", "create:movie", "update:schedule"],
+  USER: ["view:ticket", "create:order", "create:transaction"],
 } as const;
 
 export type Role = keyof typeof ROLES;
