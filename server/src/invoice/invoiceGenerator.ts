@@ -2,8 +2,14 @@ import { PrismaClient } from "@prisma/client";
 import { RequestHandler } from "express";
 import nodemailer from "nodemailer";
 import QRCode from "qrcode";
-import { AppError, STATUS, successRes } from "../utils";
-import { MAIL_PASSWORD, MAIL_USERNAME } from "../config/config";
+import { AppError, generateFileName, STATUS, successRes } from "../utils";
+import {
+	MAIL_PASSWORD,
+	MAIL_USERNAME,
+	AWS_S3_BUCKET_NAME,
+	s3Client,
+} from "../config/config";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 
 const prisma = new PrismaClient();
 
@@ -67,7 +73,7 @@ export const generateInvoice: RequestHandler = async (req, res, next) => {
 						pass: MAIL_PASSWORD,
 					},
 				});
-				transporter.sendMail(mailOptions, (error, info) => {
+				transporter.sendMail(mailOptions, async (error, info) => {
 					if (error) {
 						throw new AppError(
 							"Invoice is not sent!",
@@ -80,9 +86,20 @@ export const generateInvoice: RequestHandler = async (req, res, next) => {
 							paymentId: paymentId,
 						};
 						console.log(info);
-						const qrCode = QRCode.toDataURL(JSON.stringify(qrData));
+						const qrCode = await QRCode.toDataURL(JSON.stringify(qrData));
 						// send To S3
-						// const params = (Bucket: AWS_BUCKET_)
+						const base64Data = Buffer.from(
+							qrCode.replace(/^data:image\/\w+;base64,/, ""),
+							"base64"
+						);
+						const params = {
+							Bucket: AWS_S3_BUCKET_NAME,
+							Body: base64Data,
+							Key: "qrCode/" + generateFileName() + ".png",
+							ContentEncoding: "base64",
+							ContentType: "image/png",
+						};
+						await s3Client.send(new PutObjectCommand(params));
 						return successRes(res, qrCode);
 					}
 				});
