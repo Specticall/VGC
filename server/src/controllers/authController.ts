@@ -66,13 +66,7 @@ export const loginWithGoogle: RequestHandler = async (
 
 export const login: RequestHandler = async (request, response, next) => {
   try {
-    const { access_token, email, password } = request.body;
-    if (!access_token) {
-      throw new AppError(
-        "Token is missing in the request body",
-        STATUS.BAD_REQUEST
-      );
-    }
+    const { email, password } = request.body;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (email.includes("'")) {
       throw new AppError(
@@ -123,13 +117,7 @@ export const login: RequestHandler = async (request, response, next) => {
 
 export const register: RequestHandler = async (request, response, next) => {
   try {
-    const { access_token, name, email, password, age } = request.body;
-    if (!access_token) {
-      throw new AppError(
-        "Token is missing in the request body",
-        STATUS.BAD_REQUEST
-      );
-    }
+    const { name, email, password, age } = request.body;
     if (!name) {
       throw new AppError(
         "Name is missing in the request body",
@@ -183,7 +171,7 @@ export const register: RequestHandler = async (request, response, next) => {
         Email: email,
         Password: hashedPassword,
         ProfilePicture: "",
-        Age: age,
+        Age: +age,
         Role: "USER",
       },
     });

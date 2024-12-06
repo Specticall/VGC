@@ -154,6 +154,7 @@ export type TicketData = {
     };
     movie: {
       Title: string;
+      Poster: string;
     };
   };
 };

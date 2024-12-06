@@ -10,6 +10,7 @@ export default function useTicketsQuery() {
   });
 
   const ticketsData = ticketsQuery.data?.data.data;
+  const isEmpty = !ticketsQuery.isPending && ticketsData?.length === 0;
 
-  return { ticketsData, ticketsQuery };
+  return { ticketsData, ticketsQuery, isEmpty };
 }

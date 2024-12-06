@@ -8,6 +8,7 @@ type Props<T extends boolean> = {
   onSelect?: (item: string[] | string | undefined) => void;
   errorMessage?: string;
   multiple?: T;
+  canUnselect?: boolean;
 };
 
 export default function Dropdown<T extends boolean = false>({
@@ -15,6 +16,7 @@ export default function Dropdown<T extends boolean = false>({
   placeholder,
   value,
   onSelect,
+  canUnselect,
   multiple,
   errorMessage,
   ...props
@@ -94,7 +96,7 @@ export default function Dropdown<T extends boolean = false>({
                   if (onSelect) onSelect(newValue);
                 } else {
                   newValue = usedValue === item ? undefined : item;
-                  if (onSelect) onSelect(newValue);
+                  if (onSelect) onSelect(canUnselect ? newValue : item);
                   setIsOpen(false);
                 }
 

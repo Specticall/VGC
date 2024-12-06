@@ -15,11 +15,6 @@ const userMenus = [
     icon: "bxs-discount",
     redirect: "/tickets",
   },
-  {
-    title: "History",
-    icon: "bx-list-ul",
-    redirect: "/history",
-  },
 ];
 
 const adminMenus = [

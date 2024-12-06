@@ -8,28 +8,40 @@ import loginImage from "../../public/login-image.png";
 import { useState } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 import useAuthMutation from "@/hooks/mutation/useAuthMutation";
+import { isAxiosError } from "axios";
+import { useToast } from "@/components/ui/Toast";
 
 type LoginFields = {
-  username: string;
+  email: string;
   password: string;
 };
 
 export default function Login() {
-  const { googleLoginMutation } = useAuthMutation();
+  const { googleLoginMutation, loginMutation } = useAuthMutation();
   const handleLogin = useGoogleLogin({
     onSuccess: (response) => {
       googleLoginMutation.mutate({ access_token: response.access_token });
     },
   });
+  const { toast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<LoginFields>();
 
-  const onSubmit: SubmitHandler<LoginFields> = (value) => {
-    console.log(value);
+  const onSubmit: SubmitHandler<LoginFields> = async (value) => {
+    try {
+      await loginMutation.mutateAsync(value);
+      toast.success("Successfully logged in!");
+    } catch (err) {
+      if (!isAxiosError(err)) return;
+      const errMessage = err.response?.data.message as string;
+      setError("email", { message: errMessage });
+      setError("password", { message: errMessage });
+    }
   };
   return (
     <main className="min-h-screen grid place-items-center">
@@ -49,11 +61,11 @@ export default function Login() {
                   label="Email"
                   type="email"
                   placeholder="johndoe@gmail.com"
-                  {...register("username", {
-                    required: "Username field is required",
+                  {...register("email", {
+                    required: "Email field is required",
                   })}
                   className="mb-4"
-                  errorMessage={errors.username?.message}
+                  errorMessage={errors.email?.message}
                 />
 
                 <div className="relative mb-4">
@@ -70,13 +82,14 @@ export default function Login() {
                     type="button"
                     className={`bx ${
                       showPassword ? "bx-hide" : "bx-show"
-                    } absolute right-5 top-11 text-3xl cursor-pointer text-white`}
+                    } absolute right-5 top-11 text-2xl cursor-pointer text-white`}
                     onClick={() => setShowPassword(!showPassword)}
                   ></button>
                 </div>
 
                 <div className="pt-2">
                   <Button
+                    isLoading={loginMutation.isPending}
                     type="submit"
                     className="border-none bg-accent text-white w-[100%] p-5 rounded-[8px]"
                   >

@@ -2,11 +2,12 @@ import { Control, Controller, useController } from "react-hook-form";
 import { Button } from "../ui/Button";
 import SeatSelectorLegend from "./SeatSelectorLegend";
 import { OrderFields } from "@/pages/OrderTicket";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import useSeatsQuery from "@/hooks/queries/useSeatsQuery";
 import { SeatsData } from "@/lib/types";
 import { cn, formatToRupiah } from "@/lib/utils";
 import Skeleton from "react-loading-skeleton";
+import Dropdown from "../ui/Dropdown";
 
 // const COLUMNS = 24 + 2;
 // const ROWS = 6 + 1;
@@ -37,23 +38,24 @@ export default function SeatSelector({
     control,
   });
   const [cinemaIdx, setCinemaIdx] = useState(0);
-  const { seatsData } = useSeatsQuery({ roomId: selectedRoomId });
+  const { seatsData, seatsQuery } = useSeatsQuery({ roomId: selectedRoomId });
 
-  const seatsDataWithSpacing = seatsData?.seats.reduce(
-    (acc: (SeatsData | string)[], seats, i) => {
-      const idx = i % (COLUMNS - 5);
-      if (idx === 1) {
-        acc.push("SPACING");
-        acc.push("SPACING");
-      }
+  const seatsDataWithSpacing = useMemo(
+    () =>
+      seatsData?.seats.reduce((acc: (SeatsData | string)[], seats, i) => {
+        const idx = i % (COLUMNS - 5);
+        if (idx === 1) {
+          acc.push("SPACING");
+          acc.push("SPACING");
+        }
 
-      if (idx === 15) {
-        acc.push("SPACING");
-      }
-      acc.push(seats);
-      return acc;
-    },
-    []
+        if (idx === 15) {
+          acc.push("SPACING");
+        }
+        acc.push(seats);
+        return acc;
+      }, []),
+    [seatsData?.seats]
   );
 
   return (
@@ -63,27 +65,23 @@ export default function SeatSelector({
           control={control}
           name="cinemaId"
           render={({ field: { onChange, value } }) => {
-            const cinema = cinemas?.find((cinema) => cinema.id === value);
+            const cinemaValue = cinemas?.find((cinema) => cinema.id === value);
             return (
-              <div className="flex items-center gap-8">
-                <div className="grid grid-cols-[auto_20rem] gap-x-3">
-                  <i className="bx bx-map text-white text-3xl row-span-2 "></i>
-                  <h2 className="text-white text-xl">
-                    {cinema?.name || <Skeleton height={"2rem"} />}
-                  </h2>
-                  <p className="text-light mt-1">
-                    {cinema?.location || <Skeleton />}
-                  </p>
-                </div>
-                <i
-                  className="text-white text-3xl bx bx-chevron-right transition hover:text-light cursor-pointer"
-                  onClick={() => {
-                    if (!cinemas) return;
-                    const newIdx = (cinemaIdx + 1) % cinemas.length;
-                    setCinemaIdx(newIdx);
-                    onChange(cinemas[newIdx].id);
+              <div>
+                <Dropdown
+                  canUnselect={false}
+                  className="w-[25rem] [&_button]:py-4"
+                  placeholder="Select Cinema"
+                  data={cinemas?.map((cinema) => cinema.name)}
+                  onSelect={(selectedName) => {
+                    const target = cinemas?.find(
+                      (cinema) => cinema.name === selectedName
+                    );
+
+                    onChange(target?.id);
                   }}
-                ></i>
+                  value={cinemaValue?.name}
+                />
               </div>
             );
           }}
@@ -109,6 +107,10 @@ export default function SeatSelector({
                 gridTemplateColumns: `repeat(${COLUMNS - 2},3rem)`,
               }}
             >
+              {seatsQuery.isPending &&
+                new Array(11 * 20).fill("x").map((_, i) => {
+                  return <Skeleton key={i} className="h-[3rem]" />;
+                })}
               {seatsDataWithSpacing?.map((seat, i) => {
                 if (typeof seat === "string") {
                   return <li key={i} className="h-[3rem]"></li>;
