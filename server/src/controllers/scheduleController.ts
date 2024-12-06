@@ -1,4 +1,4 @@
-import { successRes, AppError, STATUS } from "@/utils";
+import { AppError, STATUS, successRes } from "../utils";
 import { PrismaClient } from "@prisma/client";
 import { RequestHandler } from "express";
 
@@ -7,7 +7,6 @@ const prisma = new PrismaClient();
 export const getSchedules: RequestHandler = async (request, response, next) => {
 	try {
 		const movieId = request.query.movieId as string | undefined;
-
 		const schedules = await prisma.schedule.findMany({
 			where: {
 				MovieId: movieId,

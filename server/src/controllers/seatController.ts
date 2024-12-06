@@ -1,81 +1,185 @@
-import { successRes } from "@/utils";
+import { successRes } from "../utils";
 import { PrismaClient } from "@prisma/client";
 import { RequestHandler } from "express";
 
 const prisma = new PrismaClient();
 
 export const getSeatsByMovieId: RequestHandler = async (req, res, next) => {
-  try {
-    const { id } = req.params;
+	try {
+		const { id } = req.params;
 
-    const cinemas = await prisma.cinema.findMany({
-      include: {
-        rooms: {
-          include: {
-            schedules: {
-              where: { MovieId: id },
-              include: {
-                reservations: {
-                  include: {
-                    seats: true,
-                  },
-                },
-              },
-            },
-            seats: true,
-          },
-        },
-      },
-    });
+		const cinemas = await prisma.cinema.findMany({
+			include: {
+				rooms: {
+					include: {
+						schedules: {
+							where: {
+								MovieId: id,
+							},
+							include: {
+								reservations: {
+									include: {
+										seats: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		});
 
-    const result = cinemas.map((cinema) => ({
-      CinemaId: cinema.CinemaId,
-      Name: cinema.Name,
-      rooms: cinema.rooms
-        .filter((room) =>
-          room.schedules.some((schedule) => schedule.MovieId === id)
-        )
-        .map((room) => {
-          const schedules = room.schedules.map((schedule) => {
-            const reservedSeatIds = schedule.reservations.flatMap((reservation) =>
-              reservation.seats.map((seat) => seat.SeatId)
-            );
+		const grouped = cinemas
+			.map((cinema) => {
+				const roomsWithSchedules = cinema.rooms.filter(
+					(c) => c.schedules.length > 0
+				);
 
-            const reservedSeats = room.seats.filter((seat) =>
-              reservedSeatIds.includes(seat.SeatId)
-            );
+				const groupedByDates: Record<string, unknown[]> = {};
+				roomsWithSchedules.forEach((room) => {
+					room.schedules.forEach((schedule) => {
+						const date = schedule.StartTime.toISOString().split("T")[0];
+						const scheduleSummary = {
+							RoomId: room.RoomId,
+							StartTime: schedule.StartTime,
+							EndTime: schedule.EndTime,
+							Reservations: schedule.reservations,
+							ScheduleId: schedule.ScheduleId,
+						};
 
-            const unreservedSeats = room.seats.filter(
-              (seat) => !reservedSeatIds.includes(seat.SeatId)
-            );
+						if (groupedByDates[date]) {
+							groupedByDates[date].push(scheduleSummary);
+						} else {
+							groupedByDates[date] = [scheduleSummary];
+						}
+					});
+				});
 
-            return {
-              ScheduleId: schedule.ScheduleId,
-              StartTime: schedule.StartTime,
-              EndTime: schedule.EndTime,
-              reservedSeats: reservedSeats.map((seat) => ({
-                seatId: seat.SeatId,
-                row: seat.Row,
-                number: seat.Number,
-              })),
-              unreservedSeats: unreservedSeats.map((seat) => ({
-                seatId: seat.SeatId,
-                row: seat.Row,
-                number: seat.Number,
-              })),
-            };
-          });
+				return {
+					CinemaId: cinema.CinemaId,
+					Name: cinema.Name,
+					Location: cinema.Location,
+					Contact: cinema.Contact,
+					Schedules: groupedByDates,
+				};
+			})
+			.filter((cinema) => Object.keys(cinema.Schedules).length > 0);
 
-          return {
-            RoomId: room.RoomId,
-            RoomName: room.Name,
-            schedules, 
-          };
-        }),
-    }));
-
-    return successRes(res, result);
-  } catch (e) {
-    next(e);
-  }
+		return successRes(res, grouped);
+	} catch (e) {
+		next(e);
+	}
 };
+
+export const getSeatsByRoomId: RequestHandler = async (
+	request,
+	response,
+	next
+) => {
+	try {
+		const { roomId } = request.params;
+		const seats = await prisma.seat.findMany({
+			where: {
+				RoomId: roomId,
+			},
+			orderBy: {
+				Row: "asc",
+			},
+		});
+
+		const reservedSeats = await prisma.reservationSeat.findMany({
+			where: {
+				seat: {
+					RoomId: roomId,
+				},
+			},
+			orderBy: {
+				seat: {
+					Row: "asc",
+				},
+			},
+		});
+
+		return successRes(response, { seats, reservedSeats });
+	} catch (error) {
+		next(error);
+	}
+};
+
+// export const getSeatsByMovieId: RequestHandler = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+
+//     const cinemas = await prisma.cinema.findMany({
+//       include: {
+//         rooms: {
+//           include: {
+//             schedules: {
+//               where: { MovieId: id },
+//               include: {
+//                 reservations: {
+//                   include: {
+//                     seats: true,
+//                   },
+//                 },
+//               },
+//             },
+//             seats: true,
+//           },
+//         },
+//       },
+//     });
+
+//     const result = cinemas
+//       .map((cinema) => ({
+//         CinemaId: cinema.CinemaId,
+//         Name: cinema.Name,
+//         rooms: cinema.rooms
+//           .filter((room) =>
+//             room.schedules.some((schedule) => schedule.MovieId === id)
+//           )
+//           .map((room) => {
+//             const schedules = room.schedules.map((schedule) => {
+//               const reservedSeatIds = schedule.reservations.flatMap(
+//                 (reservation) => reservation.seats.map((seat) => seat.SeatId)
+//               );
+
+//               const reservedSeats = room.seats.filter((seat) =>
+//                 reservedSeatIds.includes(seat.SeatId)
+//               );
+
+//               const unreservedSeats = room.seats.filter(
+//                 (seat) => !reservedSeatIds.includes(seat.SeatId)
+//               );
+
+//               return {
+//                 ScheduleId: schedule.ScheduleId,
+//                 StartTime: schedule.StartTime,
+//                 EndTime: schedule.EndTime,
+//                 reservedSeats: reservedSeats.map((seat) => ({
+//                   seatId: seat.SeatId,
+//                   row: seat.Row,
+//                   number: seat.Number,
+//                 })),
+//                 unreservedSeats: unreservedSeats.map((seat) => ({
+//                   seatId: seat.SeatId,
+//                   row: seat.Row,
+//                   number: seat.Number,
+//                 })),
+//               };
+//             });
+
+//             return {
+//               RoomId: room.RoomId,
+//               RoomName: room.Name,
+//               schedules,
+//             };
+//           }),
+//       }))
+//       .filter((cinema) => cinema.rooms.length > 0);
+
+//     return successRes(res, result);
+//   } catch (e) {
+//     next(e);
+//   }
+// };

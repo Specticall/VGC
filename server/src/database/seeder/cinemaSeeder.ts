@@ -1,10 +1,10 @@
-import { PrismaClient, Row } from '@prisma/client';
-import cinemas from '@/assets/cinemas';
+import { PrismaClient, Row } from "@prisma/client";
+import cinemas from "../../assets/cinemas";
 
 const prisma = new PrismaClient();
 
 export const cinemaSeeder = () => {
-  console.log('Seeding cinemas...');
+  console.log("Seeding cinemas...");
   cinemas.forEach(async (cinema) => {
     try {
       await prisma.cinema.create({
@@ -28,9 +28,9 @@ export const cinemaSeeder = () => {
           },
         },
       });
-    }catch (e) {
+    } catch (e) {
       console.error(e);
     }
   });
-  console.log('Cinemas seeded!');
+  console.log("Cinemas seeded!");
 };

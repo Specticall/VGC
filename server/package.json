@@ -7,7 +7,9 @@
     "lint": "eslint . --ext .ts",
     "dev": "SET NODE_ENV=development&&nodemon",
     "prod": "SET NODE_ENV=production&&nodemon",
-    "seed": "ts-node -r tsconfig-paths/register ./src/database/seeder"
+    "seed": "ts-node -r tsconfig-paths/register ./src/database/seeder",
+    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
+    "vercel-build": "npm run build"
   },
   "keywords": [],
   "author": "",
@@ -28,14 +30,16 @@
     "eslint": "^8.56.0",
     "nodemon": "^3.0.3",
     "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0",
+    "ts-patch": "^3.2.1",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "typescript-transform-paths": "^3.5.2"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.701.0",
     "@aws-sdk/s3-request-presigner": "^3.701.0",
     "@prisma/client": "^6.0.0",
+    "aws-sdk": "^2.1692.0",
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
@@ -49,10 +53,15 @@
     "prisma": "^6.0.0",
     "qrcode": "^1.5.4",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "tsc-alias": "^1.8.10",
+    "tsconfig-paths": "^4.2.0"
   },
   "prisma": {
     "schema": "./src/database/prisma/schema.prisma"
   },
-  "description": ""
+  "description": "",
+  "_moduleAliases": {
+    "@": "./dist"
+  }
 }

@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 
 import {
-
   authRouter,
   castRouter,
   languageRouter,
@@ -17,6 +16,7 @@ import { schedulesRouter } from "./routes/schedulesRouter";
 import { genreRouter } from "./routes/genreRouter";
 import { cinemaRouter } from "./routes/cinemaRouter";
 import { roomRouter } from "./routes/roomRouter";
+import { ticketRouter } from "./routes/ticketRouter";
 import { invoiceRouter } from "./routes/invoiceRouter";
 
 const app = express();
@@ -39,7 +39,7 @@ app.use("/cinemas", cinemaRouter);
 app.use("/rooms", roomRouter);
 app.use("/invoice", invoiceRouter);
 app.use("/seats", seatRouter);
-
+app.use("/tickets", ticketRouter);
 
 app.use(errorHandler);
 

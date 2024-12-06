@@ -21,6 +21,7 @@
     "react-hook-form": "^7.53.2",
     "react-loading-skeleton": "^3.5.0",
     "react-router-dom": "^7.0.1",
+    "swiper": "^11.1.15",
     "tailwind-merge": "^2.5.4"
   },
   "devDependencies": {

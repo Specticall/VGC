@@ -1,5 +1,6 @@
 export const QUERY_KEYS = {
   USERS: "users",
+  TICKETS: "tickets",
   ACTORS: "actors",
   MOVIES: "movies",
   MOVIE: "movie",
@@ -9,4 +10,10 @@ export const QUERY_KEYS = {
   GENRES: "genres",
   CINEMA: "string",
   ROOM: "rooms",
+  SEARCH_HISTORY: "search-history",
+  MOVIE_SEARCH: "movie-search",
+  SEATS: "seats",
+  SHOWING_MOVIE: "showing-movie",
+  SEATS_ROOM: "seats-room",
+  CINEMA_SCHEDULE: "cinema-schedule",
 };

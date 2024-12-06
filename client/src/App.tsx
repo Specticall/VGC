@@ -71,7 +71,11 @@ const router = createBrowserRouter([
         element: <AdminMovies />,
       },
       {
-        path: "order-ticket",
+        path: "Tickets",
+        element: <Tickets />,
+      },
+      {
+        path: "order-ticket/:movieId",
         element: <OrderTicket />,
       },
       {

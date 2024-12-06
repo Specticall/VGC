@@ -1,19 +1,20 @@
 import {
-  getMovieById,
-  getMovies,
-  createMovie,
-  updateMovie,
-  deleteMovie,
-} from "@/controllers/movieController";
+	getMovieById,
+	getMovies,
+	createMovie,
+	updateMovie,
+	deleteMovie,
+} from "../controllers";
+import { protect } from "../middleware/protect";
 import express from "express";
 
 const movieRouter = express.Router();
 
-movieRouter.get("/", getMovies);
-movieRouter.get("/:id", getMovieById);
-movieRouter.post("/", createMovie);
-movieRouter.put("/:movieId", updateMovie);
-movieRouter.delete("/:movieId", deleteMovie);
+movieRouter.get("/", protect, getMovies);
+movieRouter.get("/:id", protect, getMovieById);
+movieRouter.post("/", protect, createMovie);
+movieRouter.put("/:movieId", protect, updateMovie);
+movieRouter.delete("/:movieId", protect, deleteMovie);
 
 export { movieRouter };
 
