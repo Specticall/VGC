@@ -151,6 +151,7 @@ export default function OrderTicket() {
         control={control}
         cinemas={cinemaNames}
         selectedRoomId={selectedRoomId}
+        selectedScheduleId={scheduleId}
       />
     </form>
   );

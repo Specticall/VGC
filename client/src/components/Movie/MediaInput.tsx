@@ -3,8 +3,6 @@ import { Button } from "../ui/Button";
 import { cn } from "../../lib/utils";
 import useMediaMutation from "@/hooks/mutation/useMediaMutation";
 import axios from "axios";
-import { API } from "@/lib/API";
-import { APISuccessResponse } from "@/lib/types";
 import { LoadingSpinner } from "../ui/LoadingSpinner";
 import { S3_URL } from "@/lib/config";
 

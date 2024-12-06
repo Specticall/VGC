@@ -13,8 +13,6 @@ export default function MovieDetails() {
 
   const navigate = useNavigate();
 
-  console.log(movieData);
-
   return (
     <main className="min-h-screen">
       <div className="relative h-[40rem]">

@@ -1,16 +1,14 @@
 import BackNavigation from "@/components/general/BackNavigation";
 import { SubmitHandler, useForm } from "react-hook-form";
-import MovieMediaInputs from "@/components/Movie/MovieMediaInputs";
-import MovieGeneralInputs from "@/components/Movie/MovieGeneralInputs";
 import { useNavigate, useParams } from "react-router-dom";
 import useMovieQuery from "@/hooks/queries/useMovieQuery";
-import Topbar from "@/components/general/Topbar";
 import { useToast } from "@/components/ui/Toast";
 import useLanguageQuery from "@/hooks/queries/useLanguageQuery";
 import useGenreQuery from "@/hooks/queries/useGenreQuery";
 import useMovieMutation from "@/hooks/mutation/useMovieMutation";
-import { AxiosError } from "axios";
 import { Button } from "@/components/ui/Button";
+import MovieGeneralInputs from "@/components/movie/MovieGeneralInputs";
+import MovieMediaInputs from "@/components/movie/MovieMediaInputs";
 
 export type MovieFields = {
   title: string;
@@ -91,7 +89,6 @@ export default function MovieForm() {
         toast.success("Successfuly created movie");
       }
     } catch (err) {
-      console.log((err as AxiosError).response?.data);
       toast.error("Oops, Something went wrong!");
     }
   };

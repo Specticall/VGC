@@ -89,7 +89,7 @@ export default function AdminMovies() {
               <li className="text-light">
                 {formatDate(new Date(movie.ReleaseDate))}
               </li>
-              <li className="text-light">-</li>
+              <li className="text-light">{movie.VoteAverage || "-"}</li>
               <Button
                 ref={scheduleButtonRef}
                 variant={"tertiary"}

@@ -60,6 +60,9 @@ export const getTicketByUserId: RequestHandler = async (
           },
         },
       },
+      orderBy: {
+        CreatedAt: "desc",
+      },
     });
 
     return successRes(response, tickets);

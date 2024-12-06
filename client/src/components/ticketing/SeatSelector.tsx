@@ -2,7 +2,7 @@ import { Control, Controller, useController } from "react-hook-form";
 import { Button } from "../ui/Button";
 import SeatSelectorLegend from "./SeatSelectorLegend";
 import { OrderFields } from "@/pages/OrderTicket";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import useSeatsQuery from "@/hooks/queries/useSeatsQuery";
 import { SeatsData } from "@/lib/types";
 import { cn, formatToRupiah } from "@/lib/utils";
@@ -22,6 +22,7 @@ type Props = {
     location: string;
   }[];
   selectedRoomId?: string;
+  selectedScheduleId?: string;
   price?: string;
 };
 
@@ -29,6 +30,7 @@ export default function SeatSelector({
   cinemas,
   control,
   selectedRoomId,
+  selectedScheduleId,
   price,
 }: Props) {
   const {
@@ -37,8 +39,10 @@ export default function SeatSelector({
     name: "seatIds",
     control,
   });
-  const [cinemaIdx, setCinemaIdx] = useState(0);
-  const { seatsData, seatsQuery } = useSeatsQuery({ roomId: selectedRoomId });
+  const { seatsData, seatsQuery } = useSeatsQuery({
+    roomId: selectedRoomId,
+    scheduleId: selectedScheduleId,
+  });
 
   const seatsDataWithSpacing = useMemo(
     () =>

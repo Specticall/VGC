@@ -70,7 +70,7 @@ model SearchHistory {
   MovieId         String
   UserId          String
   CreatedAt       DateTime @default(now())
-  movie           Movie    @relation(fields: [MovieId], references: [MovieId])
+  movie           Movie    @relation(fields: [MovieId], references: [MovieId], onDelete: Cascade)
   user            User     @relation(fields: [UserId], references: [UserId])
 }
 

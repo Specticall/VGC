@@ -5,105 +5,108 @@ import { RequestHandler } from "express";
 const prisma = new PrismaClient();
 
 export const getSeatsByMovieId: RequestHandler = async (req, res, next) => {
-	try {
-		const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-		const cinemas = await prisma.cinema.findMany({
-			include: {
-				rooms: {
-					include: {
-						schedules: {
-							where: {
-								MovieId: id,
-							},
-							include: {
-								reservations: {
-									include: {
-										seats: true,
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		});
+    const cinemas = await prisma.cinema.findMany({
+      include: {
+        rooms: {
+          include: {
+            schedules: {
+              where: {
+                MovieId: id,
+              },
+              include: {
+                reservations: {
+                  include: {
+                    seats: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
 
-		const grouped = cinemas
-			.map((cinema) => {
-				const roomsWithSchedules = cinema.rooms.filter(
-					(c) => c.schedules.length > 0
-				);
+    const grouped = cinemas
+      .map((cinema) => {
+        const roomsWithSchedules = cinema.rooms.filter(
+          (c) => c.schedules.length > 0
+        );
 
-				const groupedByDates: Record<string, unknown[]> = {};
-				roomsWithSchedules.forEach((room) => {
-					room.schedules.forEach((schedule) => {
-						const date = schedule.StartTime.toISOString().split("T")[0];
-						const scheduleSummary = {
-							RoomId: room.RoomId,
-							StartTime: schedule.StartTime,
-							EndTime: schedule.EndTime,
-							Reservations: schedule.reservations,
-							ScheduleId: schedule.ScheduleId,
-						};
+        const groupedByDates: Record<string, unknown[]> = {};
+        roomsWithSchedules.forEach((room) => {
+          room.schedules.forEach((schedule) => {
+            const date = schedule.StartTime.toISOString().split("T")[0];
+            const scheduleSummary = {
+              RoomId: room.RoomId,
+              StartTime: schedule.StartTime,
+              EndTime: schedule.EndTime,
+              Reservations: schedule.reservations,
+              ScheduleId: schedule.ScheduleId,
+            };
 
-						if (groupedByDates[date]) {
-							groupedByDates[date].push(scheduleSummary);
-						} else {
-							groupedByDates[date] = [scheduleSummary];
-						}
-					});
-				});
+            if (groupedByDates[date]) {
+              groupedByDates[date].push(scheduleSummary);
+            } else {
+              groupedByDates[date] = [scheduleSummary];
+            }
+          });
+        });
 
-				return {
-					CinemaId: cinema.CinemaId,
-					Name: cinema.Name,
-					Location: cinema.Location,
-					Contact: cinema.Contact,
-					Schedules: groupedByDates,
-				};
-			})
-			.filter((cinema) => Object.keys(cinema.Schedules).length > 0);
+        return {
+          CinemaId: cinema.CinemaId,
+          Name: cinema.Name,
+          Location: cinema.Location,
+          Contact: cinema.Contact,
+          Schedules: groupedByDates,
+        };
+      })
+      .filter((cinema) => Object.keys(cinema.Schedules).length > 0);
 
-		return successRes(res, grouped);
-	} catch (e) {
-		next(e);
-	}
+    return successRes(res, grouped);
+  } catch (e) {
+    next(e);
+  }
 };
 
 export const getSeatsByRoomId: RequestHandler = async (
-	request,
-	response,
-	next
+  request,
+  response,
+  next
 ) => {
-	try {
-		const { roomId } = request.params;
-		const seats = await prisma.seat.findMany({
-			where: {
-				RoomId: roomId,
-			},
-			orderBy: {
-				Row: "asc",
-			},
-		});
+  try {
+    const { scheduleId, roomId } = request.params;
+    const seats = await prisma.seat.findMany({
+      where: {
+        RoomId: roomId,
+      },
 
-		const reservedSeats = await prisma.reservationSeat.findMany({
-			where: {
-				seat: {
-					RoomId: roomId,
-				},
-			},
-			orderBy: {
-				seat: {
-					Row: "asc",
-				},
-			},
-		});
+      orderBy: {
+        Row: "asc",
+      },
+    });
 
-		return successRes(response, { seats, reservedSeats });
-	} catch (error) {
-		next(error);
-	}
+    const reservedSeats = await prisma.reservationSeat.findMany({
+      where: {
+        reservation: {
+          schedule: {
+            ScheduleId: scheduleId,
+          },
+        },
+      },
+      orderBy: {
+        seat: {
+          Row: "asc",
+        },
+      },
+    });
+
+    return successRes(response, { seats, reservedSeats });
+  } catch (error) {
+    next(error);
+  }
 };
 
 // export const getSeatsByMovieId: RequestHandler = async (req, res, next) => {
