@@ -19,7 +19,8 @@ import MovieDetails from "./pages/MovieDetails";
 import Movies from "./pages/Movies";
 import Checkout from "./pages/Checkout";
 import MovieTicket from "./pages/MovieTicket";
-import Ticket from "./pages/Ticket";
+import Tickets from "./pages/Tickets";
+import TicketDetails from "./pages/TicketDetails";
 
 const router = createBrowserRouter([
   {
@@ -71,10 +72,6 @@ const router = createBrowserRouter([
         element: <AdminMovies />,
       },
       {
-        path: "Tickets",
-        element: <Tickets />,
-      },
-      {
         path: "order-ticket/:movieId",
         element: <OrderTicket />,
       },
@@ -95,8 +92,12 @@ const router = createBrowserRouter([
         element: <MovieTicket />,
       },
       {
-        path: "ticket",
-        element: <Ticket />,
+        path: "tickets",
+        element: <Tickets />,
+      },
+      {
+        path: "tickets/:id",
+        element: <TicketDetails />,
       },
     ],
   },

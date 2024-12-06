@@ -1,6 +1,7 @@
 export const QUERY_KEYS = {
   USERS: "users",
   TICKETS: "tickets",
+  TICKETS_RESERVATION: "tickets-reservation",
   ACTORS: "actors",
   MOVIES: "movies",
   MOVIE: "movie",
