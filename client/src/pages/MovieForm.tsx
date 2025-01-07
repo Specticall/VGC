@@ -7,8 +7,8 @@ import useLanguageQuery from "@/hooks/queries/useLanguageQuery";
 import useGenreQuery from "@/hooks/queries/useGenreQuery";
 import useMovieMutation from "@/hooks/mutation/useMovieMutation";
 import { Button } from "@/components/ui/Button";
-import MovieGeneralInputs from "@/components/movie/MovieGeneralInputs";
-import MovieMediaInputs from "@/components/movie/MovieMediaInputs";
+import MovieMediaInputs from "@/components/Movie/MovieMediaInputs";
+import MovieGeneralInputs from "@/components/Movie/MovieGeneralInputs";
 
 export type MovieFields = {
   title: string;
@@ -88,6 +88,7 @@ export default function MovieForm() {
         await createMovieMutation.mutateAsync(payload);
         toast.success("Successfuly created movie");
       }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       toast.error("Oops, Something went wrong!");
     }

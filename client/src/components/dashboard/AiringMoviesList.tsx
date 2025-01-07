@@ -1,7 +1,5 @@
 import useSchedulesQuery from "@/hooks/queries/useSchedulesQuery";
-import Badge from "../ui/Badge";
 import Table from "../ui/Table";
-import { formatDate, isBetweenDate } from "@/lib/utils";
 import Skeleton from "react-loading-skeleton";
 import { useNavigate } from "react-router-dom";
 
@@ -59,15 +57,6 @@ export default function AiringMoviesList() {
                     {schedule.movie.Tagline}
                   </p>
                 </div>
-              </li>
-              {isBetweenDate(schedule.StartDate, schedule.EndDate) ? (
-                <Badge variant={"green"}>Airing</Badge>
-              ) : (
-                <Badge variant={"red"}>Upcoming</Badge>
-              )}
-              <li className="flex gap-2 text-light">
-                {formatDate(schedule.StartDate)} -{" "}
-                {formatDate(schedule.EndDate)}
               </li>
               <li className="text-light">{schedule.room.Name}</li>
               <li className="text-light">{schedule._count.reservations}</li>

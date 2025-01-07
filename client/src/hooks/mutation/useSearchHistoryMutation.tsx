@@ -1,5 +1,4 @@
 import { API } from "@/lib/API";
-import { APISuccessResponse, MovieData } from "@/lib/types";
 import { useMutation } from "@tanstack/react-query";
 
 type StoreHistoryPayload = {

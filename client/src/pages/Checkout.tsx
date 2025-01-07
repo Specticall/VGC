@@ -6,7 +6,7 @@ import { useMemo } from "react";
 import useSeatsQuery from "@/hooks/queries/useSeatsQuery";
 import useOrderMutation from "@/hooks/mutation/useOrderMutation";
 import { useToast } from "@/components/ui/Toast";
-import { LocalCheckoutData, MidtransSuccess } from "@/lib/types";
+import { LocalCheckoutData } from "@/lib/types";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 
@@ -33,7 +33,7 @@ export default function Checkout() {
           const snapToken = response.data.data.token;
           const reservationId = response.data.data.reservationId;
           window.snap.pay(snapToken, {
-            onSuccess: async (result: MidtransSuccess) => {
+            onSuccess: async () => {
               try {
                 await confirmPaymentMutation.mutateAsync({
                   reservationId,
