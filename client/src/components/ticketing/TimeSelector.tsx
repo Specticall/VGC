@@ -55,3 +55,14 @@ export default function TimeSelector({
     </div>
   );
 }
+
+const variants = {
+  a: 1,
+  b: 2,
+  c: 3,
+  d: 4,
+};
+
+const variant = undefined;
+
+console.log(variants[variant || "a"]);

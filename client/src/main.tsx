@@ -11,7 +11,7 @@ createRoot(document.getElementById("root")!).render(
     <App />
   </StrictMode>
 );
-
+//
 (() => {
   const script = document.createElement("script");
   script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
