@@ -1,4 +1,3 @@
-import Badge from "../ui/Badge";
 import { Button } from "../ui/Button";
 
 type Props = {
@@ -16,8 +15,6 @@ type Props = {
 export default function HeroMovieDetails({
   image,
   title,
-  description,
-  badge,
   altImage,
   imageDetails,
   rating,

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "../ui/Button";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Input from "../ui/Input";

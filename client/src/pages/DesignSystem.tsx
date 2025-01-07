@@ -2,7 +2,6 @@ import Badge from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import Dropdown from "@/components/ui/Dropdown";
 import Input from "@/components/ui/Input";
-import useMoviesQuery from "@/hooks/queries/useMoviesQuery";
 
 // http://localhost:8000/genres
 export default function DesignSystem() {

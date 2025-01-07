@@ -1,5 +1,4 @@
 import { MovieData } from "@/lib/types";
-import { Swiper, SwiperSlide } from "swiper/react";
 import Upcoming from "../Movie/Upcoming";
 import { useRef } from "react";
 import Skeleton from "react-loading-skeleton";
